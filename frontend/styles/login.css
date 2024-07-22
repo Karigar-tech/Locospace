@@ -1,113 +1,125 @@
-/* styles/login.css */
+/* styles/Login.module.css */
 
-/* Base styles */
+/* frontend/styles/login.css */
+
 .background {
   display: flex;
   opacity: 100%;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url('../images/DetailedLogo.png') no-repeat;
-  background-position: 140% 60%;
-  background-size: auto 150%;
+  background: url('../images/DetailedLogo.png') no-repeat; /* Ensure no-repeat to prevent repetition */
+  background-position: 140% 60%; /* Example: Adjust position coordinates */
+  background-size: auto 150%; /* Adjust size to maintain aspect ratio and fill height */
 }
 
 .header {
   position: absolute;
   top: 100px;
   left: 40px;
+  position: 200% 60%;
   display: flex;
 }
 
 .logo {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  height: 80px;
+  position: absolute; /* Make the logo positionable */
+  top: 10px; /* Adjust top position as needed */
+  left: 10px; /* Adjust left position as needed */
+  right: 0px;
+  bottom: 0px;
+  height: 80px; /* Adjust size as needed */
+  margin-right: 10px;
 }
 
 .loginBox {
-  width: 90%;
-  max-width: 500px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  height: 420px;
+  width: 550px;
+  padding: 40px;
+  position: 140% 60%;
+  background: rgba(255, 255, 255, 1); /* cool grey with transparency */
   text-align: center;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  margin: 20px;
 }
 
-.loginBox h2 {
-  margin-bottom: 20px;
-  font-family: 'Gotham';
-  color: #3281ff;
-}
+/* Other styles for loginBox, inputBox, etc. */
 
-.inputBox {
-  position: relative;
-  width: 100%;
-  margin-bottom: 30px;
-}
+  
+  .loginBox h2 {
+    margin: 0 -300px 30px;
+    padding: 0;
+    font-family: 'Gotham';
+    color: #3281ff;
+  }
+  
+  
+  .inputBox {
+    position: relative;
+    width: 400px;
+    margin-left: 40px;
+    margin-bottom: 30px;
+  }
+  .Eye {
+    position: absolute;
+    width: 400px;
+    margin-left: 170px;
+    margin-top: -65px;
+  }
 
-.Eye {
-  position: absolute;
-  width: 100%;
-  margin-left: 170px;
-  margin-top: -65px;
-}
-
-.inputBox input {
+  
+  .inputBox input {
   width: 100%;
   padding: 10px;
   font-size: 16px;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   border: 1px solid #333;
   border-radius: 5px;
   outline: none;
   background: transparent;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
 }
-
-.inputBox label {
-  position: absolute;
-  top: -37px;
-  left: 10px;
-  font-family: 'Gotham';
-  padding: 10px 0;
-  font-size: 16px;
-  color: #333;
-  pointer-events: none;
-  transition: 0.5s;
-}
-
-.inputBox input:focus ~ label,
-.inputBox input:valid ~ label {
-  font-family: 'Avenir-bold';
-  top: -36px;
-  left: 0;
-  color: #112630;
-  font-size: 17px;
-}
-
-button {
-  width: 100%;
-  height: 50px;
-  font-family: 'Gotham';
-  background: #03a9f4;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 18px;
-  transition: 0.5s;
-}
-
-button:hover {
-  background: #05324a;
-  padding: 9px;
-}
+  
+  .inputBox label {
+    position: absolute;
+    top: -37px;
+    left: 0px;
+    font: "Gotham";
+    padding: 10px 0;
+    font-size: 16px;
+    color: #333;
+    pointer-events: none;
+    transition: 0.5s;
+  }
+  
+  .inputBox input:focus ~ label,
+  .inputBox input:valid ~ label {
+    font: "Avenir-bold";
+    top: -36px;
+    left: 0;
+    color: #112630;
+    font-size: 17px;
+  }
+  
+  button {
+    width: 180px;
+    height: 50px;
+    margin-top: -20px;
+    font-family: 'Gotham';
+    background: #03a9f4;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    transition: 0.5s;
+  }
+  
+  button:hover {
+    background: #05324a;
+    padding: 9px;
+  }
 
 .homeButton {
   position: absolute;
@@ -149,17 +161,8 @@ button:hover {
   color: #0c5070;
 }
 
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr; /* Single column for small screens */
-  gap: 20px;
-}
-
-/* Media Queries */
-
-/* Tablets and larger screens */
-@media (min-width: 768px) {
   .formGrid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
   }
 

@@ -1,24 +1,18 @@
-'use client'
+'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row, Modal, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
+import '../../styles/sellerform.css';
 
 interface FormData {
   location: string;
   purpose: string;
   price: string;
   areaSize: string;
-  bedrooms: string;
-  bathrooms: string;
-  kitchen: string;
+  bedrooms: number;
+  bathrooms: number;
+  kitchen: number;
   propertyDescription: string;
-  propertyFeatures: {
-    busy: boolean;
-    peaceful: boolean;
-    greenArea: boolean;
-    commercialArea: boolean;
-    supportiveCommunity: boolean;
-    resistantCommunity: boolean;
-  };
+  environment: string;
 }
 
 const SellerForm: React.FC = () => {
@@ -27,37 +21,37 @@ const SellerForm: React.FC = () => {
     purpose: '',
     price: '',
     areaSize: '',
-    bedrooms: '',
-    bathrooms: '',
-    kitchen: '',
+    bedrooms: 0,
+    bathrooms: 0,
+    kitchen: 0,
     propertyDescription: '',
-    propertyFeatures: {
-      busy: false,
-      peaceful: false,
-      greenArea: false,
-      commercialArea: false,
-      supportiveCommunity: false,
-      resistantCommunity: false,
-    },
+    environment: '',
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+  const [showEnvironmentModal, setShowEnvironmentModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredEnvironments, setFilteredEnvironments] = useState(['Busy', 'Peaceful', 'Green', 'Quiet', 'Urban']);
 
-    if (type === 'checkbox') {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        propertyFeatures: {
-          ...prevFormData.propertyFeatures,
-          [name]: checked,
-        },
-      }));
-    } else {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    }
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleIncrement = (field: keyof FormData) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [field]: (prevFormData[field] as number) + 1,
+    }));
+  };
+
+  const handleDecrement = (field: keyof FormData) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [field]: Math.max((prevFormData[field] as number) - 1, 0),
+    }));
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -66,24 +60,40 @@ const SellerForm: React.FC = () => {
     // Handle form submission logic here
   };
 
+  const handleEnvironmentSelect = (env: string) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      environment: env,
+    }));
+    setShowEnvironmentModal(false);
+  };
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredEnvironments(
+      ['Busy', 'Peaceful', 'Green', 'Quiet', 'Urban'].filter(env => env.toLowerCase().includes(query))
+    );
+  };
+
   return (
-    <Container className="mt-5">
-      <h1 className="text-center mb-4">Seller Form</h1>
+    <div className="seller-form mt-5 mx-auto">
+      <h1 className="text-center mb-4">Property Details</h1>
       <Form onSubmit={handleSubmit}>
         <Row className="mb-3 align-items-center">
-          <Col md={9}>
+          <Col md={8}>
             <Form.Group>
               <h4>Purpose</h4>
               <div className="d-flex mt-3">
                 <Button
-                  className='me-5 rounded-5 px-3'
+                  className={`me-3 rounded-5 px-4 ${formData.purpose === 'sell' ? 'active' : ''}`}
                   variant={formData.purpose === 'sell' ? 'primary' : 'outline-primary'}
                   onClick={() => setFormData(prev => ({ ...prev, purpose: 'sell' }))}
                 >
                   Sell
                 </Button>
                 <Button
-                  className='ms-2 rounded-5 px-3'
+                  className={`ms-3 rounded-5 px-4 ${formData.purpose === 'rent' ? 'active' : ''}`}
                   variant={formData.purpose === 'rent' ? 'primary' : 'outline-primary'}
                   onClick={() => setFormData(prev => ({ ...prev, purpose: 'rent' }))}
                 >
@@ -92,19 +102,18 @@ const SellerForm: React.FC = () => {
               </div>
             </Form.Group>
           </Col>
-          <Col md={3} className="p-3 border rounded-circle shadow-sm">
-            <Button variant="link">
-              <img src="/home-icon.png" alt="Icon" />
-            </Button>
+          <Col md={4} className="p-3 d-flex justify-content-center align-items-center">
+            <div className="icon-container rounded-circle">
+              <img src="/home-icon.png" alt="Icon" className="icon-image" />
+            </div>
           </Col>
         </Row>
 
         <Row>
-          <Col md={12}>
+          <Col xs={12} md={4}>
             <Form.Group>
               <h4>Location</h4>
-              <div className="d-flex mt-3 "></div>
-              <Form.Control className='w-50 mb-4'
+              <Form.Control
                 type="text"
                 name="location"
                 value={formData.location}
@@ -116,28 +125,28 @@ const SellerForm: React.FC = () => {
         </Row>
 
         <Row>
-          <Col xs={4}>
+          <Col xs={6}>
             <Form.Group>
               <h4>Area Size</h4>
-              <div className="d-flex mt-3"></div>
               <Form.Control
                 type="text"
                 name="areaSize"
                 value={formData.areaSize}
                 onChange={handleChange}
+                className="short-input"
                 required
               />
             </Form.Group>
           </Col>
-          <Col xs={4}>
+          <Col xs={6}>
             <Form.Group>
               <h4>Price</h4>
-              <div className="d-flex mt-3"></div>
               <Form.Control
                 type="text"
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
+                className="short-input"
                 required
               />
             </Form.Group>
@@ -145,9 +154,8 @@ const SellerForm: React.FC = () => {
         </Row>
 
         <Form.Group>
-        <div className="d-flex mt-3"></div>
-          <h3>Property Description</h3>
-          <Form.Control className='w-50'
+          <h4>Description</h4>
+          <Form.Control
             as="textarea"
             name="propertyDescription"
             value={formData.propertyDescription}
@@ -156,124 +164,102 @@ const SellerForm: React.FC = () => {
           />
         </Form.Group>
 
-        <Row>
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Bedrooms:</Form.Label>
+        <h4 className="mt-4">Features</h4>
+        <ul className="features-list">
+          <li className="features-list-item">
+            <label>Bedrooms:</label>
+            <div className="counter-container">
+              <Button variant="outline-secondary" onClick={() => handleDecrement('bedrooms')}>-</Button>
               <Form.Control
                 type="text"
                 name="bedrooms"
                 value={formData.bedrooms}
-                onChange={handleChange}
-                required
+                readOnly
+                className="counter-input"
               />
-            </Form.Group>
-          </Col>
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Bathrooms:</Form.Label>
-              <Form.Control
-                type="text"
-                name="bathrooms"
-                value={formData.bathrooms}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-          </Col>
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Kitchen:</Form.Label>
+              <Button variant="outline-secondary" onClick={() => handleIncrement('bedrooms')}>+</Button>
+            </div>
+          </li>
+          <li className="features-list-item">
+            <label>Kitchen:</label>
+            <div className="counter-container">
+              <Button variant="outline-secondary" onClick={() => handleDecrement('kitchen')}>-</Button>
               <Form.Control
                 type="text"
                 name="kitchen"
                 value={formData.kitchen}
-                onChange={handleChange}
-                required
+                readOnly
+                className="counter-input"
               />
-            </Form.Group>
-          </Col>
-        </Row>
+              <Button variant="outline-secondary" onClick={() => handleIncrement('kitchen')}>+</Button>
+            </div>
+          </li>
+          <li className="features-list-item">
+            <label>Bathrooms:</label>
+            <div className="counter-container">
+              <Button variant="outline-secondary" onClick={() => handleDecrement('bathrooms')}>-</Button>
+              <Form.Control
+                type="text"
+                name="bathrooms"
+                value={formData.bathrooms}
+                readOnly
+                className="counter-input"
+              />
+              <Button variant="outline-secondary" onClick={() => handleIncrement('bathrooms')}>+</Button>
+            </div>
+          </li>
+        </ul>
 
-        <Form.Group>
-          <Form.Label>Property Features:</Form.Label>
-          <Row>
-            <Col sm={6}>
-              <Form.Check
-                type="checkbox"
-                id="busy"
-                label="Busy Area"
-                checked={formData.propertyFeatures.busy}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col sm={6}>
-              <Form.Check
-                type="checkbox"
-                id="peaceful"
-                label="Peaceful Area"
-                checked={formData.propertyFeatures.peaceful}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Check
-                type="checkbox"
-                id="greenArea"
-                label="Green Area"
-                checked={formData.propertyFeatures.greenArea}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col sm={6}>
-              <Form.Check
-                type="checkbox"
-                id="commercialArea"
-                label="Commercial Area"
-                checked={formData.propertyFeatures.commercialArea}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Check
-                type="checkbox"
-                id="supportiveCommunity"
-                label="Supportive Community"
-                checked={formData.propertyFeatures.supportiveCommunity}
-                onChange={handleChange}
-              />
-            </Col>
-            <Col sm={6}>
-              <Form.Check
-                type="checkbox"
-                id="resistantCommunity"
-                label="Resistant Community"
-                checked={formData.propertyFeatures.resistantCommunity}
-                onChange={handleChange}
-              />
-            </Col>
-          </Row>
+        <Form.Group className="mt-4">
+          <h4>Environment</h4>
+          <div className="d-flex align-items-center">
+            <span className="me-3">{formData.environment || 'Select an environment'}</span>
+            <Button variant="outline-secondary" onClick={() => setShowEnvironmentModal(true)}>
+              <i className="bi bi-plus"></i>
+            </Button>
+          </div>
         </Form.Group>
 
         <Row className="mb-3">
-          <Col md={6}>
-            <Button 
-            type="submit" variant="primary" className='me-5 rounded-5 px-3'>
-              publish
+          <Col className="text-center">
+            <Button type="submit" variant="primary" className="rounded-5 px-4 me-2">
+              Publish
             </Button>
-          </Col>
-          <Col md={6}>
-          <Button variant="primary" className='me-5 rounded-5 px-3'>
-             Publish
+            <Button variant="secondary" className="rounded-5 px-4 ms-2">
+              Cancel
             </Button>
           </Col>
         </Row>
+
+        <Modal show={showEnvironmentModal} onHide={() => setShowEnvironmentModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Select Environment</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <InputGroup className="mb-3">
+              <FormControl
+                placeholder="Search"
+                aria-label="Search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+            </InputGroup>
+            <ul className="list-group">
+              {filteredEnvironments.map((env) => (
+                <li
+                  key={env}
+                  className="list-group-item"
+                  onClick={() => handleEnvironmentSelect(env)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {env}
+                </li>
+              ))}
+            </ul>
+          </Modal.Body>
+        </Modal>
       </Form>
-    </Container>
+    </div>
   );
 };
 

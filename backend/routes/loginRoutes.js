@@ -22,7 +22,7 @@ try {
           res.status(401).json('Invalid password!');
         }
         else{
-          // Cookies.set("loggedIn", true)
+          Cookies.set("loggedIn", true)
           const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
           res.json({ token });
         }

@@ -1,50 +1,150 @@
-/* sellerform.css */
+/* General Form Styles */
 .seller-form {
   max-width: 800px;
   margin: 0 auto;
+  background: white;
+  border-radius: 15px;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.seller-form label {
-  display: block;
-  margin-bottom: 5px;
+.seller-form h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.seller-form h4 {
+  margin-bottom: 10px;
+}
+
+.short-input {
+  width: 100%;
+  max-width: 100px;
+}
+
+.seller-form .btn {
+  margin: 10px 0;
+  padding: 10px 20px;
+}
+
+.seller-form .btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.seller-form .btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+.seller-form .btn-outline-secondary {
+  border: 1px solid #6c757d;
+}
+
+.seller-form .rounded-5 {
+  border-radius: 50px;
+}
+
+.seller-form .mx-2 {
+  margin-left: 0.5rem !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Icon Container */
+.icon-container {
+  width: 200px; /* Increase size */
+  height: 200px; /* Increase size */
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-image {
+  width: 80%;
+  height: 80%;
+  object-fit: cover; /* Ensure the image covers the container */
+}
+
+/* Counter Styles */
+.counter-container {
+  display: flex;
+  align-items: center;
+}
+
+.counter-input {
+  width: 60px;
+  text-align: center;
+  border: none;
+  background: none;
+}
+
+.counter-container .btn {
+  font-size: 0.7rem; /* Size of + and - buttons */
+  padding: 0.5rem 1rem; /* Adjust padding */
+}
+
+/* Features List */
+.features-list {
+  list-style: none;
+  padding: 0;
+}
+
+.features-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.features-list-item label {
+  width: 80px; /* Adjust width as needed */
+}
+
+/* Environment Section */
+.environment-container {
+  margin-top: 20px;
+}
+
+.environment-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+}
+
+.environment-heading h4 {
+  margin: 0;
+}
+
+.environment-modal-content {
+  padding: 20px;
+}
+
+.environment-option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.environment-option:hover {
+  background-color: #f8f9fa;
+}
+
+.selected-environment {
+  margin-top: 10px;
   font-weight: bold;
 }
 
-.seller-form input[type="text"],
-.seller-form input[type="email"],
-.seller-form textarea,
-.seller-form select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
-  background-color: #f9f9f9;
+/* Search Bar in Modal */
+.search-bar {
+  margin-bottom: 10px;
 }
 
-.seller-form .short-input {
-  width: 200px; /* Set your desired width */
-}
-
-.seller-form .btn-group {
-  margin-bottom: 15px;
-}
-
-.seller-form button {
-  background-color: #03a9f4;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.seller-form button:hover {
-  background-color: #0288d1;
+.search-bar .form-control {
+  border-radius: 0.25rem;
 }

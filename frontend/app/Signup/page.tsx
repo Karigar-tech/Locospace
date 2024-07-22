@@ -51,7 +51,14 @@ const Signup: React.FC = () => {
 
   return (
     <div className="background">
-      <SignupNavbar/>  
+      <Link href="/">
+        <div className="homeButton">Locospace</div>
+      </Link>
+      
+      <Link href="/">
+        <img src="Logo.png" alt="Logo" className="logo" />
+      </Link>
+      {/* <SignupNavbar/>   */}
       <div className="signUpBox">
         <h2 className="signUpHeading">Sign up</h2>
         <form
@@ -95,9 +102,10 @@ const Signup: React.FC = () => {
               <div className="inputBox">
               <label>Location</label>
                 <MapComponent onLocationSelect={(lat: number, lng: number) => setLocation({ latitude: lat, longitude: lng })} />
-                {/* {location && (
+                {location && (
                   <p> Selected Coordinates: {location.latitude}, {location.longitude}</p>
-                )} */}
+                )}
+                <p>Adjust your position Accordingly</p>
               </div>
             </div>
           </div>

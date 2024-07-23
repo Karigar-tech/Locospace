@@ -17,5 +17,7 @@ router.put('/:id', authenticateToken, upload.array('ListingPictures', 5), listin
 // Delete a listing
 router.delete('/:id', authenticateToken, listingController.deleteListing);
 
+// get a specific listing
+router.get('/:id', listingController.getSpecificListing)
 
 module.exports = router;

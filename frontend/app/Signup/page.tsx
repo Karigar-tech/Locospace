@@ -5,8 +5,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import '../../styles/signup.css';
 import Link from 'next/link';
-import MapComponent from '../../components/Map/Map'; // Adjust the import based on your folder structure
+import MapComponent from '../../components/Map/Map';
 import SignupNavbar from '../../components/Signup/SignupNavbar';
+import { latLng } from 'leaflet';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -35,7 +36,7 @@ const Signup: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password, name, address, contact, community, location }),
+        body: JSON.stringify({ username, email, password, name, address, contact, community , location}),
       });
 
       if (!response.ok) {
@@ -106,6 +107,7 @@ const Signup: React.FC = () => {
                   <p> Selected Coordinates: {location.latitude}, {location.longitude}</p>
                 )}
                 <p>Adjust your position Accordingly</p>
+                <MapComponent onLocationSelect={(lat: number, lng: number) => setLocation({ latitude: lat, longitude: lng })}/>
               </div>
             </div>
           </div>

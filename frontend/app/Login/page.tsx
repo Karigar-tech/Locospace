@@ -29,7 +29,6 @@ const Login: React.FC = () => {
 
       if (response.ok) {
         const { token } = await response.json();
-        //setToken(token);
         localStorage.setItem('token',token)
         router.push('/')
       } else {

@@ -31,11 +31,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lat: {
-    type: String
-  },
-  lng: {
-    type: String
+  location: {
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
   },
   profilePicture: {
     data: Buffer,

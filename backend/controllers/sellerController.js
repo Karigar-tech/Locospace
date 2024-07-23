@@ -92,3 +92,21 @@ exports.getSpecificListing = async (req, res) =>{
     }
 
 };
+
+exports.getAllListings = async (req, res) =>{
+    try{
+        const list = await Listing.find();
+
+        if (!list) {
+    
+        return res.status(404).json({ error: 'No listings' });
+        }
+
+        res.json(list);
+
+    }catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+
+};
+

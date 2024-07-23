@@ -2,17 +2,18 @@
 import React, { useState, useEffect } from 'react'
 import CustomNavbar from '../../components/LandingNavbar';
 import SearchBar from '@/components/Listings/SearchBar';
-
+import {Listing} from '../../types';
 const page = () => {
 
-  const [listings, setListings] = useState([]);
+  const [listings, setListings] = useState<Listing[]>([]); 
 
   const getListings = async () => {
     try {
-      const response = await fetch('/api/listings'); // Replace with your actual API endpoint
+      const response = await fetch('http://localhost:5000/api/listings/'); // Replace with your actual API endpoint
       const data = await response.json();
+      console.log(data);
       setListings(data);
-      
+
     } catch (error) {
       console.error('Error fetching listings:', error);
     }
@@ -34,7 +35,8 @@ const page = () => {
             {listings.map( (listing,index) => (
               <li key= {index}>
                 {/* {listing.name} */}
-                uo
+                {listing.Description}
+                <br/> Bathroom: {listing.bath}
               </li>
             ))}
           </ul>

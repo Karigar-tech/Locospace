@@ -4,8 +4,9 @@ body {
     font-family: 'Gotham';
     background-color: white;
     color: #333;
-}
-* {
-  box-sizing: border-box;
+    overflow-x:hidden;
 }
 
+*, *::before, *::after{
+  box-sizing: content-box !important;
+}

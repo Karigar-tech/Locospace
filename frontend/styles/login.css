@@ -1,159 +1,130 @@
-/* styles/Login.module.css */
-
 /* frontend/styles/login.css */
 
+/* Background styles */
 .background {
   display: flex;
-  opacity: 100%;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
   height: 100vh;
-  background: url('../images/DetailedLogo.png') no-repeat; /* Ensure no-repeat to prevent repetition */
-  background-position: 140% 60%; /* Example: Adjust position coordinates */
-  background-size: auto 150%; /* Adjust size to maintain aspect ratio and fill height */
-}
-
-.header {
-  position: absolute;
-  top: 100px;
-  left: 40px;
-  position: 200% 60%;
-  display: flex;
+  background: url('../images/DetailedLogo.png') no-repeat;
+  background-position: right; /* Move background image to the right */
+  margin-left: auto;
+  background-size: auto 150%;
 }
 
 .logo {
-  position: absolute; /* Make the logo positionable */
-  top: 10px; /* Adjust top position as needed */
-  left: 10px; /* Adjust left position as needed */
-  right: 0px;
-  bottom: 0px;
-  height: 80px; /* Adjust size as needed */
-  margin-right: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 80px;
 }
 
 .loginBox {
-  height: 420px;
-  width: 550px;
+  z-index: 0;
+  width: 90%;
+  max-width: 35.5rem;
+  height: auto;
   padding: 40px;
-  position: 140% 60%;
-  background: rgba(255, 255, 255, 1); /* cool grey with transparency */
+  background: rgba(255, 255, 255, 0.85);
   text-align: center;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
+  margin: 5.5rem 0 auto; /* Horizontally center the box */
 }
 
-/* Other styles for loginBox, inputBox, etc. */
+/* Adjusting the top margin for smaller screens */
+@media (max-width: 768px) {
+  .loginBox {
+    width: 90%;
+    padding: 20px;
+    margin-top: 150px; /* Adjust margin for smaller screens */
+  }
+}
 
-  
-  .loginBox h2 {
-    margin: 0 -300px 30px;
-    padding: 0;
-    font-family: 'Gotham';
-    color: #3281ff;
-  }
-  
-  
-  .inputBox {
-    position: relative;
-    width: 400px;
-    margin-left: 40px;
-    margin-bottom: 30px;
-  }
-  .Eye {
-    position: absolute;
-    width: 400px;
-    margin-left: 170px;
-    margin-top: -65px;
-  }
+/* Additional styles */
+.loginHeading {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
 
-  
-  .inputBox input {
+.inputBox {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.inputBox input {
   width: 100%;
   padding: 10px;
   font-size: 16px;
   color: #333;
-  margin-bottom: 30px;
-  border: 1px solid #333;
+  border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
-  background: transparent;
-  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+  background: #f9f9f9;
+  box-sizing: border-box;
 }
-  
-  .inputBox label {
-    position: absolute;
-    top: -37px;
-    left: 0px;
-    font: "Gotham";
-    padding: 10px 0;
-    font-size: 16px;
-    color: #333;
-    pointer-events: none;
-    transition: 0.5s;
-  }
-  
-  .inputBox input:focus ~ label,
-  .inputBox input:valid ~ label {
-    font: "Avenir-bold";
-    top: -36px;
-    left: 0;
-    color: #112630;
-    font-size: 17px;
-  }
-  
-  button {
-    width: 180px;
-    height: 50px;
-    margin-top: -20px;
-    font-family: 'Gotham';
-    background: #03a9f4;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 18px;
-    transition: 0.5s;
-  }
-  
-  button:hover {
-    background: #05324a;
-    padding: 9px;
-  }
+
+.inputBox label {
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  font-size: 14px;
+  color: #333;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.inputBox input:focus ~ label,
+.inputBox input:valid ~ label {
+  top: -30px;
+  font-size: 12px;
+  color: #03a9f4;
+}
+
+button.loginButton {
+  width: 30%;
+  height: 40px;
+  margin-top: 1rem;
+  background: #03a9f4;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button.loginButton:hover {
+  background: #0288d1;
+}
 
 .homeButton {
   position: absolute;
-  font-family: 'Gotham';
-  top: 25px;
-  left: 80px;
+  top: 20px;
+  left: 100px;
   padding: 10px;
   color: #333;
   text-decoration: none;
   font-size: 16px;
   background-color: #fff;
-  border: 0px solid #333;
   border-radius: 5px;
   transition: all 0.3s ease;
 }
 
 .homeButton:hover {
-  background-color: #ffffff;
-  color: #17425e;
+  background-color: #333;
+  color: #fff;
 }
 
 .accountPrompt {
-  margin-top: 20px;
   font-size: 14px;
   color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 1rem;
 }
 
 .createAccountLink {
   color: #03a9f4;
   text-decoration: none;
-  margin-left: 5px;
 }
 
 .createAccountLink:hover {
@@ -161,25 +132,27 @@
   color: #0c5070;
 }
 
-  .formGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  }
-
-  .loginBox {
-    padding: 40px;
-  }
-
-
-/* Desktops and larger screens */
-@media (min-width: 992px) {
+/* Responsive */
+@media (max-width: 576px) {
   .background {
+    background-size: contain;
     background-position: right;
-    background-size: cover;
   }
 
   .loginBox {
-    max-width: 550px;
-    padding: 40px;
+    width: 90%;
+    padding: 20px;
+    margin-top: 18rem; /* Adjust margin for smaller screens */
+  }
+
+  button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .homeButton {
+    top: 15px;
+    left: 40px;
+    font-size: 14px;
   }
 }

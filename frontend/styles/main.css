@@ -26,6 +26,7 @@ body {
 
 .navbar{
   background-color: rgb(245, 245, 245);
+  z-index: 2;
 }
 .navbar-brand-custom {
   font-size: 2.5rem;
@@ -181,7 +182,7 @@ body {
 
 .card-custom .card-body {
   flex-grow: 1;
-  /* display: flex; */
+  display: flex;
   flex-direction: column;
   justify-content: space-between; 
   padding: 25px;
@@ -206,6 +207,80 @@ body {
   margin-bottom: 5%;
 }
 
+/* Communities page */
+
+.search-bar-container {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center;     /* Vertically center */
+  width: 100%;
+  height: 100%;            /* Ensure it takes full height of its container */
+  position: relative;      /* Ensure it respects the position of its container */
+  z-index: 1;
+}
+
+.search-bar-container button {
+  position: relative;
+  z-index: 2;
+  border-radius: 0.5rem;
+  height: 1.3rem;
+  right: -32.5rem;
+  display: flex;
+
+  
+}
+
+.community-search{
+    width: 40%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    font-size: 1rem;
+
+  }
+.gradient-bar{
+  position: absolute;
+  width: 100%;
+  height: 9rem;
+  background: linear-gradient(90deg, #3D8BFD 0%, #290661);
+}
+.gradient-bar-container{
+  position: relative;
+  width: 100%;
+  height: 9rem;
+}
+
+/* Community Box */
+
+.community-box{
+  height: 15rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: solid 1px #333;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.community-box:hover{
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  background-color: beige;
+}
+.community-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.community-info {
+  font-size: 1rem;
+  margin: 0.25rem 0;
+}
 
 /* Tablets and small desktops */
 @media (max-width: 992px) {

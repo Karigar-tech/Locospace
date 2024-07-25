@@ -3,31 +3,27 @@
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 100vh;
+  height: 150vh;
   background: url('../images/DetailedLogo.png') no-repeat;
   background-position: right; /* Move background image to the right */
+  
   background-size: auto 120%;
 }
-
-/* Navbar styles */
-.navbar {
-  background-color: #007bff; /* Blue background color */
-  color: #fff; /* White text color */
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 80px;
 }
 
 .signUpBox {
+  
   z-index: 0;
   width: 90%;
   max-width: 35.5rem;
   height: auto;
   padding: 40px;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.85);
   text-align: center;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
@@ -169,6 +165,7 @@ button.signUpButton:hover {
   }
 
   .signUpBox {
+    opacity: 0.5;
     width: 90%;
     padding: 20px;
     margin-top: 18rem; /* Adjust margin for smaller screens */

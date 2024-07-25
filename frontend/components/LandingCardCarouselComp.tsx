@@ -73,7 +73,7 @@ const CardCarouselComp: React.FC = () => {
         responsive={responsive}
         infinite={true}
         autoPlay={true}
-        autoPlaySpeed={1000}
+        autoPlaySpeed={2000}
         containerClass="carousel-container"
         itemClass="carousel-item-padding-40-px"
         showDots={false}
@@ -90,19 +90,20 @@ const CardCarouselComp: React.FC = () => {
                 <Col><span>{item.type}</span></Col>
                 <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
               </Row></Card.Title>
-              <Row className="mb-2">
+              <Row className="mb-3 mt-2">
                 <Col><FontAwesomeIcon icon={faBed} /> {item.bedrooms}</Col>
                 <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.baths}</Col>
               </Row>
               <hr />
               <Row className="mb-2">
-              <Col>
+                <Col md={5}>
                   <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-                  <span style={{ marginLeft: '0.5rem' }}>{item.address.split(',')[0]}</span>, {item.city}
-              </Col>
-                
+                  <span style={{ marginLeft: '0.25rem' }}>{item.address.split(',')[0]}</span>, {item.city}
+                </Col>
+                <Col md={4} className="text-right">
+                  <Button variant="primary" href="#" style={{ width: '5rem' }}>View</Button>
+                </Col>                
               </Row>
-              <Button variant="primary" href="#">View</Button>
             </Card.Body>
           </Card>
         ))}

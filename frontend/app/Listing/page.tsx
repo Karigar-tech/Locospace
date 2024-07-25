@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import ProfileBar from '../../components/Profile/ProfileNavbar';
 import ImageGallery from '../../components/ImageGallery';
 import { Button } from 'react-bootstrap';
 import '../../styles/selectedlist.css';
@@ -13,11 +12,12 @@ import { FaBed, FaBath, FaRulerCombined, FaRunning, FaTree, FaBuilding, FaHandsH
 import VerticalCardCarousel from '../../components/VerticalCarousel';
 import MapComponent from '../../components/MapComponentListing';
 import { geocodeAddress } from '../../utils/geocode';
+import NavBar from '../../components/NavBar';
 
 const SelectedListing: React.FC = () => {
   const router = useRouter();
  // const { id } = router.query; // Get the id from the URL
-  const id = '66a1676b9ed9e6d3a244e94b'
+  const id = '66a1fedb1995a6c4340142a9'
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -116,7 +116,7 @@ const SelectedListing: React.FC = () => {
 
   return (
     <div className="row">
-      <ProfileBar />
+      <NavBar />
       <div className="col-md-7 d-flex flex-column gap-3">
         <div className="rectangle">
           <ImageGallery images={images} />
@@ -166,7 +166,7 @@ const SelectedListing: React.FC = () => {
         <div className="rectangle rec2">
             <h2>Environment</h2>
             <div className="col-12 prefernece">
-                {listing.preferences.map((preference, index) => (
+                {listing.preferences.environment.map((preference, index) => (
                 <Button variant="outline-primary" key={index} className="tags m-1">
                     {preferenceIconMap[preference]} {preference}
                 </Button>

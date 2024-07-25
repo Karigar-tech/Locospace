@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import '../styles/main.css';
 
-const CustomNavBar: React.FC = () => {
+const NavBar: React.FC = () => {
   return (
     <Navbar expand="lg" style={{ backgroundColor: 'white' }}>
       <Container fluid>
@@ -16,11 +16,17 @@ const CustomNavBar: React.FC = () => {
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
           <Nav className="ms-auto">
-            <Link href="/Login" passHref>
-              <Button variant="outline-primary" className="btn-custom">Login</Button>
+            <Link href="/Communities" passHref>
+              <Button variant="outline-primary" className="navbar-btn-custom">Communities</Button>
             </Link>
-            <Link href="/Signup" passHref>
-              <Button variant="primary" className="btn-custom-signup">Sign Up</Button>
+            <Link href="/Profile" passHref>
+              <Button variant="outline-secondary" className="navbar-btn-custom">Profile</Button>
+            </Link>
+            <Link href="/Login" passHref>
+              <Button variant="outline-primary" className="navbar-btn-custom">Login</Button>
+            </Link>
+            <Link href="/" passHref>
+              <Button variant="primary" className="btn-custom-signup">Logout</Button>
             </Link>
           </Nav>
         </Navbar.Collapse>
@@ -29,4 +35,4 @@ const CustomNavBar: React.FC = () => {
   );
 };
 
-export default CustomNavBar;
+export default NavBar;

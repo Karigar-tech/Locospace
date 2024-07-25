@@ -34,10 +34,11 @@ const SellerForm: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<FileList | null>(null);
 
-  const token = localStorage.getItem('authToken');
-  
+  const token = localStorage.getItem('token');
+  console.log(token)
+
   const options = {
     environment: ['Busy', 'Peaceful', 'Green', 'Commercial', 'Supportive', 'Safe', 'Affordable', 'Pet Friendly'],
     facilities: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground'],
@@ -66,14 +67,28 @@ const SellerForm: React.FC = () => {
     }));
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files);
+    }
+  };
+
+  const handleHomeIconClick = () => {
+    document.getElementById('fileInput')?.click(); 
+  };
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
+
+   
 
     try {
       const response = await fetch('http://localhost:5000/api/listings/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
           
         },
         body: JSON.stringify(formData),
@@ -85,10 +100,10 @@ const SellerForm: React.FC = () => {
 
       const data = await response.json();
       console.log('Done', data.message);
-      // Handle success (e.g., redirect to a login page or show a success message)
+      
     } catch (error) {
       console.error('Error:', error);
-      // Handle error (e.g., show an error message)
+      
     }
   };
 
@@ -332,7 +347,7 @@ const SellerForm: React.FC = () => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {filteredOptions.map(option => (
+                {options.environment.map(option => (
                   <Form.Check
                     key={option}
                     type="checkbox"

@@ -290,6 +290,10 @@ body {
   margin: 1rem 0; /* Margin for spacing around the grid */
 }
 
+.navbar-btn-custom{
+  border-color: transparent;
+}
+
 @media (max-width: 1200px) {
   .community-list {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */

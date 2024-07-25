@@ -1,46 +1,53 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import CustomNavBar from '../../components/LandingNavbar';
 import CommunityBox from '../../components/Communities/CommunityBox';
-import '../../styles/main.css'
+import '../../styles/main.css';
 import { Button } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 
-const hardcodedCommunities = [
-    { name: 'DHA-1', members: 150, listings: 20 },
-    { name: 'DHA-2', members: 200, listings: 30 },
-    { name: 'Bahria Phase 1-6', members: 180, listings: 25 },
-    { name: 'Bahria Phase 7-9', members: 220, listings: 35 },
-    { name: 'Gulberg Greens', members: 170, listings: 28 },
-    
+const communities = [
+  { name: "DHA-1", members: 120, listings: 15 },
+  { name: "DHA-2", members: 90, listings: 10 },
+  { name: "Bahria Phase 1-6", members: 200, listings: 25 },
+  { name: "Bahria Phase 7-9", members: 150, listings: 20 },
+  { name: "Gulberg Greens", members: 100, listings: 18 },
+  { name: "PWD", members: 420, listings: 69 }
+
 ];
-const page = () => {
+
+const CommunitiesPage = () => {
+  const router = useRouter();
+
+  const handleCommunityClick = (name: string) => {
+    localStorage.setItem('selectedCommunity', name);
+    router.push('/Listings');
+  };
+
   return (
     <div>
-    <CustomNavBar />
-
-        <div className="gradient-bar-container">
-            <div className="gradient-bar"></div>
-            <div className='search-bar-container'>
-                <Button>Search</Button>
-                <input type="text" className='community-search' placeholder='Searchstuff'/>
-            </div>
+      <CustomNavBar />
+      <div className="gradient-bar-container">
+        <div className="gradient-bar"></div>
+        <div className='search-bar-container'>
+          <Button>Search</Button>
+          <input type="text" className='community-search' placeholder='Searchstuff' />
         </div>
-
-      
-      <div className="p-4 mt-8">
-        <h1>All communities</h1>
-        {hardcodedCommunities.map((community,index)=>(
-            <CommunityBox
-            key={index}
-            name= {community.name}
+      </div>
+      <h2>All Communities</h2>
+      <div className="community-list">
+        {communities.map((community) => (
+          <CommunityBox
+            key={community.name}
+            name={community.name}
             members={community.members}
             listings={community.listings}
-            />
+            onClick={() => handleCommunityClick(community.name)}
+          />
         ))}
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default CommunitiesPage;

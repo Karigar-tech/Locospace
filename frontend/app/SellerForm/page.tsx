@@ -116,15 +116,6 @@ const SellerForm: React.FC = () => {
       )
     );
   };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputElement = e.target as HTMLInputElement;
-    if (inputElement.files && inputElement.files.length > 0) {
-      setFile(inputElement.files[0]); // Store the file in local state
-      // Handle file upload here if necessary
-    }
-  };
-
   const handleRemoveEnvironment = (envToRemove: string) => {
     setFormData(prevFormData => ({
       ...prevFormData,
@@ -178,9 +169,14 @@ const SellerForm: React.FC = () => {
             <Col>
               <Form.Group>
                 <h4>Location</h4>
-                <div className="map-container">
-                  <MapComponent onLocationSelect={(lat: number, lng: number) => setLocation({ latitude: lat, longitude: lng })}/>
-                </div>
+                <Form.Control
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  placeholder="Enter the Address"
+                  required
+                />
               </Form.Group>
             </Col>
           </Row>
@@ -299,23 +295,6 @@ const SellerForm: React.FC = () => {
           </Row>
         </div>
 
-        <div className="card mb-4 p-3">
-          <Row>
-            <Col>
-              <h4>Proof of Ownership</h4>
-              <Form.Group>
-                <InputGroup>
-                  <FormControl
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={handleFileChange}
-                    className="custom-file-input"
-                  />
-                </InputGroup>
-              </Form.Group>
-            </Col>
-          </Row>
-        </div>
 
         <div className="d-flex justify-content-end">
           <Button type="submit" className="me-2 btn-primary rounded-5 px-4">

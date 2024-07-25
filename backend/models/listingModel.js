@@ -34,12 +34,26 @@ const ListingSchema = new mongoose.Schema({
     kitchen: {
         type: Number,
         required: true,
-    },
+    }, 
     area: {
         type: String,
         required: true,
     },
-    preferences: [{ type: String }]
+    preferences: {
+        environment: {
+            type: [String],
+            enum: ['Busy', 'Peaceful', 'Green', 'Commercial', 'Supportive', 'Safe', 'Affordable', 'Pet Friendly']
+        },
+        facilities: {
+            type: [String],
+            enum: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground']
+        },
+        ageGroup: {
+            type: [String],
+            enum: ['Kids', 'Teens', 'Adults', 'Seniors']
+        }
+    }
+   
 });
 
 const Listing = mongoose.model('Listing', ListingSchema);

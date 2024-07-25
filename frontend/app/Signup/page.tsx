@@ -36,7 +36,7 @@ const Signup: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password, name, address, contact, community , location}),
+        body: JSON.stringify({ username, email, password, name, address, contact, community ,location}),
       });
 
       if (!response.ok) {
@@ -103,11 +103,6 @@ const Signup: React.FC = () => {
               <div className="inputBox">
               <label>Location</label>
                 <MapComponent onLocationSelect={(lat: number, lng: number) => setLocation({ latitude: lat, longitude: lng })} />
-                {location && (
-                  <p> Selected Coordinates: {location.latitude}, {location.longitude}</p>
-                )}
-                <p>Adjust your position Accordingly</p>
-                <MapComponent onLocationSelect={(lat: number, lng: number) => setLocation({ latitude: lat, longitude: lng })}/>
               </div>
             </div>
           </div>

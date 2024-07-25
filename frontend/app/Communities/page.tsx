@@ -34,7 +34,7 @@ const CommunitiesPage = () => {
           <input type="text" className='community-search' placeholder='Searchstuff' />
         </div>
       </div>
-      <h2>All Communities</h2>
+      <h2 className="ml-15 mt-36">All Communities</h2>
       <div className="community-list">
         {communities.map((community) => (
           <CommunityBox

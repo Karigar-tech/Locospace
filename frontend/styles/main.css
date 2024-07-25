@@ -250,29 +250,43 @@ body {
   width: 100%;
   height: 9rem;
 }
-
-/* Community Box */
-
-.community-box{
-  height: 15rem;
-  padding: 2rem;
-  width: 20%;
-  margin-bottom: 1rem;
-  border: solid 1px #333;
+/* Listing Box */
+.listing-box {
+  padding: 1rem;
+  margin: 1rem; /* Add margin around each box */
+  border: solid 1px #9c9c9c;
   border-radius: 10px;
+  width: 75%;
+  height: 25%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  background-color: antiquewhite;
+  background-color: rgb(255, 254, 253);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  
-  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+/* Community Box */
+
+.community-box {
+  padding: 1rem;
+  margin: 1rem; /* Add margin around each box */
+  border: solid 1px #9c9c9c;
+  border-radius: 10px;
+  width: 70%;
+  height: 80%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  background-color: rgb(255, 254, 253);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 
-.community-box:hover{
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  background-color: beige;
+.community-box:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  background-color: rgb(235, 243, 255);
 }
+
 .community-name {
   font-size: 1.5rem;
   font-weight: bold;
@@ -286,9 +300,28 @@ body {
 .community-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  gap: 1rem; /* Space between boxes */
-  margin: 1rem 0; /* Margin for spacing around the grid */
+  gap: 0.25rem; /* Space between boxes */
+  margin: 0.5rem 5rem; /* Margin for spacing around the grid */
 }
+
+
+.explore-button {
+  width: 12rem;
+  background: linear-gradient(90deg, #3D8BFD, #8671ff); /* Initial gradient background */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 25px; /* Rounded corners */
+  padding: 0.5rem 1rem; /* Padding inside the button */
+  font-size: 1rem; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: transform 0.9s ease-in-out, background 1.6s ease-in-out ; /* Transition effects */
+}
+
+.explore-button:hover {
+  background: linear-gradient(150deg, #00088f, #290661); /* Changed gradient background on hover */
+  transform: scale(1.03); /* Slightly larger on hover */
+}
+
 
 .navbar-btn-custom{
   border-color: transparent;

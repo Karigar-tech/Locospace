@@ -1,47 +1,41 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from 'react-bootstrap';
+import { Listing, User } from '@/types';
 import '../../styles/sellerform.css';
 import MapComponent from '@/components/Map/Map';
 
-interface FormData {
-  location: string;
-  purpose: string;
-  price: string;
-  areaSize: string;
-  bedrooms: number;
-  bathrooms: number;
-  kitchen: number;
-  propertyDescription: string;
-  environment: string[];
-  facilities: string[];
-  ageGroup: string[];
-  proofOfOwnership?: File;
-}
 
 const SellerForm: React.FC = () => {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [formData, setFormData] = useState<FormData>({
-    location: '',
-    purpose: '',
-    price: '',
-    areaSize: '',
-    bedrooms: 0,
-    bathrooms: 0,
+  const [formData, setFormData] = useState<Listing>({
+    ListingPictures: [""],
+    Description: "",
+    location: "",
+    bedroom: 0,
+    bath: 0,
     kitchen: 0,
-    propertyDescription: '',
-    environment: [],
-    facilities: [],
-    ageGroup: [],
+    price: 0,
+    listing_type: "",
+    area: 0,
+    preferences: [""],
+    user: {
+      address: "",
+      contact: "",
+      email: "",
+      name: "",
+      profilePicture: {
+        filePath: "",
+        url: "",
+      },
+    },
   });
-
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState('environment');
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [file, setFile] = useState<File | null>(null);
-
   const options = {
     environment: ['Busy', 'Peaceful', 'Green', 'Commercial', 'Supportive', 'Safe', 'Affordable', 'Pet Friendly'],
     facilities: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground'],
@@ -70,11 +64,31 @@ const SellerForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    console.log('Form Data Submitted:', formData);
-    // Handle form submission logic here
+  const handleSubmit = async (e:any) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    try {
+      const response = await fetch('/api/listings/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('DOne', data.message);
+      // Handle success (e.g., redirect to a login page or show a success message)
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error (e.g., show an error message)
+    }
   };
+
 
   const handleOptionSelect = (option: string) => {
     setSelectedOptions(prev =>

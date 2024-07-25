@@ -36,7 +36,7 @@ const page = () => {
               <li key= {index}>
                 {/* {listing.name} */}
                 {listing.Description}
-                <br/> Bathroom: {listing.bath}
+                <br/> Bathroom: {listing.bathrooms}
               </li>
             ))}
           </ul>

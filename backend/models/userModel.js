@@ -40,9 +40,9 @@ const UserSchema = new mongoose.Schema({
     },
   },
   profilePicture: {
-    data: Buffer,
-    contentType: String,
-  },
+    filePath: { type: String },
+    url: { type: String }
+  } 
 });
 
 const User =   mongoose.model('User', UserSchema);

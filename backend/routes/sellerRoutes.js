@@ -24,6 +24,7 @@ router.delete('/:id', authenticateToken, listingController.deleteListing);
 // get a specific listing
 router.get('/:id', listingController.getSpecificListing)
 
-
+// Get all listings
+router.get('/', listingController.getListings); 
 
 module.exports = router;

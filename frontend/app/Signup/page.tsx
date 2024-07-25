@@ -7,7 +7,6 @@ import '../../styles/signup.css';
 import Link from 'next/link';
 import MapComponent from '../../components/Map/Map';
 import SignupNavbar from '../../components/Signup/SignupNavbar';
-import { latLng } from 'leaflet';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -23,11 +22,7 @@ const Signup: React.FC = () => {
   const router = useRouter();
 
   const handleSignup = async () => {
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
+    
     setError('');
 
     try {
@@ -36,7 +31,7 @@ const Signup: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password, name, address, contact, community ,location}),
+        body: JSON.stringify({ username, email, password, name, address, contact, community, location }),
       });
 
       if (!response.ok) {
@@ -47,6 +42,7 @@ const Signup: React.FC = () => {
       }
     } catch (error) {
       console.error('Sign Up Error:', error);
+      setError('An error occurred during sign up. Please try again.');
     }
   };
 
@@ -55,17 +51,23 @@ const Signup: React.FC = () => {
       <Link href="/">
         <div className="homeButton">Locospace</div>
       </Link>
-      
+
       <Link href="/">
         <img src="Logo.png" alt="Logo" className="logo" />
       </Link>
-      {/* <SignupNavbar/>   */}
+      {/* <SignupNavbar/> */}
       <div className="signUpBox">
         <h2 className="signUpHeading">Sign up</h2>
+        {error && <div className="error">{error}</div>}
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSignup();
+            if (password !== confirmPassword) {
+              setError('Passwords do not match');
+              return;
+            }
+            else{
+            handleSignup();}
           }}
         >
           <div className="formContainer">
@@ -82,10 +84,10 @@ const Signup: React.FC = () => {
                 <input type="text" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
                 <label>Name</label>
               </div>
-              <div className="inputBox">
+              {/* <div className="inputBox">
                 <input type="text" name="address" required style={{ height: '60px', margin: '0px' }} value={address} onChange={(e) => setAddress(e.target.value)} />
                 <label>Address</label>
-              </div>
+              </div> */}
             </div>
             <div className="rightInputs">
               <div className="inputBox">
@@ -100,10 +102,10 @@ const Signup: React.FC = () => {
                 <input type="text" name="contact" required value={contact} onChange={(e) => setContact(e.target.value)} />
                 <label>Contact</label>
               </div>
-              <div className="inputBox">
+              {/* <div className="inputBox">
               <label>Location</label>
                 <MapComponent onLocationSelect={(lat: number, lng: number) => setLocation({ latitude: lat, longitude: lng })} />
-              </div>
+              </div> */}
             </div>
           </div>
           <button type="submit" className="signUpButton">Sign up</button>

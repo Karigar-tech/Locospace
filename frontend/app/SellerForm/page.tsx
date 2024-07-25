@@ -3,7 +3,6 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from 'react-bootstrap';
 import { Listing, User } from '@/types';
 import '../../styles/sellerform.css';
-import MapComponent from '@/components/Map/Map';
 
 const SellerForm: React.FC = () => {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);

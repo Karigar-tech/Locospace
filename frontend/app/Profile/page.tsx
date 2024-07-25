@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import ProfileBar from '../../components/Profile/ProfileNavbar';
+import NavBar from '../../components/NavBar';
 import UserProfile from '../../components/Profile/UserProfile';
 import Footer from '../../components/LandingFooter';
 import '../../styles/profile.css';
@@ -11,7 +11,7 @@ const MyProfile: React.FC = () => {
 
   return (
     <div>
-      <ProfileBar />
+      <NavBar />
       <div className='head'>
       </div>
       <UserProfile />

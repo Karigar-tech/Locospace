@@ -1,7 +1,7 @@
 
 body {
     margin: 0;
-    font-family: 'Gotham';
+    font-family: 'Gotham', 'Source Sans Pro', sans-serif;
     background-color: white;
     color: #333;
 }

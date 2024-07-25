@@ -1,11 +1,18 @@
 
-export interface ListingPicture {
-    data: Buffer;  
-    contentType: string;
+
+  export interface User {
+    address: string;
+    contact: string;
+    email: string;
+    name: string;
+    profilePicture: {
+      filePath: string;
+      url: string;
+  };
   }
-  
+
   export interface Listing {
-    ListingPictures: ListingPicture[];
+    ListingPictures: string[];
     Description: string;
     location: string;
     bedroom: number;
@@ -13,5 +20,14 @@ export interface ListingPicture {
     kitchen: number;
     price: number;
     listing_type: string;
+    area: number;
+    preferences: string[];
+    user: User; 
+
   }
+
+
+ 
+  
+  
   

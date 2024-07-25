@@ -10,10 +10,7 @@ const ListingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ListingPictures: [{    
-        data: Buffer,
-        contentType: String
-    }],
+    ListingPictures: [String], 
     price: {
         type: Number,
         required: true,

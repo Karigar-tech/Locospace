@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from 'react';
 import CustomNavBar from '../components/LandingNavbar';
 import LandingPageComp from '../components/LandingMiddleCon';

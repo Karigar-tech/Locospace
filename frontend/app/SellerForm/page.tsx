@@ -36,6 +36,8 @@ const SellerForm: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [file, setFile] = useState<File | null>(null);
 
+  const token = localStorage.getItem('authToken');
+  
   const options = {
     environment: ['Busy', 'Peaceful', 'Green', 'Commercial', 'Supportive', 'Safe', 'Affordable', 'Pet Friendly'],
     facilities: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground'],
@@ -68,10 +70,11 @@ const SellerForm: React.FC = () => {
     e.preventDefault(); // Prevent default form submission behavior
 
     try {
-      const response = await fetch('/api/listings/', {
+      const response = await fetch('http://localhost:5000/api/listings/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          
         },
         body: JSON.stringify(formData),
       });

@@ -19,7 +19,6 @@ const LandingPageComp: React.FC = () => {
           <div className="text-overlay">
             <div className="big-text">Find your Community<br />not just a Property!</div>
             <div className="small-text">Welcome to Locospace, your ultimate destination for finding the perfect home</div>
-          <div>
             <div className="big-text">Find your Community <br></br>not just a Property!</div>
             <div className="small-text">Welcome to Locospace, your ultimate destination for finding the perfect home. Whether you're looking to rent or buy, our extensive listings cover everything from cosy apartments to spacious family homes</div>
             <div className="search-container">

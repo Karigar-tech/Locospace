@@ -1,33 +1,39 @@
 
-
-  export interface User {
-    address: string;
-    contact: string;
-    email: string;
-    name: string;
-    profilePicture: {
-      filePath: string;
-      url: string;
-  };
+export interface ListingPicture {
+    data: Buffer;  
+    contentType: string;
   }
-
+  
   export interface Listing {
-    ListingPictures: string[];
+    ListingPictures: ListingPicture[];
     Description: string;
-    location: string;
-    bedroom: number;
-    bath: number;
-    kitchen: number;
+    location: {
+      latitude: number;
+      longitude: number;
+    };
+    areaSize: String;
     price: number;
+    bedrooms: number;
+    bathrooms: number;
+    kitchen: number;
     listing_type: string;
-    area: number;
-    preferences: string[];
-    user: User; 
-
+    environment: [string];
+    proofofownership?:File;
   }
 
-
- 
-  
-  
-  
+  export interface FormData {
+    ListingPictures: ListingPicture[];
+    Description: string;
+    location: {
+      latitude: number;
+      longitude: number;
+    };
+    areaSize: String;
+    price: number;
+    bedrooms: number;
+    bathrooms: number;
+    kitchen: number;
+    listing_type: string;
+    environment: [string];
+    ownershipproof: File;
+  }

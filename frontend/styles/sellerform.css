@@ -1,9 +1,9 @@
 /* General Form Styles */
 .seller-form {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   background: white;
-  border-radius: 15px;
+  border-radius: 10px;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -16,7 +16,6 @@
 .seller-form h4 {
   margin-bottom: 10px;
 }
-
 .short-input {
   width: 100%; /* Adjust as needed */
   max-width: 300px; /* Increase for larger areaSize and price fields */
@@ -60,8 +59,6 @@
   border-color: #007bff; /* Matching border color on hover */
 }
 
-
-
 .seller-form .rounded-5 {
   border-radius: 50px;
 }
@@ -86,19 +83,10 @@
   transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition */
 }
 
-.icon-button:hover {
-  background-color: rgba(0, 0, 0, 0.1) !important; /* Light gray background on hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow on hover */
-}
 
 .icon-image {
-  width: 50px; /* Adjust size of icon as needed */
-  height: 50px; /* Adjust size of icon as needed */
-}
-
-.icon-image {
-  width: 50px; /* Adjust size of icon as needed */
-  height: 50px; /* Adjust size of icon as needed */
+  width: 200%; /* Adjust size of icon as needed */
+  height: 200%; /* Adjust size of icon as needed */
 }
 
 
@@ -247,9 +235,8 @@
 .remove-option:hover {
   color: #219bff;
 }
-  
-.map-container {
-  width: 100%;
-  height: 250px; /* Adjust height as needed */
-  overflow: hidden;
+
+.checklist1, .checklist2 , .checklist3 {
+  border:'1px solid grey';
+  border-radius: 50%;
 }

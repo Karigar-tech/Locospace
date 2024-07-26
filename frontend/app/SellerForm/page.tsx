@@ -1,11 +1,17 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from 'react-bootstrap';
-import { FaBed, FaBath, FaRulerCombined, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaCopy } from 'react-icons/fa';
+//Icons 
+import { FaBed,FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw , FaChild } from 'react-icons/fa';
+import { MdOutlineSecurity , MdElderly, MdOutlineHiking} from "react-icons/md";
+import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
+import { CgGym } from "react-icons/cg";
+import { GiBurningRoundShot } from "react-icons/gi";
+import { GiPeaceDove } from "react-icons/gi";
+//IconsEnd
 import Footer from '../../components/LandingFooter';
 import { Listing } from '@/types';
 import '../../styles/sellerform.css'; 
-import { width } from '@fortawesome/free-brands-svg-icons/fa42Group';
 
 const SellerForm: React.FC = () => {
   
@@ -141,7 +147,7 @@ const SellerForm: React.FC = () => {
     }
 };
 
-  const handleOptionSelect = (option: string) => {
+const handleOptionSelect = (option: string) => {
     setSelectedOptions(prev =>
       prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]
     );
@@ -169,15 +175,31 @@ const SellerForm: React.FC = () => {
     );
   };
 
-  const preferenceIconMap: Record<string, React.ReactElement> = {
+  const environmentIconMap: Record<string, React.ReactElement> = {
     "Busy": <FaRunning/>,
-    "Peaceful": <FaBed/>,
+    "Peaceful": <GiPeaceDove/>,
     "Green": <FaTree/>,
     "Commercial": <FaBuilding/>,
     "Supportive": <FaHandsHelping/>,
     "Safe": <FaShieldAlt/>,
     "Affordable": <FaMoneyBillWave/>,
-    "PetFriendly": <FaPaw/>
+    "Pet Friendly": <FaPaw/>
+
+  };
+
+   const facilitiesIconMap: Record<string, React.ReactElement> = {
+    "Gym": <CgGym/>,
+    "Swimming Pool": <FaPersonSwimming/>,
+    "Parking": <FaParking/>,
+    "Security": <MdOutlineSecurity/>,
+    "Playground": <GiBurningRoundShot />
+  };
+
+  const ageGroupIconMap: Record<string, React.ReactElement> = {
+    "Kids": <FaChild/>,
+    "Teens": <FaPerson/>,
+    "Adults": <MdOutlineHiking/>,
+    "Seniors": <MdElderly />
   };
 
   const handleRemoveOption = (option: string, category: keyof typeof formData.preferences) => {
@@ -392,19 +414,22 @@ const SellerForm: React.FC = () => {
                 <div className="selected-options-container">
                   {formData.preferences.environment.map((env, index) => (
                     <span key={index}className="selected-option">
-                      {env}
+                      {environmentIconMap[env]}
+                      <span style={{ marginLeft: '5px' }}>{env}</span>
                       <span className="remove-option" onClick={() => handleRemoveOption(env, 'environment')}>×</span>
                     </span>
                   ))}
                   {formData.preferences.facilities.map((fac, index) => (
                     <span key={index} className="selected-option">
-                      {fac}
+                      {facilitiesIconMap[fac]} 
+                      <span style={{ marginLeft: '5px' }}>{fac}</span>
                       <span className="remove-option" onClick={() => handleRemoveOption(fac, 'facilities')}>×</span>
                     </span>
                   ))}
                   {formData.preferences.ageGroup.map((age, index) => (
                     <span key={index} className="selected-option">
-                      {age}
+                      {ageGroupIconMap[age]}
+                      <span style={{ marginLeft: '5px' }}>{age}</span>
                       <span className="remove-option" onClick={() => handleRemoveOption(age, 'ageGroup')}>×</span>
                     </span>
                   ))}
@@ -450,6 +475,7 @@ const SellerForm: React.FC = () => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
+          
                 {filteredOptions.length > 0 ? (
                   filteredOptions.map(option => (
                     <Form.Check
@@ -465,13 +491,20 @@ const SellerForm: React.FC = () => {
                     <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
                       key={option}
                       type="checkbox"
-                      label={option}
+                      label={
+                        <>
+                          {environmentIconMap[option]}
+                          <span style={{ marginLeft: '10px' }}>{option}</span>
+                        </>
+                      }
+                        
                       checked={selectedOptions.includes(option)}
                       onChange={() => handleOptionSelect(option)}
                     />
                   ))
                 )}
               </Tab.Pane>
+
               <Tab.Pane eventKey="facilities">
                 <InputGroup className="mb-3 mt-3">
                   <FormControl
@@ -495,7 +528,12 @@ const SellerForm: React.FC = () => {
                     <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
                       key={option}
                       type="checkbox"
-                      label={option}
+                      label={
+                        <>
+                        {facilitiesIconMap[option]}
+                        <span style={{ marginLeft: '10px' }}>{option}</span>
+                      </>
+                      }
                       checked={selectedOptions.includes(option)}
                       onChange={() => handleOptionSelect(option)}
                     />
@@ -526,7 +564,12 @@ const SellerForm: React.FC = () => {
                       
                       key={option}
                       type="checkbox"
-                      label={option}
+                      label={
+                        <>
+                        {ageGroupIconMap[option]}
+                        <span style={{ marginLeft: '10px' }}>{option}</span>
+                        </>
+                      }
                       checked={selectedOptions.includes(option)}
                       onChange={() => handleOptionSelect(option)}
                     />

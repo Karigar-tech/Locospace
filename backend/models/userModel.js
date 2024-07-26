@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-  },
+  }, 
   password: {
     type: String,
     required: true,
@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true,
+    // required: ,
   },
   location: {
     lat: {

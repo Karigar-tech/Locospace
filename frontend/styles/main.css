@@ -273,14 +273,13 @@ body {
   width: 100%;
   height: 9rem;
 }
-/* Listing Box */
+/* Listings */
 .listing-box {
   padding: 1rem;
-  margin: 1rem; /* Add margin around each box */
+  margin: 1rem; /* Margin around each box */
   border: solid 1px #9c9c9c;
   border-radius: 10px;
-  width: 75%;
-  height: 25%;
+  width: 100%; /* Ensure full width in the grid */
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   background-color: rgb(255, 254, 253);
   display: flex;
@@ -288,6 +287,29 @@ body {
   align-items: flex-start;
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
+
+/* Grid container for listings */
+.listings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Responsive columns */
+  gap: 0.5rem; /* Space between boxes */
+  margin: 0.5rem 1rem; /* Margin for spacing around the grid */
+}
+
+/* Optional: Additional responsiveness */
+@media (max-width: 768px) {
+  .listings-list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Smaller columns on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .listings-list {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+}
+/* Listings End */
+
 /* Community Box */
 
 .community-box {
@@ -326,6 +348,7 @@ body {
   gap: 0.25rem; /* Space between boxes */
   margin: 0.5rem 5rem; /* Margin for spacing around the grid */
 }
+
 
 
 .explore-button {

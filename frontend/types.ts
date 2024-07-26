@@ -9,6 +9,7 @@ export interface User {
 };
 }
 export interface Listing {
+  _id: number;
   ListingPictures: string[];
   Description: string;
   location: string;
@@ -18,7 +19,12 @@ export interface Listing {
   price: number;
   listing_type: string;
   area: number;
-  preferences: string[];
+  preferences: {
+    environment: string[];
+    facilities: string[];
+    ageGroup: string[];
+  
+  }
   user: User;
 }
 

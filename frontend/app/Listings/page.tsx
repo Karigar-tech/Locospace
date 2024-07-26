@@ -1,19 +1,18 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import CustomNavbar from '../../components/LandingNavbar';
 import SearchBar from '@/components/Listings/SearchBar';
-import {Listing} from '../../types';
+import { Listing } from '../../types';
+import ListingBox from '@/components/Listings/ListingBox';
+import NavBar from '../../components/NavBar';
 
-const page = () => {
-
+const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]); 
-  const [community, setCommunity]= useState<string | null>(null)
+  const [community, setCommunity] = useState<string | null>(null);
 
-  useEffect(()=>{
-    const storedCommunity= localStorage.getItem('selectedCommunity');
-    if(storedCommunity){
-      // const communityData= JSON.parse(storedCommunity);
-      // setCommunity(communityData);
+  useEffect(() => {
+    const storedCommunity = localStorage.getItem('selectedCommunity');
+    if (storedCommunity) {
       setCommunity(storedCommunity);
 
       const getListings = async () => {
@@ -22,37 +21,24 @@ const page = () => {
           const data = await response.json();
           console.log(data);
           setListings(data);
-    
         } catch (error) {
           console.error('Error fetching listings:', error);
         }
-    
       };
       getListings();
     }
-  },[]);
-  
-
-  useEffect(() => {
-    
   }, []);
 
   return (
     <div>
-      <CustomNavbar/>
-      <SearchBar/>
-      <div>
+      <NavBar />
+      <SearchBar />
+      <div className="community-list">
         <h2>Listings for {community ? community : 'All'}</h2>
-        {listings.length > 0 ?(
+        {listings.length > 0 ? (
           <ul>
-            {listings.map( (listing,index) => (
-              <li key= {index}>
-                {listing.location}
-                
-                <br/>{listing.Description}
-                <br/> Bathroom: {listing.bath}
-                <br/> Bedroom: {listing.bedroom}
-              </li>
+            {listings.map((listing, index) => (
+              <ListingBox key={listing._id} item={listing} />
             ))}
           </ul>
         ) : (
@@ -60,7 +46,7 @@ const page = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

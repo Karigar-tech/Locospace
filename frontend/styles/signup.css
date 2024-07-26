@@ -9,6 +9,12 @@
   
   background-size: auto 120%;
 }
+.error {
+  color: red;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
 .logo {
   position: absolute;
   top: 10px;

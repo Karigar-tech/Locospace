@@ -8,8 +8,6 @@ const authenticateToken = require('../middlewares/tokenauthentication');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// get all listings
-router.get('/', listingController.getAllListings);
 
 // Create a new listing
 router.post('/', authenticateToken, upload.array('ListingPictures', 5), listingController.createListing);

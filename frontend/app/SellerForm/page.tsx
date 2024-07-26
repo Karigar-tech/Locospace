@@ -1,14 +1,13 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from 'react-bootstrap';
-import { Listing, User } from '@/types';
-import '../../styles/sellerform.css';
-import MapComponent from '@/components/Map/Map';
-import { fileFrom } from 'node-fetch';
+import { Listing } from '@/types';
+import '../../styles/sellerform.css'; 
 
 const SellerForm: React.FC = () => {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [formData, setFormData] = useState<Listing>({
+    _id:0,
     ListingPictures: [],
     Description: "",
     location: "",
@@ -18,7 +17,11 @@ const SellerForm: React.FC = () => {
     price: 0,
     listing_type: "",
     area: 0,
-    preferences: [],
+    preferences: {
+      environment: [],
+      facilities: [],
+      ageGroup: [],
+    },
     user: {
       address: "",
       contact: "",
@@ -35,10 +38,11 @@ const SellerForm: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<FileList | null>(null);
 
-  const token = localStorage.getItem('authToken');
-  
+  const token = localStorage.getItem('token');
+  console.log(token);
+
   const options = {
     environment: ['Busy', 'Peaceful', 'Green', 'Commercial', 'Supportive', 'Safe', 'Affordable', 'Pet Friendly'],
     facilities: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground'],
@@ -67,31 +71,57 @@ const SellerForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submission behavior
-
-    try {
-      const response = await fetch('http://localhost:5000/api/listings/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      console.log('Done', data.message);
-      // Handle success (e.g., redirect to a login page or show a success message)
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle error (e.g., show an error message)
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files);
     }
   };
+
+  const handleHomeIconClick = () => {
+    document.getElementById('fileInput')?.click(); 
+  };
+
+ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append('listing_type', formData.listing_type);
+    formDataToSubmit.append('price', formData.price.toString());
+    formDataToSubmit.append('Description', formData.Description);
+    formDataToSubmit.append('location', formData.location);
+    formDataToSubmit.append('bedroom', formData.bedroom.toString());
+    formDataToSubmit.append('bath', formData.bath.toString());
+    formDataToSubmit.append('kitchen', formData.kitchen.toString());
+    formDataToSubmit.append('area', formData.area.toString());
+    formDataToSubmit.append('preferences', JSON.stringify(formData.preferences));
+    
+    // Append files to formData
+    if (file) {
+        Array.from(file).forEach((f) => {
+            formDataToSubmit.append('ListingPictures', f);
+        });
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/listings/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formDataToSubmit,
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log('Done', data.message);
+        
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
 
   const handleOptionSelect = (option: string) => {
     setSelectedOptions(prev =>
@@ -102,7 +132,10 @@ const SellerForm: React.FC = () => {
   const handleConfirmSelection = () => {
     setFormData(prevFormData => ({
       ...prevFormData,
-      [activeTab]: selectedOptions,
+      preferences: {
+        ...prevFormData.preferences,
+        [activeTab]: selectedOptions,
+      },
     }));
     setShowModal(false);
     setSelectedOptions([]);
@@ -117,14 +150,19 @@ const SellerForm: React.FC = () => {
       )
     );
   };
-  const handleRemoveEnvironment = (envToRemove: string) => {
+
+  const handleRemoveOption = (option: string, category: keyof typeof formData.preferences) => {
     setFormData(prevFormData => ({
       ...prevFormData,
-      preferences: prevFormData.preferences.filter(env => env !== envToRemove)
+      preferences: {
+        ...prevFormData.preferences,
+        [category]: prevFormData.preferences[category].filter(o => o !== option),
+      },
     }));
   };
 
   return (
+    
     <div className="seller-form mt-5 mx-auto">
       <h1 className="text-center mb-4">Property Details</h1>
       <Form onSubmit={handleSubmit}>
@@ -157,11 +195,17 @@ const SellerForm: React.FC = () => {
               <Button
                 type="button"
                 className="icon-button d-flex justify-content-center align-items-center rounded-circle"
-                onClick={() => {
-                }} 
+                onClick={handleHomeIconClick}
               >
                 <img src="/home-icon.png" alt="Home Icon" className="icon-image" />
               </Button>
+              <input
+                        type="file"
+                        id="fileInput"
+                        multiple
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
             </Col>
           </Row>
         </div>
@@ -275,20 +319,32 @@ const SellerForm: React.FC = () => {
               </ul>
             </Col>
             <Col md={6}>
-              <h4>About the environment</h4>
+              <h4>Preferences</h4>
               <div>
                 <Button
                   variant="primary"
                   className="btn-sm"
                   onClick={() => { setShowModal(true); setActiveTab('environment'); }}
                 >
-                  Select Environment
+                  Select Preferences
                 </Button>
                 <div className="selected-options-container">
-                  {formData.preferences.map((env, index) => (
+                  {formData.preferences.environment.map((env, index) => (
                     <span key={index} className="selected-option">
                       {env}
-                      <span className="remove-option" onClick={() => handleRemoveEnvironment(env)}>×</span>
+                      <span className="remove-option" onClick={() => handleRemoveOption(env, 'environment')}>×</span>
+                    </span>
+                  ))}
+                  {formData.preferences.facilities.map((fac, index) => (
+                    <span key={index} className="selected-option">
+                      {fac}
+                      <span className="remove-option" onClick={() => handleRemoveOption(fac, 'facilities')}>×</span>
+                    </span>
+                  ))}
+                  {formData.preferences.ageGroup.map((age, index) => (
+                    <span key={index} className="selected-option">
+                      {age}
+                      <span className="remove-option" onClick={() => handleRemoveOption(age, 'ageGroup')}>×</span>
                     </span>
                   ))}
                 </div>
@@ -296,7 +352,6 @@ const SellerForm: React.FC = () => {
             </Col>
           </Row>
         </div>
-
 
         <div className="d-flex justify-content-end">
           <Button type="submit" className="me-2 btn-primary rounded-5 px-4">
@@ -310,7 +365,7 @@ const SellerForm: React.FC = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Select Options</Modal.Title>
+          <Modal.Title>Select Preferences</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Tab.Container activeKey={activeTab}>
@@ -334,15 +389,27 @@ const SellerForm: React.FC = () => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {filteredOptions.map(option => (
-                  <Form.Check
-                    key={option}
-                    type="checkbox"
-                    label={option}
-                    checked={selectedOptions.includes(option)}
-                    onChange={() => handleOptionSelect(option)}
-                  />
-                ))}
+                {filteredOptions.length > 0 ? (
+                  filteredOptions.map(option => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionSelect(option)}
+                    />
+                  ))
+                ) : (
+                  options.environment.map(option => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionSelect(option)}
+                    />
+                  ))
+                )}
               </Tab.Pane>
               <Tab.Pane eventKey="facilities">
                 <InputGroup className="mb-3">
@@ -352,15 +419,27 @@ const SellerForm: React.FC = () => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {options.facilities.map(option => (
-                  <Form.Check
-                    key={option}
-                    type="checkbox"
-                    label={option}
-                    checked={selectedOptions.includes(option)}
-                    onChange={() => handleOptionSelect(option)}
-                  />
-                ))}
+                {filteredOptions.length > 0 ? (
+                  filteredOptions.map(option => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionSelect(option)}
+                    />
+                  ))
+                ) : (
+                  options.facilities.map(option => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionSelect(option)}
+                    />
+                  ))
+                )}
               </Tab.Pane>
               <Tab.Pane eventKey="ageGroup">
                 <InputGroup className="mb-3">
@@ -370,15 +449,27 @@ const SellerForm: React.FC = () => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {options.ageGroup.map(option => (
-                  <Form.Check
-                    key={option}
-                    type="checkbox"
-                    label={option}
-                    checked={selectedOptions.includes(option)}
-                    onChange={() => handleOptionSelect(option)}
-                  />
-                ))}
+                {filteredOptions.length > 0 ? (
+                  filteredOptions.map(option => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionSelect(option)}
+                    />
+                  ))
+                ) : (
+                  options.ageGroup.map(option => (
+                    <Form.Check
+                      key={option}
+                      type="checkbox"
+                      label={option}
+                      checked={selectedOptions.includes(option)}
+                      onChange={() => handleOptionSelect(option)}
+                    />
+                  ))
+                )}
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>

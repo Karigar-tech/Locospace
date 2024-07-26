@@ -13,7 +13,7 @@ interface CommunityBoxProps {
 
 const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, onClick }) => {
   return (
-    <Card className="d-block card-custom" onClick={onClick}>
+    <Card className="community-box" onClick={onClick}>
       <div className="image-wrapper">
         <Card.Img variant="top" src='placeholder.png' alt={`Image of ${name}`} />
       </div>
@@ -26,7 +26,7 @@ const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, on
           <Col className="text-right"><FontAwesomeIcon icon={faList} /> {listings} Listings</Col>
         </Row>
         <hr />
-        <Button variant="primary" onClick={onClick}>View Details</Button>
+        <Button className='explore-button' onClick={onClick}>Explore</Button>
       </Card.Body>
     </Card>
   );

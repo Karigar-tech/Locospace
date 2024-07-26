@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import CustomNavBar from '../../components/LandingNavbar';
+import NavBar from '../../components/NavBar';
 import CommunityBox from '../../components/Communities/CommunityBox';
 import '../../styles/main.css';
 import { Button } from 'react-bootstrap';
@@ -26,7 +26,7 @@ const CommunitiesPage = () => {
 
   return (
     <div>
-      <CustomNavBar />
+      <NavBar />
       <div className="gradient-bar-container">
         <div className="gradient-bar"></div>
         <div className='search-bar-container'>
@@ -34,7 +34,7 @@ const CommunitiesPage = () => {
           <input type="text" className='community-search' placeholder='Searchstuff' />
         </div>
       </div>
-      <h2>All Communities</h2>
+      <h2 className="ml-15 mt-36">All Communities</h2>
       <div className="community-list">
         {communities.map((community) => (
           <CommunityBox

@@ -7,10 +7,6 @@ const signUpValidator = z.object({
     email: z.string({required_error: "Email is required"}).email(),
     address: z.string({required_error: "Address is required"}).min(4).max(100),
     contact: z.string().min(11).max(11),
-    location: z.object({
-        latitude: z.number(),
-        longitude: z.number(),
-    }),
 });
 
 module.exports = {signUpValidator};

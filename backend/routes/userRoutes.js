@@ -4,7 +4,7 @@ const userController = require('../controllers/userController');
 const {signUpValidator} = require('../validators/auth-validator');
 const {validateMiddleware} = require('../middlewares/validate-middleware');
 
-router.post('/signup',validateMiddleware(signUpValidator), userController.signUp);
+router.post('/signup',userController.signUp);
 
 
 module.exports = router;

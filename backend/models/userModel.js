@@ -28,8 +28,8 @@ const UserSchema = new mongoose.Schema({
     type: String,
   },
   address: {
-    type: String,
-    required: true,
+    type: String
+    
   },
   location: {
     lat: {

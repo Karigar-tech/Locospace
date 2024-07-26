@@ -13,12 +13,15 @@ import VerticalCardCarousel from '../../components/VerticalCarousel';
 import MapComponent from '../../components/MapComponentListing';
 import { geocodeAddress } from '../../utils/geocode';
 import NavBar from '../../components/NavBar';
+import { useSearchParams } from 'next/navigation';
+
 
 const SelectedListing: React.FC = () => {
   const router = useRouter();
- // const { id } = router.query; // Get the id from the URL
-  const id = '66a1fedb1995a6c4340142a9'
-
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+  console.log(id)
+  
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

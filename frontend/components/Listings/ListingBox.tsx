@@ -5,12 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faList } from '@fortawesome/free-solid-svg-icons';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import {Listing} from '../../types'
+import { useRouter } from 'next/navigation';
 
 interface ListingBoxProps {
     item: Listing;
 }
 
 const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
+  const router = useRouter();
+
     const formatPrice = (price: number) => {
         if (typeof price !== 'number') {
           return 'Invalid price';
@@ -22,6 +25,9 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
         }
       };
   
+      const handleClick = () => {
+        router.push(`/Listing?id=${item._id}`); 
+      };
     return (
     <Card className="listing-box" >
       <div className="image-wrapper">
@@ -45,7 +51,7 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
                     <span style={{ marginLeft: '0.5rem' }}>{item.location}</span>, {item.area}
                   </Col>
                 </Row>
-                <Button variant="primary" href="#">View</Button>
+                <Button onClick={handleClick} variant="primary" href="#">View</Button>
               </Card.Body>
     </Card>
   );

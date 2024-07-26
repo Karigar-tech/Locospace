@@ -3,12 +3,20 @@ import { Container, Row, Col, Button, Form, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import '../styles/main.css';
+import { useRouter } from 'next/navigation';
+
 
 const LandingPageComp: React.FC = () => {
+  const router = useRouter();
   const [showFilters, setShowFilters] = useState(false);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
+  };
+
+  const handleSell = () =>{
+    router.push('/SellerForm')
+
   };
 
   return (
@@ -22,7 +30,7 @@ const LandingPageComp: React.FC = () => {
             <div className="search-container">
               <div className="buttons-container">
                 <Button className='search_buttons' variant="primary">Buy</Button>
-                <Button className='search_buttons' variant="primary">Sell</Button>
+                <Button className='search_buttons' variant="primary" onClick ={handleSell}>Sell</Button>
                 <Button className='search_buttons' variant="primary">Rent</Button>
               </div>
               <Form>

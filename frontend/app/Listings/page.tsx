@@ -38,7 +38,7 @@ const Page = () => {
         {listings.length > 0 ? (
           <ul>
             {listings.map((listing, index) => (
-              <ListingBox key={index} item={listing} />
+              <ListingBox key={listing._id} item={listing} />
             ))}
           </ul>
         ) : (

@@ -9,6 +9,7 @@ export interface User {
 };
 }
 export interface Listing {
+  _id: number;
   ListingPictures: string[];
   Description: string;
   location: string;

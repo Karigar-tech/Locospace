@@ -24,14 +24,14 @@ const Signup: React.FC = () => {
   const handleSignup = async () => {
     
     setError('');
-
+    console.log({ username, password, name, email, contact }); 
     try {
       const response = await fetch('http://localhost:5000/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password, name, address, contact, community, location }),
+        body: JSON.stringify({username, password , name ,email,  contact  }),
       });
 
       if (!response.ok) {

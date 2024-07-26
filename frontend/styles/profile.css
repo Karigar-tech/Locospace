@@ -20,7 +20,11 @@
   
   .profile-header h2 {
     margin-left: 10%;
+    font-family: 'Gotham';
+    font-weight:bold;
   }
+
+ 
   
   .header-line {
     flex-grow: 1;
@@ -32,6 +36,7 @@
     
     display: flex;
     flex-direction: row;
+    margin-top: 30px;
    
 }
 
@@ -73,6 +78,7 @@
     display: flex;
     flex-direction: column;
     gap: 0px;
+    height:110%;
   }
 
   .edit-icon{
@@ -92,7 +98,7 @@
     background-color: white;
     padding: 25px;
     height: 132px;
-    width: 96%;
+    width: 92%;
     border-bottom: 1px solid #ddd;
     border-left: 1px solid #ddd;
     border-top-right-radius: 7px; 
@@ -105,8 +111,9 @@
   }
   
   .detail-box label {
-    font-weight: bold;
+    font-weight: 700;
     margin-right: 10px;
+    font-family: 'Gotham';
   }
   
   .head {
@@ -207,10 +214,28 @@
   }
 
   .modal-header{
-    background: linear-gradient(180deg, rgba(139, 139, 245, 0.8) 0%, rgba(135, 206, 235, 0.2) 100%);
+    background: linear-gradient(90deg, #3D8BFD 0%, #290661);
     color: white;
     border-bottom: none;
+    height: 50% !important;
   }
+
+  .close{
+    
+    color: white; 
+    opacity: 1;
+    border: none;
+    font-size: 30px;
+    position: absolute;
+    top:10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  
 
   .modal-content{
     border: none;
@@ -223,16 +248,15 @@
   }
 
   .save-button{
-    padding: 0.25rem 0.75rem;
+    padding: 0.75rem 0.95rem;
     border-radius: 50px;
     font-size: 0.875rem;
     margin-inline: 10px;
-    background-color: rgba(139, 139, 245, 0.8);
+    background: linear-gradient(90deg, #3D8BFD, #8671ff);
     border: none;
   }
   .save-button:hover{
-   
-    background-color: rgba(110, 110, 237, 0.8);
+    background-color: linear-gradient(90deg, #3D8BFD 0%, #290661)!important;
   }
 
   .custom-modal .modal-dialog {

@@ -4,6 +4,7 @@ import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from
 import { Listing, User } from '@/types';
 import '../../styles/sellerform.css';
 import MapComponent from '@/components/Map/Map';
+import { fileFrom } from 'node-fetch';
 
 const SellerForm: React.FC = () => {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
@@ -156,7 +157,8 @@ const SellerForm: React.FC = () => {
               <Button
                 type="button"
                 className="icon-button d-flex justify-content-center align-items-center rounded-circle"
-                onClick={() => {}} 
+                onClick={() => {
+                }} 
               >
                 <img src="/home-icon.png" alt="Home Icon" className="icon-image" />
               </Button>

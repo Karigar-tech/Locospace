@@ -9,6 +9,14 @@ const generatePublicUrl = (file) => {
 
 exports.createListing = async (req, res) => {
     try {
+        const userId = req.user.id;
+
+        //check for 2 listings
+        const existingListingsCount = await Listing.countDocuments({ user_id: userId });
+        if (existingListingsCount >= 2) {
+            return res.status(403).json({ error: "You can only create up to 2 listings." });
+        }
+
         const listingData = {
             user_id: req.user.id,
             listing_type: req.body.listing_type,

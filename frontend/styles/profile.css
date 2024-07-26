@@ -28,7 +28,17 @@
     background-color: #a3a3a3 ;
     margin-left: 10px;
   }
+  .row {
+    
+    display: flex;
+    flex-direction: row;
+   
+}
 
+  .col-6 {
+    flex: 0 0 auto;
+    width: 45%;
+  }
   .profile-picture {
     flex: 1;
     display: flex;

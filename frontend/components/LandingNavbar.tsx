@@ -16,12 +16,6 @@ const CustomNavBar: React.FC = () => {
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
           <Nav className="ms-auto">
-            <Link href="/Communities" passHref>
-              <Button variant="outline-primary" className="btn-custom">Communities</Button>
-            </Link>
-            <Link href="/Profile" passHref>
-              <Button variant="outline-secondary" className="btn-profile">Profile</Button>
-            </Link>
             <Link href="/Login" passHref>
               <Button variant="outline-primary" className="btn-custom">Login</Button>
             </Link>

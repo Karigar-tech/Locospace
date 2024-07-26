@@ -6,7 +6,11 @@ const useAuthStore = create((set) => ({
   getToken: () => {
     const { token } = useAuthStore.getState();
     return token;
-  },
+  },
+  logout: () => {
+    localStorage.removeItem('token');
+    set({ token: null });
+  },
 }));
 
 export default useAuthStore;

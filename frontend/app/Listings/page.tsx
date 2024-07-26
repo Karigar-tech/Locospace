@@ -4,6 +4,7 @@ import CustomNavbar from '../../components/LandingNavbar';
 import SearchBar from '@/components/Listings/SearchBar';
 import { Listing } from '../../types';
 import ListingBox from '@/components/Listings/ListingBox';
+import NavBar from '../../components/NavBar';
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]); 
@@ -30,14 +31,14 @@ const Page = () => {
 
   return (
     <div>
-      <CustomNavbar />
+      <NavBar />
       <SearchBar />
       <div className="community-list">
         <h2>Listings for {community ? community : 'All'}</h2>
         {listings.length > 0 ? (
           <ul>
             {listings.map((listing, index) => (
-              <ListingBox key={index} item={listing} />
+              <ListingBox key={listing._id} item={listing} />
             ))}
           </ul>
         ) : (

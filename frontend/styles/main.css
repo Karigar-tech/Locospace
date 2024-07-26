@@ -29,12 +29,32 @@ body {
   z-index: 2;
 }
 .navbar-brand-custom {
-  font-size: 2.5rem;
+  font-size: 30px;
   font-weight: bold;
   text-decoration: none;
-  color: rgb(255, 255, 255);
+  color: black;
 }
 
+.navbar-btn-custom {
+  font-weight: bold;
+  color: black;
+  background-color: initial; 
+  border: none;
+}
+
+.navbar-btn-custom:hover { 
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  border: none;
+}
+
+.navbar-btn-custom:active { 
+  font-weight: bold !important;
+  color: black !important;
+  background-color: white !important;
+  border: none !important;
+}
 .navbar-toggler {
   width: 40px; /* adjust the width of the toggle button */
   height: 40px; /* adjust the height of the toggle button */
@@ -57,8 +77,9 @@ body {
 .btn-custom {
   padding: 0.25rem 0.75rem;
   border-radius: 50px;
-  font-size: 0.875rem;
   margin-inline: 10px;
+  font-family: 'Gotham';
+  font-weight: bold;
 }
 
 .btn-profile {
@@ -71,8 +92,10 @@ body {
 .btn-custom-signup {
   padding: 0.25rem 0.75rem;
   border-radius: 50px;
-  font-size: 0.875rem;
   margin-inline: 10px;
+  font-family: 'Gotham';
+  font-weight: bold;
+ 
 }
 
 .btn-custom-signup:hover {
@@ -321,6 +344,24 @@ body {
   background: linear-gradient(150deg, #00088f, #290661); /* Changed gradient background on hover */
   transform: scale(1.03); /* Slightly larger on hover */
 }
+
+
+.navbar-text{
+  font-family: 'Gotham';
+  font-weight: 40px;
+  color: black;
+}
+
+.navbar-nav{
+  font-family: 'Gotham';
+  font-weight: 30px;
+  color: black;
+}
+
+.navbar-btn-custom{
+  border-color: transparent;
+}
+
 
 
 @media (max-width: 1200px) {

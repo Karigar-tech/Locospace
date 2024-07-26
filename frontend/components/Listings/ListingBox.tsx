@@ -4,6 +4,7 @@ import { Card, Button, Row, Col, Carousel } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Listing } from '../../types';
+import { useRouter } from 'next/navigation';
 
 interface ListingBoxProps {
   item: Listing;

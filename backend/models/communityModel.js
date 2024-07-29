@@ -11,15 +11,14 @@ const CommunitySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    location: {
-        type: String,
-        required: true,
+    // location: {
+    //     type: String,
+    //     required: true,
 
-    },
+    // },
     communityPicture: {    
-        data: Buffer,
-        contentType: String
-    }
+        type: String,
+    },
 
     
 });

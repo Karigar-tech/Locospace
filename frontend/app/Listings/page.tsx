@@ -9,6 +9,7 @@ import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
 import '../../styles/profile.css';
 import ToggleButton from "../../components/Listings/Toggle"
+import MainBox from '@/components/Threads/MainBox';
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -57,9 +58,10 @@ const Page = () => {
 
         
       
-      <h2>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : 'Threads'}</h2>
+      <h2 className='p-4 ml-4'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`} </h2>
       {view === 'listings' ? (
         <div className="listings-list">
+          
           {listings.length > 0 ? (
             <ul>
               {listings.map((listing) => (
@@ -72,6 +74,7 @@ const Page = () => {
         </div>
       ) : (
         <div className="threads-list">
+          <MainBox/>
           {threads.length> 0 ? (
             <ul>
                 {threads.map((thread, index) => (

@@ -12,6 +12,7 @@ interface ListingBoxProps {
 
 const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
   const [showCarousel, setShowCarousel] = useState(false);
+  const router = useRouter();
 
   const formatPrice = (price: number) => {
     if (typeof price !== 'number') {
@@ -30,6 +31,10 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
 
   const handleMouseLeave = () => {
     setShowCarousel(false);
+  };
+
+  const handleClick = () => {
+    router.push(`/Listing?id=${item._id}`); // Use the correct property for listing ID
   };
 
   return (
@@ -65,7 +70,7 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
             <span style={{ marginLeft: '0.5rem' }}>{item.location}</span>, {item.area}
           </Col>
         </Row>
-        <Button variant="primary" href="#">View</Button>
+        <Button onClick={handleClick} variant="primary">View</Button>
       </Card.Body>
     </Card>
   );

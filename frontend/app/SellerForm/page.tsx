@@ -1,14 +1,24 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from 'react-bootstrap';
+//Icons 
+import { FaBed,FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw , FaChild } from 'react-icons/fa';
+import { MdOutlineSecurity , MdElderly, MdOutlineHiking} from "react-icons/md";
+import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
+import { CgGym } from "react-icons/cg";
+import { GiBurningRoundShot } from "react-icons/gi";
+import { GiPeaceDove } from "react-icons/gi";
+//IconsEnd
+import Footer from '../../components/LandingFooter';
 import { Listing } from '@/types';
 import '../../styles/sellerform.css'; 
 
 const SellerForm: React.FC = () => {
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  
   const [formData, setFormData] = useState<Listing>({
     _id:0,
     ListingPictures: [],
+    adTitle: "",
     Description: "",
     location: "",
     bedroom: 0,
@@ -16,7 +26,9 @@ const SellerForm: React.FC = () => {
     kitchen: 0,
     price: 0,
     listing_type: "",
-    area: 0,
+    areasize: 0,
+    areaunit: "",
+    area:"",
     preferences: {
       environment: [],
       facilities: [],
@@ -48,13 +60,24 @@ const SellerForm: React.FC = () => {
     facilities: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground'],
     ageGroup: ['Kids', 'Teens', 'Adults', 'Seniors']
   };
-
+  const area = ['Marla', 'Kanal', 'Square Feet', 'Acres'];
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value,
     }));
+  };
+  const handleArea = (event:any) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => {
+      const newFormData = { ...prevData, [name]: value };
+      if (name === 'areaunit' || name === 'areasize') {
+        newFormData.area = `${newFormData.areaunit} ${newFormData.areasize}`.trim();
+      }
+      console.log(newFormData); 
+      return newFormData;
+    });
   };
 
   const handleIncrement = (field: keyof Listing) => {
@@ -87,6 +110,7 @@ const SellerForm: React.FC = () => {
     const formDataToSubmit = new FormData();
     formDataToSubmit.append('listing_type', formData.listing_type);
     formDataToSubmit.append('price', formData.price.toString());
+    formDataToSubmit.append('adTitle', formData.adTitle);
     formDataToSubmit.append('Description', formData.Description);
     formDataToSubmit.append('location', formData.location);
     formDataToSubmit.append('bedroom', formData.bedroom.toString());
@@ -123,7 +147,7 @@ const SellerForm: React.FC = () => {
     }
 };
 
-  const handleOptionSelect = (option: string) => {
+const handleOptionSelect = (option: string) => {
     setSelectedOptions(prev =>
       prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]
     );
@@ -151,6 +175,33 @@ const SellerForm: React.FC = () => {
     );
   };
 
+  const environmentIconMap: Record<string, React.ReactElement> = {
+    "Busy": <FaRunning/>,
+    "Peaceful": <GiPeaceDove/>,
+    "Green": <FaTree/>,
+    "Commercial": <FaBuilding/>,
+    "Supportive": <FaHandsHelping/>,
+    "Safe": <FaShieldAlt/>,
+    "Affordable": <FaMoneyBillWave/>,
+    "Pet Friendly": <FaPaw/>
+
+  };
+
+   const facilitiesIconMap: Record<string, React.ReactElement> = {
+    "Gym": <CgGym/>,
+    "Swimming Pool": <FaPersonSwimming/>,
+    "Parking": <FaParking/>,
+    "Security": <MdOutlineSecurity/>,
+    "Playground": <GiBurningRoundShot />
+  };
+
+  const ageGroupIconMap: Record<string, React.ReactElement> = {
+    "Kids": <FaChild/>,
+    "Teens": <FaPerson/>,
+    "Adults": <MdOutlineHiking/>,
+    "Seniors": <MdElderly />
+  };
+
   const handleRemoveOption = (option: string, category: keyof typeof formData.preferences) => {
     setFormData(prevFormData => ({
       ...prevFormData,
@@ -162,13 +213,12 @@ const SellerForm: React.FC = () => {
   };
 
   return (
-    
-    <div className="seller-form mt-5 mx-auto">
-      <h1 className="text-center mb-4">Property Details</h1>
-      <Form onSubmit={handleSubmit}>
-        <div className="card mb-4 p-3">
+    <div className="container-fluid">
+      <img src="/Sellerform.png" alt="Logo" className="img-fluid pb-3" /> 
+      <Form onSubmit={handleSubmit} className='mb-5'>
+        <div className="card p-3" style={{border:'none'}}>
           <Row className="align-items-center">
-            <Col md={8}>
+            <Col s={6} md={6}>
               <Form.Group>
                 <h4>Purpose</h4>
                 <div className="d-flex mt-3">
@@ -188,10 +238,10 @@ const SellerForm: React.FC = () => {
                     <img src="/key.png" alt="Icon" className="key-image me-2" />
                     Rent
                   </Button>
-                </div>
+                </div>  
               </Form.Group>
             </Col>
-            <Col md={4} className="p-3 d-flex justify-content-center align-items-center">
+            <Col s={5}  md={5} className="p-3 d-flex justify-content-center align-items-center">
               <Button
                 type="button"
                 className="icon-button d-flex justify-content-center align-items-center rounded-circle"
@@ -200,23 +250,20 @@ const SellerForm: React.FC = () => {
                 <img src="/home-icon.png" alt="Home Icon" className="icon-image" />
               </Button>
               <input
-                        type="file"
-                        id="fileInput"
-                        multiple
-                        style={{ display: 'none' }}
-                        onChange={handleFileChange}
-                    />
+                type="file"
+                id="fileInput"
+                multiple
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
             </Col>
           </Row>
-        </div>
-
-        <div className="card mb-4 p-3">
           <Row>
-            <Col>
+            <Col xs={7} md={7}>
               <Form.Group>
                 <h4>Location</h4>
                 <Form.Control
-                  type="text"
+                  type="textarea"
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
@@ -225,23 +272,37 @@ const SellerForm: React.FC = () => {
                 />
               </Form.Group>
             </Col>
-          </Row>
-
-          <Row>
-            <Col lg={6}>
+            <Col md={5} className='mt-3'>
               <Form.Group>
                 <h4>Area Size</h4>
                 <Form.Control
-                  type="text"
-                  name="area"
-                  value={formData.area}
-                  onChange={handleChange}
-                  placeholder="Enter the area size"
+                  type="Number" 
+                  name="areaunit"
+                  value={formData.areaunit}
+                  onChange={handleArea}
+                  placeholder='Enter Area Size'
                   required
+                  className="mb-1 w-50"
+                  min="1"
                 />
+                <Form.Control
+                  as="select"
+                  name="areasize"
+                  value={formData.areasize}
+                  onChange={handleArea}
+                  required
+                  className="w-50"
+                >
+                  <option value="">Select Area Unit</option>
+                  {area.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+              </Form.Control>
               </Form.Group>
             </Col>
-            <Col lg={6}>
+            <Col md={5} className='mt-3'>
               <Form.Group>
                 <h4>Price</h4>
                 <Form.Control
@@ -251,27 +312,49 @@ const SellerForm: React.FC = () => {
                   onChange={handleChange}
                   placeholder="Enter the price"
                   required
+                  className="w-50"
                 />
               </Form.Group>
             </Col>
           </Row>
 
-          <Form.Group>
-            <h4>Description</h4>
-            <Form.Control
-              as="textarea"
-              name="Description"
-              value={formData.Description}
-              onChange={handleChange}
-              placeholder="Enter property description"
-              required
-            />
-          </Form.Group>
+        </div>
+        <div className="card mb-1 p-3" style={{border:'none'}}>
+          <Row>
+            <Col md={7} className=''>
+              <Form.Group>
+                <h4>Title</h4>
+                <Form.Control
+                  type="text"
+                  name="adTitle"
+                  value={formData.adTitle}
+                  onChange={handleChange}
+                  placeholder="Enter property title"
+                  required
+                  className="mb-2 w-100"
+                />
+              </Form.Group> 
+            </Col>
+            <Col md={11}>
+              <Form.Group>
+                <h4>Description</h4>
+                <Form.Control
+                  as="textarea"
+                  name="Description"
+                  value={formData.Description}
+                  onChange={handleChange}
+                  placeholder="Enter property description"
+                  required
+                  className="w-60"
+                />
+              </Form.Group>
+            </Col>
+          </Row>
         </div>
 
-        <div className="card mb-4 p-3">
+        <div className="card mb-4 p-3" style={{border:'none'}}>
           <Row>
-            <Col md={6}>
+            <Col xs={6} md={6}>
               <h4>Features</h4>
               <ul className="features-list">
                 <li className="features-list-item">
@@ -318,7 +401,7 @@ const SellerForm: React.FC = () => {
                 </li>
               </ul>
             </Col>
-            <Col md={6}>
+            <Col xs={6} md={5}>
               <h4>Preferences</h4>
               <div>
                 <Button
@@ -330,20 +413,23 @@ const SellerForm: React.FC = () => {
                 </Button>
                 <div className="selected-options-container">
                   {formData.preferences.environment.map((env, index) => (
-                    <span key={index} className="selected-option">
-                      {env}
+                    <span key={index}className="selected-option">
+                      {environmentIconMap[env]}
+                      <span style={{ marginLeft: '5px' }}>{env}</span>
                       <span className="remove-option" onClick={() => handleRemoveOption(env, 'environment')}>×</span>
                     </span>
                   ))}
                   {formData.preferences.facilities.map((fac, index) => (
                     <span key={index} className="selected-option">
-                      {fac}
+                      {facilitiesIconMap[fac]} 
+                      <span style={{ marginLeft: '5px' }}>{fac}</span>
                       <span className="remove-option" onClick={() => handleRemoveOption(fac, 'facilities')}>×</span>
                     </span>
                   ))}
                   {formData.preferences.ageGroup.map((age, index) => (
                     <span key={index} className="selected-option">
-                      {age}
+                      {ageGroupIconMap[age]}
+                      <span style={{ marginLeft: '5px' }}>{age}</span>
                       <span className="remove-option" onClick={() => handleRemoveOption(age, 'ageGroup')}>×</span>
                     </span>
                   ))}
@@ -353,7 +439,7 @@ const SellerForm: React.FC = () => {
           </Row>
         </div>
 
-        <div className="d-flex justify-content-end">
+        <div>
           <Button type="submit" className="me-2 btn-primary rounded-5 px-4">
             Publish
           </Button>
@@ -382,13 +468,14 @@ const SellerForm: React.FC = () => {
             </Nav>
             <Tab.Content>
               <Tab.Pane eventKey="environment">
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-3 mt-3">
                   <FormControl
                     placeholder="Search Environment..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
+          
                 {filteredOptions.length > 0 ? (
                   filteredOptions.map(option => (
                     <Form.Check
@@ -401,18 +488,25 @@ const SellerForm: React.FC = () => {
                   ))
                 ) : (
                   options.environment.map(option => (
-                    <Form.Check
+                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
                       key={option}
                       type="checkbox"
-                      label={option}
+                      label={
+                        <>
+                          {environmentIconMap[option]}
+                          <span style={{ marginLeft: '10px' }}>{option}</span>
+                        </>
+                      }
+                        
                       checked={selectedOptions.includes(option)}
                       onChange={() => handleOptionSelect(option)}
                     />
                   ))
                 )}
               </Tab.Pane>
+
               <Tab.Pane eventKey="facilities">
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-3 mt-3">
                   <FormControl
                     placeholder="Search Facilities..."
                     value={searchQuery}
@@ -431,10 +525,15 @@ const SellerForm: React.FC = () => {
                   ))
                 ) : (
                   options.facilities.map(option => (
-                    <Form.Check
+                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
                       key={option}
                       type="checkbox"
-                      label={option}
+                      label={
+                        <>
+                        {facilitiesIconMap[option]}
+                        <span style={{ marginLeft: '10px' }}>{option}</span>
+                      </>
+                      }
                       checked={selectedOptions.includes(option)}
                       onChange={() => handleOptionSelect(option)}
                     />
@@ -442,7 +541,7 @@ const SellerForm: React.FC = () => {
                 )}
               </Tab.Pane>
               <Tab.Pane eventKey="ageGroup">
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-3 mt-3">
                   <FormControl
                     placeholder="Search Age Group..."
                     value={searchQuery}
@@ -451,7 +550,7 @@ const SellerForm: React.FC = () => {
                 </InputGroup>
                 {filteredOptions.length > 0 ? (
                   filteredOptions.map(option => (
-                    <Form.Check
+                    <Form.Check 
                       key={option}
                       type="checkbox"
                       label={option}
@@ -461,10 +560,16 @@ const SellerForm: React.FC = () => {
                   ))
                 ) : (
                   options.ageGroup.map(option => (
-                    <Form.Check
+                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
+                      
                       key={option}
                       type="checkbox"
-                      label={option}
+                      label={
+                        <>
+                        {ageGroupIconMap[option]}
+                        <span style={{ marginLeft: '10px' }}>{option}</span>
+                        </>
+                      }
                       checked={selectedOptions.includes(option)}
                       onChange={() => handleOptionSelect(option)}
                     />
@@ -479,6 +584,7 @@ const SellerForm: React.FC = () => {
         </Modal.Footer>
       </Modal>
     </div>
+
   );
 };
 

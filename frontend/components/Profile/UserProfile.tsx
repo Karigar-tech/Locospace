@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form,  Row, Col  } from 'react-bootstrap';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import '../../styles/profile.css'; // Adjust path based on your folder structure
 import useAuthStore from '../../authStore';
-import { BsPencilSquare, BsPersonFill, BsPeopleFill   } from 'react-icons/bs';
+import { BsPencilSquare, BsPersonFill, BsPeopleFill, BsCamera } from 'react-icons/bs';
 
 const UserProfile: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -30,14 +30,11 @@ const UserProfile: React.FC = () => {
       if (response.ok) {
         const Data = await response.json();
         setUsername(Data.username);
-        setPassword(Data.password);
         setName(Data.name);
         setEmail(Data.email);
         setAddress(Data.address);
         setContact(Data.contact);
-        if (Data.profilePicture) {
-          setProfilePictureBase64(`data:${Data.profilePicture.contentType};base64,${Data.profilePicture}`);
-        }
+        setProfilePictureBase64(Data.profilePicture);
       } else {
         console.log('Failed to fetch data');
       }
@@ -49,13 +46,15 @@ const UserProfile: React.FC = () => {
   const handleEdit = async () => {
     const formData = new FormData();
     formData.append('username', username);
-    formData.append('password', password);
     formData.append('name', name);
     formData.append('email', email);
     formData.append('address', address);
     formData.append('contact', contact);
     if (profilePicture) {
       formData.append('profilePicture', profilePicture);
+    }
+    if (password) {
+      formData.append('password', password);
     }
 
     try {
@@ -97,114 +96,115 @@ const UserProfile: React.FC = () => {
 
   return (
     <div>
-    <div className="profile-header">
+      <div className="profile-header">
         <h2>User Profile</h2>
         <hr className="header-line" />
       </div>
-    <div className="profile-container">
-      <div className="profile-picture">
-        {profilePictureBase64 ? (
-          <img src={profilePictureBase64} alt="Profile" className="profile-img" />
-        ) : (
-          <BsPersonFill className="profile-placeholder-icon" />
-        )}
-        <BsPencilSquare className="edit-icon" onClick={() => setShowModal(true)} />
-      </div>
-      <div className="profile-details">
-        <div className="detail-box">
-          <label>Name:</label>
-          <p>{name}</p>
+      <div className="profile-container">
+        <div className="profile-picture">
+          {profilePictureBase64 ? (
+            <img src={profilePictureBase64} alt="Profile" className="profile-img" />
+          ) : (
+            <BsPersonFill className="profile-placeholder-icon" />
+          )}
+          <BsPencilSquare className="edit-icon" onClick={() => setShowModal(true)} />
         </div>
-        <div className="detail-box">
-          <label>Email:</label>
-          <p>{email}</p>
+        <div className="profile-details">
+          <div className="detail-box">
+            <label>Name:</label>
+            <p>{name}</p>
+          </div>
+          <div className="detail-box">
+            <label>Username:</label>
+            <p>{username}</p>
+          </div>
+          <div className="detail-box">
+            <label>Contact:</label>
+            <p>{contact}</p>
+          </div>
+          <div className="detail-box">
+            <label>Email:</label>
+            <p>{email}</p>
+          </div>
         </div>
-        <div className="detail-box">
-          <label>Address:</label>
-          <p>{address}</p>
-        </div>
-      </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered className="custom-modal">
-        <Modal.Header className="modal-header" closeButton>
-          <BsPeopleFill  className="profile-icon" /> 
-          <Modal.Title>Edit Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="modal-body">
-          <Row className="px-3">
-            <Col xs={6} className="mb-3 mr-4">
-              <div style = {{width: "100%", height: "100%"}}className="profile-picture" onClick={() => document.getElementById('profilePictureInputModal')?.click()}>
-              {profilePictureBase64 ? (
-                  <img src={profilePictureBase64} alt="Profile" className="profile-img" />
-                ) : (
-                  <BsPersonFill className="profile-placeholder-icon" />
-                )}
-                <input
-                  id="profilePictureInputModal"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  style={{ display: 'none' }}
-                />
-              </div>
-            </Col>
-            <Col xs={6} className="mb-3 mr-4">
-              <Form.Group controlId="formNameModal">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  style={{ borderRadius: '8px' }}
-                />
-              </Form.Group>
-              <Form.Group controlId="formEmailModal">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={{ border: '1px solid #ced4da', padding: '8px' }}
-                />
-              </Form.Group>
-              <Form.Group controlId="formAddressModal">
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  style={{ borderRadius: '8px' }}
-                />
-              </Form.Group>
-              <Form.Group controlId="formContactModal">
-                <Form.Label>Contact</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  style={{ borderRadius: '8px' }}
-                />
-              </Form.Group>
-              <Form.Group controlId="formPasswordModal">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={{ borderRadius: '8px' }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button className = "save-button"variant="primary" onClick={handleEdit}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered className="custom-modal">
+          <div className="modal-header">
+            <BsPeopleFill className="profile-icon" />
+            <Modal.Title>Edit Profile</Modal.Title>
+            <button className="close" onClick={() => setShowModal(false)}>&times;</button>
+          </div>
+          <Modal.Body className="modal-body">
+            <Row className="px-3">
+              <Col xs={6} className="mb-3 mr-4">
+                <div style={{ width: "100%", height: "100%" }} className="profile-picture" onClick={() => document.getElementById('profilePictureInputModal')?.click()}>
+                  {profilePictureBase64 ? (
+                    <div className="profile-picture-wrapper">
+                      <img src={profilePictureBase64} alt="Profile" className="profile-img" />
+                      <div className="profile-picture-overlay">
+                        <BsCamera className="camera-icon" />
+                      </div>
+                    </div>
+                  ) : (
+                    <BsPersonFill className="profile-placeholder-icon" />
+                  )}
+                  <input
+                    id="profilePictureInputModal"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                  />
+                </div>
+              </Col>
+              <Col xs={6} className="mb-3 mr-4">
+                <Form.Group controlId="formNameModal">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    style={{ borderRadius: '8px' }}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formEmailModal">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ border: '1px solid #ced4da', padding: '8px' }}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formContactModal">
+                  <Form.Label>Contact</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    style={{ borderRadius: '8px' }}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formPasswordModal">
+                  <Form.Label>New Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={password}
+                    placeholder='Add your new password here'
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{ borderRadius: '8px' }}
+                  />
+                </Form.Group>  
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="save-button" variant="primary" onClick={handleEdit}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
   );
 };

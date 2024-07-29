@@ -11,6 +11,7 @@ export interface User {
 export interface Listing {
   _id: number;
   ListingPictures: string[];
+  adTitle: string;
   Description: string;
   location: string;
   bedroom: number;
@@ -18,7 +19,9 @@ export interface Listing {
   kitchen: number;
   price: number;
   listing_type: string;
-  area: number;
+  areasize: number;
+  areaunit: string;
+  area: string;
   preferences: {
     environment: string[];
     facilities: string[];

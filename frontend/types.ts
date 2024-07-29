@@ -11,7 +11,7 @@ export interface User {
 export interface Listing {
   _id: number;
   ListingPictures: string[];
-  adTitle: string;
+  title: string;
   Description: string;
   location: string;
   bedroom: number;

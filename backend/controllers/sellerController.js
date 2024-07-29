@@ -19,6 +19,7 @@ exports.createListing = async (req, res) => {
 
         const listingData = {
             user_id: req.user.id,
+            title: req.body.title,
             listing_type: req.body.listing_type,
             price: req.body.price,
             Description: req.body.Description,

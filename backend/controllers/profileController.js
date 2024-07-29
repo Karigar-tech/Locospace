@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Listing = require('../models/listingModel')
 const multer = require('multer');
 const bcrypt = require("bcrypt");
 const { bucket } = require('../firebaseAdmin');
@@ -21,13 +22,16 @@ exports.getMyProfile = async (req, res) => {
             return res.status(404).json('User not found!');
         }
 
+        const listings = await Listing.find({ user_id: id }); 
+
+
         if (user.profilePicture && user.profilePicture.url) {
             // Use the URL from profilePicture
             const userDataWithProfilePicUrl = { ...user._doc, profilePicture: user.profilePicture.url };
 
-            return res.status(200).json(userDataWithProfilePicUrl);
+            return res.status(200).json({ user: userDataWithProfilePicUrl, listings });
         } else {
-            return res.status(200).json(user);
+            return res.status(200).json({ user, listings });
         }
     } catch (error) {
         console.error('Error: Not able to get user', error);

@@ -14,7 +14,11 @@ const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
-  
+  const [threads, setThreads]=  useState<string[]>(
+    ["Thread 1: Power outage",
+     "Thread 2: Communal gathering"
+    ]);
+
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
     if (storedCommunity) {
@@ -68,9 +72,19 @@ const Page = () => {
         </div>
       ) : (
         <div className="threads-list">
-          {/* Replace the following with your Threads component or implementation */}
-          <p>No threads found</p>
+          {threads.length> 0 ? (
+            <ul>
+                {threads.map((thread, index) => (
+                  <li key={index}>{thread}</li>
+                ))}
+            </ul>
+
+          ): (
+            <p>No threads found</p>
+          )}
+          
         </div>
+  
       )}
     </div>
   );

@@ -1,11 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from '../../components/LandingNavbar';
-import SearchBar from '@/components/Listings/SearchBar';
-import { Listing } from '../../types';
-import { Button } from 'react-bootstrap';
-import ListingBox from '@/components/Listings/ListingBox';
-import NavBar from '../../components/NavBar';
+
 import "../../styles/main.css";
 
 

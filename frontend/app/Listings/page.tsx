@@ -3,14 +3,21 @@ import React, { useState, useEffect } from 'react';
 import CustomNavbar from '../../components/LandingNavbar';
 import SearchBar from '@/components/Listings/SearchBar';
 import { Listing } from '../../types';
+import { Button } from 'react-bootstrap';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
+import '../../styles/profile.css';
+import ToggleButton from "../../components/Listings/Toggle"
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
+  const [threads, setThreads]=  useState<string[]>(
+    ["Thread 1: Power outage",
+     "Thread 2: Communal gathering"
+    ]);
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
@@ -35,16 +42,21 @@ const Page = () => {
     setView(view === 'listings' ? 'threads' : 'listings');
   };
 
+  
+
   return (
     <div>
       <NavBar />
       <div className="gradient-bar-container">
         <div className="gradient-bar"></div>
-        <SearchBar />
+          {/* <Button>Search</Button> */}
+          <ToggleButton view={view} setView={setView} />
+          {/* <input type="text" className='community-search' placeholder='Searchstuff' /> */}
+       
       </div>
-      <button className='search-bar-container button' onClick={toggleView}>
-        {view === 'listings' ? 'Show Threads' : 'Show Listings'}
-      </button>
+
+        
+      
       <h2>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : 'Threads'}</h2>
       {view === 'listings' ? (
         <div className="listings-list">
@@ -60,9 +72,19 @@ const Page = () => {
         </div>
       ) : (
         <div className="threads-list">
-          {/* Replace the following with your Threads component or implementation */}
-          <p>No threads found</p>
+          {threads.length> 0 ? (
+            <ul>
+                {threads.map((thread, index) => (
+                  <li key={index}>{thread}</li>
+                ))}
+            </ul>
+
+          ): (
+            <p>No threads found</p>
+          )}
+          
         </div>
+  
       )}
     </div>
   );

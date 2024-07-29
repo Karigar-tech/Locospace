@@ -3,8 +3,13 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import '../../styles/profile.css'; // Adjust path based on your folder structure
 import useAuthStore from '../../authStore';
 import { BsPencilSquare, BsPersonFill, BsPeopleFill, BsCamera } from 'react-icons/bs';
+import {Listing, User} from '../../types';
 
-const UserProfile: React.FC = () => {
+interface UserProfileProps {
+  onProfileUpdate: (profile: { user: User; listings: Listing[] }) => void;
+}
+
+const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -14,9 +19,11 @@ const UserProfile: React.FC = () => {
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [profilePictureBase64, setProfilePictureBase64] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
+  const [listings, setListings] = useState<Listing[]>([]);
 
   const token = localStorage.getItem('token');
 
+  console.log(token)
   const getData = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/myprofile', {
@@ -29,12 +36,15 @@ const UserProfile: React.FC = () => {
 
       if (response.ok) {
         const Data = await response.json();
-        setUsername(Data.username);
-        setName(Data.name);
-        setEmail(Data.email);
-        setAddress(Data.address);
-        setContact(Data.contact);
-        setProfilePictureBase64(Data.profilePicture);
+        setUsername(Data.user.username);
+        setName(Data.user.name);
+        setEmail(Data.user.email);
+        setAddress(Data.user.address);
+        setContact(Data.user.contact);
+        setProfilePictureBase64(Data.user.profilePicture);
+        console.log(Data)
+        setListings(Data.listings); 
+        onProfileUpdate({ user: Data.user, listings: Data.listings }); 
       } else {
         console.log('Failed to fetch data');
       }

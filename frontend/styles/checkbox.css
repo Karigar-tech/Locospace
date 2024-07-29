@@ -1,0 +1,38 @@
+/* Hide the default checkbox */
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+
+}
+
+
+/* Style the label to include a custom icon */
+.custom-checkbox label {
+    position: relative;
+    border-radius: 10%;
+    padding: 10px 10px 10px 0px; /* Adjust padding to make space for the custom icon */
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Custom icon before the label text */
+.custom-checkbox label::before {    
+    font-weight: 900; /* Ensure correct font weight */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px; /* Adjust size as needed */
+
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label::before {
+    content: '\2714'; /* Unicode for the check-square icon (FontAwesome) */
+    right: 5%;
+    color: #000000; /* Adjust color as needed */
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label {
+    background-color: #aa5fec; /* Highlight color when checked */
+}   

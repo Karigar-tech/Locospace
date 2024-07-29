@@ -12,6 +12,7 @@ import { GiPeaceDove } from "react-icons/gi";
 import Footer from '../../components/LandingFooter';
 import { Listing } from '@/types';
 import '../../styles/sellerform.css'; 
+import CustomCheckbox from '@/components/customcheckbox';
 
 const SellerForm: React.FC = () => {
   
@@ -475,34 +476,19 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-          
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
-                    <Form.Check
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={filteredOptions}
+                    IconMap={environmentIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                ) : (
-                  options.environment.map(option => (
-                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
-                      key={option}
-                      type="checkbox"
-                      label={
-                        <>
-                          {environmentIconMap[option]}
-                          <span style={{ marginLeft: '10px' }}>{option}</span>
-                        </>
-                      }
-                        
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={options.environment}
+                    IconMap={environmentIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                )}
+                
               </Tab.Pane>
 
               <Tab.Pane eventKey="facilities">

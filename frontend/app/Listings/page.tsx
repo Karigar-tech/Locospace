@@ -16,7 +16,7 @@ const Page = () => {
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [threads, setThreads]=  useState<string[]>(
     ["Thread 1: Power outage",
-     "Thread 2: Communal gathering"
+     "Thread 2: Communal- gathering"
     ]);
 
   useEffect(() => {

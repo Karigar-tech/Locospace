@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
   profilePicture: {
     filePath: { type: String },
     url: { type: String }
-  } 
+  },
 });
 
 const User =   mongoose.model('User', UserSchema);

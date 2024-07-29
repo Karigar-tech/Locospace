@@ -11,14 +11,26 @@ import '../../styles/profile.css';
 import ToggleButton from "../../components/Listings/Toggle"
 import MainBox from '@/components/Threads/MainBox';
 
+interface Thread {
+  title: string;
+  username: string;
+}
+
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
-  const [threads, setThreads]=  useState<string[]>(
-    ["Thread 1: Power outage",
-     "Thread 2: Communal gathering"
-    ]);
+  const [threads, setThreads] = useState<Thread[]>([
+    { title: "Power outage!", username: 'AliAhmed20'},
+    { title: "Communal gathering", username: 'ZahraKhan2001' },
+    { title: "Football Festival", username: 'osamababakhell'},
+    { title: "Half Marathon throughout", username: 'aaarij420'},
+    { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
+  ]);
+
+  const addThread = (title: string, username: string) => {
+    setThreads(prevThreads => [...prevThreads, { title, username }]);
+  };
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
@@ -43,25 +55,16 @@ const Page = () => {
     setView(view === 'listings' ? 'threads' : 'listings');
   };
 
-  
-
   return (
     <div>
       <NavBar />
       <div className="gradient-bar-container">
         <div className="gradient-bar"></div>
-          {/* <Button>Search</Button> */}
-          <ToggleButton view={view} setView={setView} />
-          {/* <input type="text" className='community-search' placeholder='Searchstuff' /> */}
-       
+        <ToggleButton view={view} setView={setView} />
       </div>
-
-        
-      
-      <h2 className='p-4 ml-4'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`} </h2>
+      <h2 className='p-4 ml-4'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`}</h2>
       {view === 'listings' ? (
         <div className="listings-list">
-          
           {listings.length > 0 ? (
             <ul>
               {listings.map((listing) => (
@@ -73,21 +76,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <div className="threads-list">
-          <MainBox/>
-          {threads.length> 0 ? (
-            <ul>
-                {threads.map((thread, index) => (
-                  <li key={index}>{thread}</li>
-                ))}
-            </ul>
-
-          ): (
-            <p>No threads found</p>
-          )}
-          
-        </div>
-  
+        <MainBox threads={threads} addThread={addThread} />
       )}
     </div>
   );

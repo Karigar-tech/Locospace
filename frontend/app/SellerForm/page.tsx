@@ -19,7 +19,7 @@ const SellerForm: React.FC = () => {
   const [formData, setFormData] = useState<Listing>({
     _id:0,
     ListingPictures: [],
-    adTitle: "",
+    title: "",
     Description: "",
     location: "",
     bedroom: 0,
@@ -111,7 +111,7 @@ const SellerForm: React.FC = () => {
     const formDataToSubmit = new FormData();
     formDataToSubmit.append('listing_type', formData.listing_type);
     formDataToSubmit.append('price', formData.price.toString());
-    formDataToSubmit.append('adTitle', formData.adTitle);
+    formDataToSubmit.append('adTitle', formData.title);
     formDataToSubmit.append('Description', formData.Description);
     formDataToSubmit.append('location', formData.location);
     formDataToSubmit.append('bedroom', formData.bedroom.toString());
@@ -327,8 +327,8 @@ const handleOptionSelect = (option: string) => {
                 <h4>Title</h4>
                 <Form.Control
                   type="text"
-                  name="adTitle"
-                  value={formData.adTitle}
+                  name="titkle"
+                  value={formData.title}
                   onChange={handleChange}
                   placeholder="Enter property title"
                   required

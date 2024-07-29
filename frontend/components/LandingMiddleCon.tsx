@@ -5,6 +5,14 @@ import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-
 import '../styles/main.css';
 import { useRouter } from 'next/navigation';
 
+const communities = [
+  "DHA-1",
+  "DHA-2",
+  "Bahria Phase 1-6",
+  "Bahria Phase 7-9",
+  "Gulberg Greens",
+  "PWD"
+];
 
 const LandingPageComp: React.FC = () => {
   const router = useRouter();

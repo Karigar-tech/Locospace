@@ -28,7 +28,7 @@
 }
 
 .custom-checkbox input[type="checkbox"]:checked + label::before {
-    content: '\2714'; /* Unicode for the check-square icon (FontAwesome) */
+    content: '\2714'; /* Unicode for the Tick */
     right: 5%;
     color: #000000; /* Adjust color as needed */
 }

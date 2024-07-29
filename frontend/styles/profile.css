@@ -35,8 +35,9 @@
   .row {
     
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 30px;
+    flex-wrap: nowrap;
    
 }
 
@@ -96,7 +97,7 @@
   
   .detail-box {
     background-color: white;
-    padding: 25px;
+    padding: 22px;
     height: 132px;
     width: 92%;
     border-bottom: 1px solid #ddd;
@@ -115,7 +116,7 @@
     margin-right: 10px;
     font-family: 'Gotham';
   }
-  
+
   .head {
     position: relative;
     display: flex;
@@ -151,7 +152,7 @@
     text-align: center;
   }
   
-  .toggle-container {
+  .profile-toggle-container {
     display: flex;
     justify-content: left;
     margin-left: 10%;
@@ -176,7 +177,7 @@
     cursor: pointer;
     transition-delay: 0.5s;
   }
-  .toggle-button {
+  .profile-toggle-button {
     padding: 10px 20px;
     margin: 0 2px;
     border: 1px solid #ffffff;
@@ -208,10 +209,32 @@
     border-radius: 10px;
     margin: 20px auto;
     width: 83%;
-    height: 300px;
-    margin-bottom: 150px;
+    height: 500px;
+    margin-bottom: 100px;
     background-color: #f9f9f9;
+    overflow-y: auto;   
+    
   }
+/* 
+ .image-wrapper {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.card-custom .image-wrapper img {
+ 
+  object-fit: contain;
+} */
 
   .modal-header{
     background: linear-gradient(90deg, #3D8BFD 0%, #290661);
@@ -220,6 +243,44 @@
     height: 50% !important;
   }
 
+  .card-grid-wrapper{
+    margin-left: 40px;
+  }
+  .card-custom {
+    width: 70rem;
+    height: 20rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border-radius: 30px;
+    overflow: hidden; 
+    flex-direction: row;
+  }
+
+
+  
+  
+  .image-wrapper {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    margin-left: 40px;
+  }
+  
+  .image-wrapper img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .text-right{
+    align-items: baseline;
+
+  }
   .close{
     
     color: white; 
@@ -266,7 +327,7 @@
   .custom-modal .modal-content {
     width: 100%; 
   }
-  
+
   @media (max-width: 992px) {
     .profile-container {
       flex-direction: column;
@@ -297,6 +358,7 @@
     .profile-details{
       justify-content: center;
       align-items: center;
+      margin-bottom: 0px;
     }
     
   }

@@ -499,32 +499,18 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
-                    <Form.Check
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                <CustomCheckbox
+                    options={filteredOptions}
+                    IconMap={facilitiesIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                ) : (
-                  options.facilities.map(option => (
-                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
-                      key={option}
-                      type="checkbox"
-                      label={
-                        <>
-                        {facilitiesIconMap[option]}
-                        <span style={{ marginLeft: '10px' }}>{option}</span>
-                      </>
-                      }
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={options.facilities}
+                    IconMap={facilitiesIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                )}
               </Tab.Pane>
               <Tab.Pane eventKey="ageGroup">
                 <InputGroup className="mb-3 mt-3">
@@ -534,33 +520,19 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
-                    <Form.Check 
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                <CustomCheckbox
+                    options={filteredOptions}
+                    IconMap={ageGroupIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                ) : (
-                  options.ageGroup.map(option => (
-                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
-                      
-                      key={option}
-                      type="checkbox"
-                      label={
-                        <>
-                        {ageGroupIconMap[option]}
-                        <span style={{ marginLeft: '10px' }}>{option}</span>
-                        </>
-                      }
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={options.ageGroup}
+                    IconMap={ageGroupIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                )}
+                
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>

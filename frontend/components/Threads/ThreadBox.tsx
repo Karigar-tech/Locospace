@@ -10,9 +10,8 @@ const ThreadBox: React.FC<BoxProps> = ({ title, username}) => {
   return (
     <div className='thread-box'>
 
-      <p className='thread-members'>{username}</p>
-      
-      <h3 className='thread-title'><br/>{title}</h3>
+      <p className='thread-username'>{username}</p>
+      <h4 className='thread-title'>{title}</h4>
     </div>
   );
 };

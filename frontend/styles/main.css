@@ -330,14 +330,17 @@ body {
   border-radius: 1.35rem !important;
 }
 
+
 /* Threads */
 .threads-container {
-  background: linear-gradient(rgb(182, 187, 255),rgb(215, 240, 255));
+  background: linear-gradient(rgb(182, 187, 255), rgb(215, 240, 255));
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 16px auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .threads-list {
@@ -347,12 +350,12 @@ body {
   background-color: #ffffff;
   overflow-y: auto;
   margin-bottom: 16px;
+  border-radius: 8px;
 }
 
 .thread-item {
-  
   padding: 8px;
-  background-color: #c2c2c2;
+  background-color: #e9ecef;
   border-radius: 4px;
   margin-bottom: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -361,15 +364,17 @@ body {
 .thread-box {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
+  flex-direction: column;
 }
 
 .thread-title {
-  font-weight: bold;
+  font-style: normal;
 }
 
-.thread-members {
+.thread-username{
   color: #888;
+  align-self: left;
 }
 
 .thread-input-container {
@@ -395,14 +400,12 @@ body {
   align-items: center;
   justify-content: center;
   transition: color 0.5s;
-  
 }
 
 .thread-add-button:hover {
   color: #3D8BFD;
-  
-  
 }
+
 
 /* Optional: Additional responsiveness */
 @media (max-width: 768px) {

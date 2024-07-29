@@ -21,11 +21,11 @@ const Page = () => {
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [threads, setThreads] = useState<Thread[]>([
-    { title: "Thread 1: Power outage", username: 'AliAhmed20'},
-    { title: "Thread 2: Communal gathering", username: 'ZahraKhan2001' },
-    { title: "Thread 3: Football Festival", username: 'osamababakhell'},
-    { title: "Thread 4: Half Marathon throughout", username: 'aaarij420'},
-    { title: "Thread 5: Iron-Man Triathlon", username: 'MinaKhanCode69' }
+    { title: "Power outage!", username: 'AliAhmed20'},
+    { title: "Communal gathering", username: 'ZahraKhan2001' },
+    { title: "Football Festival", username: 'osamababakhell'},
+    { title: "Half Marathon throughout", username: 'aaarij420'},
+    { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
   ]);
 
   const addThread = (title: string, username: string) => {

@@ -1,10 +1,10 @@
 import React from 'react'
-import MessageContainer from '../../components/Chat/messagecontainer';
-import SideChats from '../../components/Chat/sidechats';
+import MessageContainer from '../../components/Chat/MessageContainer';
+import SideChats from '../../components/Chat/SideChats';
 
 const page = () => {
   return (
-    <div>
+    <div className='d-flex justify-content-between min-w-full bg-gray-100 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
       <div>
         <SideChats/>
       </div>

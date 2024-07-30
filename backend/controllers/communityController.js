@@ -49,8 +49,9 @@ exports.createCommunity = async (req, res) => {
       res.status(500).json({ message: 'Error creating community', error });
     }
   };
+  
   exports.getAllCommunities = async (req, res) => {
-    const { environment, facilities, ageGroup, search } = req.query;
+    const { environment, facilities, ageGroup, search, community } = req.query;
   
     try {
       // Fetch all communities
@@ -110,8 +111,14 @@ exports.createCommunity = async (req, res) => {
           community.preferences.ageGroup.some(age => ageGroup.split(',').includes(age))
         );
       }
+
+      if (community) {
+        const communityRegex = new RegExp(community, 'i');
+        filteredCommunities = filteredCommunities.filter(community =>
+          community.communityName && community.communityName.match(communityRegex)
+        );
+      }  
   
-   
       const communitiesWithDetailedListings = await Promise.all(
         filteredCommunities.map(async community => {
           const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });

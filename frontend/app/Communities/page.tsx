@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
+import Image from 'next/image';
 import CommunityBox from '../../components/Communities/CommunityBox';
 import '../../styles/main.css';
 import { Button } from 'react-bootstrap';
@@ -70,8 +71,15 @@ const CommunitiesPage = () => {
             onChange={handleSearchChange}
           />
         </div>
+    </div>
+      <div className="upper-container" style={{ width: '90%' }}>
+      <div className="row">
+        <div className="col">
+          <h4 className="ml-15 mt-36">All Communities</h4>
+        </div>
       </div>
-      <h2 className="ml-15 mt-36">All Communities</h2>
+    </div>
+      
       <div className="community-list">
         {communities.map((community) => (
           <CommunityBox

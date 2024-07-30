@@ -358,7 +358,17 @@ body {
 }
 
 
+.upper-container{
+  margin-left:100px;
+  margin-top: 30px;
+}
 
+.row-listings{
+  display: flex;
+  flex-direction: row;
+  margin-left:400px;
+  margin-top: 30px;
+}
 
 
 

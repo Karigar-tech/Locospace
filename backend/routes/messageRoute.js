@@ -5,4 +5,6 @@ const messageController = require('../controllers/messageController');
 
 router.post('/send/:id' , authenticateToken ,messageController.sendMessages);
 
+router.get('/:id' , authenticateToken ,messageController.getMessages);
+
 module.exports = router;

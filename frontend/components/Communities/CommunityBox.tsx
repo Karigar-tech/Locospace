@@ -8,14 +8,15 @@ interface CommunityBoxProps {
     name: string;
     members: number;
     listings: number;
+    picture: string;
     onClick: () => void;
 }
 
-const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, onClick }) => {
+const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, picture, onClick }) => {
   return (
     <Card className="community-box" onClick={onClick}>
       <div className="image-wrapper">
-        <Card.Img variant="top" src='placeholder.png' alt={`Image of ${name}`} />
+        <Card.Img variant="top" src={picture}alt={`placeholder.png`} />
       </div>
       <Card.Body>
         <Card.Title>

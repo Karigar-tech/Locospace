@@ -6,6 +6,8 @@ const UserRoute = require('./routes/userRoutes')
 const LoginRoute = require('./routes/loginRoutes')
 const ProfileRoutes = require('./routes/profileRoutes')
 const listingRoutes = require('./routes/sellerRoutes')
+const messageRoute = require('./routes/messageRoute')
+const communityRoutes = require('./routes/communityRoutes')
 
 dotenv.config();
 
@@ -32,6 +34,8 @@ app.use('/api', UserRoute);
 app.use('/api', LoginRoute);
 app.use('/api', ProfileRoutes);
 app.use('/api/listings', listingRoutes);
+app.use('/api/messages', messageRoute);
+app.use('/api/community',communityRoutes);
 
 
 app.listen(port, () => {

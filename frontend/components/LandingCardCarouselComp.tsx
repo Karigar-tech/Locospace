@@ -5,6 +5,7 @@ import 'react-multi-carousel/lib/styles.css';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import {Listing} from '../types'
 import '../styles/main.css';
 
 interface CSVData {
@@ -39,18 +40,16 @@ const responsive = {
 };
 
 const CardCarouselComp: React.FC = () => {
-  const [data, setData] = useState<CSVData[]>([]);
+  const [data, setData] = useState<Listing[]>([]);
 
   useEffect(() => {
-    fetch('/zameen.csv')
-      .then(response => response.text())
-      .then(csvText => {
-        Papa.parse<CSVData>(csvText, {
-          header: true,
-          complete: (results) => {
-            setData(results.data);
-          }
-        });
+    fetch('http://localhost:5000/api/listings/') 
+      .then(response => response.json())
+      .then(data => {
+        setData(data);
+      })
+      .catch(error => {
+        console.error('Error fetching listings:', error);
       });
   }, []);
 
@@ -80,29 +79,31 @@ const CardCarouselComp: React.FC = () => {
         customLeftArrow={<></>}
         customRightArrow={<></>}
       >
-        {data.slice(0, 10).map((item, index) => (
+        {data.map((item, index) => (
           <Card key={index} className="d-block card-custom">
             <div className="image-wrapper">
-              <Card.Img variant="top" src='placeholder.png' alt={`Image of ${item.title}`} />
+              <Card.Img variant="top" src={item.ListingPictures[0] || 'placeholder.png'} alt={`Image of ${item.title}`} />
             </div>
             <Card.Body>
-              <Card.Title><Row className="mb-2">
-                <Col><span>{item.type}</span></Col>
-                <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
-              </Row></Card.Title>
+              <Card.Title>
+                <Row className="mb-2">
+                  <Col><span>{item.listing_type === 'sell' ? 'For Sale' : 'For Rent'}</span></Col>
+                  <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
+                </Row>
+              </Card.Title>
               <Row className="mb-3 mt-2">
-                <Col><FontAwesomeIcon icon={faBed} /> {item.bedrooms}</Col>
-                <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.baths}</Col>
+                <Col><FontAwesomeIcon icon={faBed} /> {item.bedroom}</Col>
+                <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath}</Col>
               </Row>
               <hr />
               <Row className="mb-2">
                 <Col md={5}>
                   <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-                  <span style={{ marginLeft: '0.25rem' }}>{item.address.split(',')[0]}</span>, {item.city}
+                  <span style={{ marginLeft: '0.25rem' }}>{item.location.split(',')[0]}</span>, {item.area}
                 </Col>
                 <Col md={4} className="text-right">
                   <Button variant="primary" href="#" style={{ width: '5rem' }}>View</Button>
-                </Col>                
+                </Col>
               </Row>
             </Card.Body>
           </Card>

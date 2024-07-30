@@ -35,20 +35,30 @@ const Page = () => {
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
-    if (storedCommunity) {
+    const token = localStorage.getItem('token');
+    
+    if (storedCommunity && token) {
       setCommunity(storedCommunity);
-
-      const getListings = async () => {
+      const fetchCommunityDetails = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/listings/'); // Replace with your actual API endpoint
+          const response = await fetch(`http://localhost:5000/api/community/${storedCommunity}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
           const data = await response.json();
           console.log(data);
-          setListings(data);
+          if (data.detailedListings) {
+            setListings(data.detailedListings);
+          } else {
+            console.error('No listings found for this community');
+            setListings([]);
+          }
         } catch (error) {
-          console.error('Error fetching listings:', error);
+          console.error('Error fetching community details:', error);
         }
       };
-      getListings();
+      fetchCommunityDetails();
     }
   }, []);
 

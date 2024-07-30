@@ -49,78 +49,26 @@ exports.createCommunity = async (req, res) => {
       res.status(500).json({ message: 'Error creating community', error });
     }
   };
-  
   exports.getAllCommunities = async (req, res) => {
-    const { environment, facilities, ageGroup, search, community } = req.query;
+    const { search } = req.query;
   
     try {
-      // Fetch all communities
-      let communities = await Community.find();
+      let communities = [];
   
-      // If a search is provided, fetch listings that match the search
-      let matchingListings = [];
       if (search) {
-        const searchRegex = new RegExp(search, 'i');
-        matchingListings = await Listing.find({
-          $or: [
-            { title: searchRegex },
-            { description: searchRegex },
-            { location: searchRegex }
-          ]
+        const searchRegex = new RegExp(search, 'i'); 
+  
+        communities = await Community.find({
+          communityName: { $regex: searchRegex }
         });
+      } else {
+       
+        communities = await Community.find();
       }
   
-      // Filter communities based on the search
-      let filteredCommunities = communities;
-      if (search) {
-        const searchRegex = new RegExp(search, 'i');
-        filteredCommunities = filteredCommunities.filter(community =>
-          community.communityName && community.communityName.match(searchRegex)
-        );
-  
-        // Include communities whose listings match the search
-        const matchingListingIds = matchingListings.map(listing => listing._id.toString());
-        filteredCommunities = filteredCommunities.filter(community =>
-          community.communityListings && community.communityListings.some(listingId =>
-            matchingListingIds.includes(listingId.toString())
-          )
-        );
-      }
-  
-      // Apply other filters
-      if (environment) {
-        filteredCommunities = filteredCommunities.filter(community =>
-          community.preferences && 
-          community.preferences.environment && 
-          community.preferences.environment.some(env => environment.split(',').includes(env))
-        );
-      }
-  
-      if (facilities) {
-        filteredCommunities = filteredCommunities.filter(community =>
-          community.preferences && 
-          community.preferences.facilities && 
-          community.preferences.facilities.some(facility => facilities.split(',').includes(facility))
-        );
-      }
-  
-      if (ageGroup) {
-        filteredCommunities = filteredCommunities.filter(community =>
-          community.preferences && 
-          community.preferences.ageGroup && 
-          community.preferences.ageGroup.some(age => ageGroup.split(',').includes(age))
-        );
-      }
-
-      if (community) {
-        const communityRegex = new RegExp(community, 'i');
-        filteredCommunities = filteredCommunities.filter(community =>
-          community.communityName && community.communityName.match(communityRegex)
-        );
-      }  
-  
+   
       const communitiesWithDetailedListings = await Promise.all(
-        filteredCommunities.map(async community => {
+        communities.map(async community => {
           const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
           return {
             ...community.toObject(),
@@ -135,6 +83,8 @@ exports.createCommunity = async (req, res) => {
       res.status(500).json({ message: 'Error fetching communities', error });
     }
   };
+  
+  
   
   exports.getCommunityDetails = async (req, res) => {
     const communityName = req.params.name;
@@ -162,3 +112,4 @@ exports.createCommunity = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+  

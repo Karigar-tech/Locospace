@@ -51,7 +51,7 @@ const Page = () => {
   const fetchListings = async (keyword: string) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/?keyword=${keyword}`, {
+      const response = await fetch(`http://localhost:5000/api/listings/alllistings?keyword=${keyword}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

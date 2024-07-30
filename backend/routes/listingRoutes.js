@@ -24,12 +24,12 @@ router.delete('/:id', authenticateToken, listingController.deleteListing);
 router.get('/specific/:id', listingController.getSpecificListing)
 
 // Get all listings
-router.get('/all', listingController.getListings); 
+router.get('/alllistings', listingController.getListings); 
 
 // Get listings by type
 router.get('/', listingController.getListingsByType);
 
-router.get('/listings', getAllListings);
+router.get('/listingserach', listingController.getAllListings);
 
 
 

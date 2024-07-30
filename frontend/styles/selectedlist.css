@@ -162,11 +162,17 @@
   margin-left: 0;
 }
 
+.row > * {
+  padding-left: 20px;
+}
+
+.justify-content-end {
+  justify-content: flex-start !important;
+}
 .side {
   margin-left: 20px;
   border: solid 1px #949494;
   margin-top: 20px;
-  height: 500px;
   border-radius: 20px;
   margin-right: 0;
 }
@@ -270,6 +276,6 @@
 
 .chat-btn {
   width: 120px;
-  height: 55px;
+  height: 40px;
   border-radius: 15px;
 }

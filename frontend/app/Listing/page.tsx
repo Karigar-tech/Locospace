@@ -8,6 +8,14 @@ import "../../styles/selectedlist.css";
 import { Listing, User } from "../../types";
 import { BsHeart, BsShare } from "react-icons/bs";
 import Image from "next/image";
+import Footer from "../../components/LandingFooter"
+//Icons 
+import { FaParking, FaChild } from 'react-icons/fa';
+import { MdOutlineSecurity , MdElderly, MdOutlineHiking} from "react-icons/md";
+import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
+import { CgGym } from "react-icons/cg";
+import { GiBurningRoundShot } from "react-icons/gi";
+import { GiPeaceDove } from "react-icons/gi";
 import {
   FaBed,
   FaBath,
@@ -125,16 +133,33 @@ const SelectedListing: React.FC = () => {
       });
   };
 
-  const preferenceIconMap: Record<string, React.ReactElement> = {
-    Busy: <FaRunning />,
-    Peaceful: <FaBed />,
-    Green: <FaTree />,
-    Commercial: <FaBuilding />,
-    Supportive: <FaHandsHelping />,
-    Safe: <FaShieldAlt />,
-    Affordable: <FaMoneyBillWave />,
-    PetFriendly: <FaPaw />,
+  const environmentIconMap: Record<string, React.ReactElement> = {
+    "Busy": <FaRunning/>,
+    "Peaceful": <GiPeaceDove/>,
+    "Green": <FaTree/>,
+    "Commercial": <FaBuilding/>,
+    "Supportive": <FaHandsHelping/>,
+    "Safe": <FaShieldAlt/>,
+    "Affordable": <FaMoneyBillWave/>,
+    "Pet Friendly": <FaPaw/>
+
   };
+
+   const facilitiesIconMap: Record<string, React.ReactElement> = {
+    "Gym": <CgGym/>,
+    "Swimming Pool": <FaPersonSwimming/>,
+    "Parking": <FaParking/>,
+    "Security": <MdOutlineSecurity/>,
+    "Playground": <GiBurningRoundShot />
+  };
+
+  const ageGroupIconMap: Record<string, React.ReactElement> = {
+    "Kids": <FaChild/>,
+    "Teens": <FaPerson/>,
+    "Adults": <MdOutlineHiking/>,
+    "Seniors": <MdElderly />
+  };
+
 
   return (
     <div className="row">
@@ -207,7 +232,35 @@ const SelectedListing: React.FC = () => {
                 key={index}
                 className="tags m-1"
               >
-                {preferenceIconMap[preference]} {preference}
+                {environmentIconMap[preference]} {preference}
+              </Button>
+            ))}
+          </div>
+        </div>
+        <div className="rectangle rec2">
+          <h2>Facilities</h2>
+          <div className="col-12 prefernece">
+            {listing.preferences.facilities.map((preference, index) => (
+              <Button
+                variant="outline-primary"
+                key={index}
+                className="tags m-1"
+              >
+                {facilitiesIconMap[preference]} {preference}
+              </Button>
+            ))}
+          </div>
+        </div>
+        <div className="rectangle rec2">
+          <h2>Age Group</h2>
+          <div className="col-12 prefernece">
+            {listing.preferences.ageGroup.map((preference, index) => (
+              <Button
+                variant="outline-primary"
+                key={index}
+                className="tags m-1"
+              >
+                {ageGroupIconMap[preference]} {preference}
               </Button>
             ))}
           </div>
@@ -219,7 +272,7 @@ const SelectedListing: React.FC = () => {
         <div className="rectangle rec2">
           <h2>Location</h2>
           <div className="location-content">{listing.location}</div>
-          {/* {coordinates && <MapComponent latitude={coordinates.latitude} longitude={coordinates.longitude} />}   */}
+          {coordinates && <MapComponent latitude={coordinates.latitude} longitude={coordinates.longitude} />}  
         </div>
       </div>
       <div className="col-md-4 d-flex flex-column gap-3">
@@ -297,6 +350,7 @@ const SelectedListing: React.FC = () => {
         <div className="rectangle side-2 p-3 mb-3">
           <VerticalCardCarousel />
         </div>
+        
       </div>
     </div>
   );

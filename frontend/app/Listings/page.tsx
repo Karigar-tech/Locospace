@@ -42,7 +42,7 @@ const Page = () => {
       setKeyword(keyword);
       fetchListings(keyword);
     }
-  }, [searchParams]);
+  }, [searchParams]); 
 
   const addThread = (title: string, username: string) => {
     setThreads(prevThreads => [...prevThreads, { title, username }]);

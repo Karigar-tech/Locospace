@@ -1,10 +1,10 @@
 import React from 'react';
-import "../../styles/main.css";
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Listing } from '../../types';
 import { useRouter } from 'next/navigation';
+import '../../styles/main.css';
 
 interface ListingBoxProps {
   item: Listing;
@@ -25,7 +25,7 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
   };
 
   const handleClick = () => {
-    router.push(`/Listing?id=${item._id}`); // Use the correct property for listing ID
+    router.push(`/Listing?id=${item._id}`);
   };
 
   return (
@@ -50,7 +50,7 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
         <Row className="mb-1">
           <Col>
             <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location} , {item.area}</span>
+            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location}</span>
           </Col>
         </Row>
         <Button onClick={handleClick} variant="primary">View</Button>

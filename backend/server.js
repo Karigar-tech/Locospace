@@ -7,7 +7,9 @@ const LoginRoute = require('./routes/loginRoutes');
 const ProfileRoutes = require('./routes/profileRoutes');
 const listingRoutes = require('./routes/sellerRoutes');
 const threadRoutes = require('./routes/threadRoutes'); 
-
+const listRoute = require('./routes/listingRoutes') 
+const communityRoute = require('./routes/communityRoutes')
+ 
 dotenv.config();
 
 const app = express();
@@ -29,13 +31,16 @@ if (mongoURI) {
   });
 } else {
   console.error('MONGODB_URI is not defined in .env file');
-}
+} 
 
 app.use('/api', UserRoute);
 app.use('/api', LoginRoute);
 app.use('/api', ProfileRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/threads', threadRoutes); 
+app.use('/api/list/', listRoute)
+app.use('/api/community', communityRoute)
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

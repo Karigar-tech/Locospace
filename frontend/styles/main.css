@@ -113,7 +113,7 @@ body {
 
 .left-half {
   margin-top: 5%;
-  flex: 1;
+ 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,11 +121,11 @@ body {
 }
 
 .right-half {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  flex-direction: column;
 }
 
 .landing-image {
@@ -247,14 +247,14 @@ body {
   z-index: 2;
   border-radius: 0.5rem;
   height: 1.3rem;
-  right: -32.5rem;
+  right: -29.5rem;
   display: flex;
 
   
 }
 
 .community-search{
-    width: 40%;
+    width: 30%;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 0.5rem;
@@ -277,35 +277,36 @@ body {
 
 .listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid for three cards per row */
-  gap: 8px; 
+  grid-template-columns: repeat(3, 1fr); /* Exactly 3 cards per row */
+  gap: 3rem; /* Gap between cards */
   padding: 20px;
-  row-gap: 50px;
+  margin: 0 10rem; /* Margin of 10rem on both sides */
+  row-gap: 1rem; /* Gap between rows */
 }
 
 .listing-box {
-  display: relative;
-  height: 95%;
-  width: 80%;
+  height: auto; /* Adjust height to auto */
+  width: 100%; /* Ensure width fits the container */
+  max-width: 300px; /* Set a max width for the cards */
   border: 10px solid #ffffff; /* Light border */
-  border-radius: 30px; /* Rounded corners */
+  border-radius: 15px; /* Rounded corners */
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   transition: transform 0.3s ease-in-out; /* Smooth hover transition */
+  margin: 0 auto; /* Center card within its grid cell */
 }
 
 .listing-box:hover {
   transform: scale(1.02); /* Slightly enlarges on hover */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24); /* Subtle shadow */
   background-color: #f8fcff;
-  border: 10px solid #f8fcff /* Light border */
-
+  border: 10px solid #f8fcff; /* Light border */
 }
 
 .listing-image {
-  height: 250px;
-  width: auto;
-  object-fit: fill; /* Ensures image covers the container */
+  height: 200px; /* Adjust image height */
+  width: 100%; /* Ensure image fits the container width */
+  object-fit: cover; /* Cover the container without distortion */
 }
 
 .card-title {
@@ -316,9 +317,44 @@ body {
   margin-right: 0.5rem; /* Space between icon and text */
 }
 
-.listing-address{
+.listing-address {
   font-size: 1rem;
   object-fit: contain;
+}
+
+
+.filter-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9); /* Less translucent background */
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1000; /* Ensure it's above other content */
+  max-width: 80vw;
+  width: 600px; /* Adjust width as needed */
+  max-height: 80vh; /* Adjust height as needed */
+  overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
+
+.filter-popup-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.filter-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-box-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 2px solid blue;
+  border-radius: 10px;
 }
 
 

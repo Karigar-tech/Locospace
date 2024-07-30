@@ -107,6 +107,17 @@ const LandingPageComp: React.FC = () => {
     handleApplyFilters(); 
   };
 
+  const handleBuyClick = () => {
+    localStorage.removeItem('selectedCommunity');
+    router.push('/Listings?keyword=buy');
+  };
+  
+  const handleRentClick = () => {
+    localStorage.removeItem('selectedCommunity');
+    router.push('/Listings?keyword=rent');
+  };
+  
+
   return (
     <Container fluid className="landing-container">
       <Row className="position-relative w-100">
@@ -117,9 +128,9 @@ const LandingPageComp: React.FC = () => {
             <div className="small-text">Welcome to Locospace, your ultimate destination for finding the perfect home. Whether you're looking to rent or buy, our extensive listings cover everything from cosy apartments to spacious family homes.</div>
             <div className="search-container">
               <div className="buttons-container">
-                <Button className='search_buttons' variant="primary">Buy</Button>
+                <Button className='search_buttons' variant="primary"onClick = {handleBuyClick}>Buy</Button>
                 <Button className='search_buttons' variant="primary" onClick={handleSell}>Sell</Button>
-                <Button className='search_buttons' variant="primary">Rent</Button>
+                <Button className='search_buttons' variant="primary" onClick = {handleRentClick}>Rent</Button>
               </div>
               <Form>
                 <InputGroup className="mb-3">

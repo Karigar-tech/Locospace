@@ -35,6 +35,9 @@ const NavBar: React.FC = () => {
                         <Link href="/Profile" passHref>
                             <Button variant="outline-secondary" className="navbar-btn-custom">Profile</Button>
                         </Link>
+                        <Link href="/Chatting" passHref>
+                            <Button variant="outline-secondary" className="navbar-btn-custom">Chat</Button>
+                        </Link>
                         <Button variant="primary" className="btn-custom-signup" onClick={handleLogout}>Logout</Button>
                     </Nav>
                 </Navbar.Collapse>

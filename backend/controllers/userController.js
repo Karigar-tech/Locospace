@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Chat = require('../models/chatModel'); 
 const bcrypt = require("bcrypt") ;
 
 exports.signUp = async (req, res) => {
@@ -31,4 +32,61 @@ exports.signUp = async (req, res) => {
       console.log(err);
       res.status(500).json({ message: "Failed to create user!" });
     }
-}
+};
+
+exports.searchUser = async (req, res) => {
+  try{
+    const search = req.query.search;
+    const currentUser = req.user._id;
+    const user = await User.find({
+      $and: [
+        {
+          name: { $regex:'.*'+search+'.*', $options: 'i'},
+          username: { $regex:'.*'+search+'.*', $options: 'i'}
+        },{
+          _id:{$ne:currentUser}
+        }
+      
+      ]
+    }).select("-password").select("-email").select("-contact").select("-location");
+    res.status(200).send(user);
+
+  }catch{
+    res.status(500).send({
+      success: false,
+      message: error  
+  })
+  console.log(error);
+  }
+};
+
+exports.getChatters = async (req, res) => {
+  try {
+    const currentUser = req.user._id;
+    const currentChatters = await Chat.find({
+      participants: currentUser
+    }).sort({
+      updatedAt: -1
+    });
+
+    if (!currentChatters || currentChatters.length === 0) {
+      return res.status(200).send([]);
+    }
+
+    const participantsID = currentChatters.reduce((ids, chat) => {
+      const otherParticipants = chat.participants.filter(id => id.toString() !== currentUser.toString());
+      return [...ids, ...otherParticipants];
+    }, []);
+
+    const otherParticipantsID = participantsID.filter(id => id.toString() !== currentUser.toString());
+    const users = await User.find({ _id: { $in: otherParticipantsID } })
+      .select("-password -email -contact -location");
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error: error.message
+    });
+  }
+};

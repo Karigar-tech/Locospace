@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import "../../styles/main.css";
-import { Card, Button, Row, Col, Carousel } from 'react-bootstrap';
+import React from 'react';
+import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Listing } from '../../types';
 import { useRouter } from 'next/navigation';
+import '../../styles/main.css';
 
 interface ListingBoxProps {
   item: Listing;
 }
 
 const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
-  const [showCarousel, setShowCarousel] = useState(false);
   const router = useRouter();
 
   const formatPrice = (price: number) => {
@@ -25,32 +24,14 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
     }
   };
 
-  const handleMouseEnter = () => {
-    setShowCarousel(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowCarousel(false);
-  };
-
   const handleClick = () => {
-    router.push(`/Listing?id=${item._id}`); // Use the correct property for listing ID
+    router.push(`/Listing?id=${item._id}`);
   };
 
   return (
-    <Card className="listing-box" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <Card className="listing-box">
       <div className="image-wrapper">
-        {showCarousel ? (
-          <Carousel>
-            {item.ListingPictures.slice(0, 5).map((picture, index) => (
-              <Carousel.Item key={index}>
-                <img className="d-block w-100" src={picture} alt={`Slide ${index}`} />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        ) : (
-          <Card.Img variant="top" src={item.ListingPictures[0]} alt={`Image of ${item.listing_type}`} />
-        )} 
+        <Card.Img variant="top" src={item.ListingPictures[0]} alt={`Image of ${item.listing_type}`} className="fixed-image" />
       </div>
       <Card.Body>
         <Card.Title>

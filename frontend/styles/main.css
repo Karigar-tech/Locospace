@@ -275,25 +275,48 @@ body {
 }
 /* Listings */
 .listing-box {
-  padding: 1rem;
-  margin: 1rem; /* Margin around each box */
-  border: solid 1px #9c9c9c;
-  border-radius: 10px;
-  width: 100%; /* Ensure full width in the grid */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  background-color: rgb(255, 254, 253);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem; /* Add margin to space out the boxes */
+  padding: 0.65rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 18rem; /* Adjust as needed */
+  height: 25rem; /* Adjust as needed */
+  position: relative; /* Ensure proper positioning */
 }
 
-/* Grid container for listings */
-.listings-list {
+.listing-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.image-wrapper {
+  position: relative;
+  /* width: 100%; */
+  transform: scale(3.5);
+  height: 30%; 
+  overflow: hidden; /* Ensures no overflow of zoomed image */
+}
+
+.fixed-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the entire container */
+  transition: transform 0.3s ease-in-out;
+}
+
+.listing-box:hover .fixed-image {
+  transform: scale(1.1); /* Adjust scale factor for zoom level */
+}
+
+.listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Responsive columns */
-  gap: 0.5rem; /* Space between boxes */
-  margin: 0.5rem 1rem; /* Margin for spacing around the grid */
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal columns */
+  gap: 0.5rem; /* Add space between grid items */
+  padding: 5.5rem; 
+  margin-top: -5rem;/* Add padding to the grid */
+  justify-items: center; /* Center grid items horizontally */
 }
 
 .toggle-container {

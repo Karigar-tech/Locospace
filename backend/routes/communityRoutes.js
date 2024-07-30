@@ -12,4 +12,6 @@ router.post('/create', upload.single('communityPicture'), communtiyController.cr
 
 router.get('/',authenticateToken, communtiyController.getAllCommunities )
 
+router.get('/:name', authenticateToken, communtiyController.getCommunityDetails);
+
 module.exports = router;

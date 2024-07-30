@@ -21,10 +21,10 @@ const Page = () => {
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [threads, setThreads] = useState<Thread[]>([
-    { title: "Power outage!", username: 'AliAhmed20'},
+    { title: "Power outage!", username: 'AliAhmed20' },
     { title: "Communal gathering", username: 'ZahraKhan2001' },
-    { title: "Football Festival", username: 'osamababakhell'},
-    { title: "Half Marathon throughout", username: 'aaarij420'},
+    { title: "Football Festival", username: 'osamababakhell' },
+    { title: "Half Marathon throughout", username: 'aaarij420' },
     { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
   ]);
 
@@ -34,20 +34,30 @@ const Page = () => {
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
-    if (storedCommunity) {
+    const token = localStorage.getItem('token');
+    
+    if (storedCommunity && token) {
       setCommunity(storedCommunity);
-
-      const getListings = async () => {
+      const fetchCommunityDetails = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/listings/'); // Replace with your actual API endpoint
+          const response = await fetch(`http://localhost:5000/api/community/${storedCommunity}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
           const data = await response.json();
           console.log(data);
-          setListings(data);
+          if (data.detailedListings) {
+            setListings(data.detailedListings);
+          } else {
+            console.error('No listings found for this community');
+            setListings([]);
+          }
         } catch (error) {
-          console.error('Error fetching listings:', error);
+          console.error('Error fetching community details:', error);
         }
       };
-      getListings();
+      fetchCommunityDetails();
     }
   }, []);
 

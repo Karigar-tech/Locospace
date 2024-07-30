@@ -7,6 +7,7 @@ const generatePublicUrl = (file) => {
     return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`;
 };
 
+
 exports.createCommunity = async (req, res) => {
     const { communityName } = req.body;
     let communityPicture;
@@ -48,52 +49,76 @@ exports.createCommunity = async (req, res) => {
       res.status(500).json({ message: 'Error creating community', error });
     }
   };
-  
   exports.getAllCommunities = async (req, res) => {
-    const { environment, facilities, ageGroup, keyword } = req.query; //extracting filters from query parameters
+    const { environment, facilities, ageGroup, keyword } = req.query;
   
     try {
       const communities = await Community.find();
-      let filteredCommunities = [];
   
-      for (let community of communities) {
-        
-        const listingsQuery = {
-          location: new RegExp(community.community_name, 'i') //case-insensitive match
-        };
+      let filteredCommunities = communities;
   
-        if (keyword) {
-          listingsQuery.$or = [
-            { title: new RegExp(keyword, 'i') },
-            { description: new RegExp(keyword, 'i') },
-            { location: new RegExp(keyword, 'i') }
-          ];
-        }
-  
-        // Apply additional filters if provided
-        if (environment) {
-          listingsQuery['preferences.environment'] = { $in: environment.split(',') };
-        }
-        if (facilities) {
-          listingsQuery['preferences.facilities'] = { $in: facilities.split(',') };
-        }
-        if (ageGroup) {
-          listingsQuery['preferences.ageGroup'] = { $in: ageGroup.split(',') };
-        }
-  
-        const listings = await Listing.find(listingsQuery);
-  
-        if (listings.length > 0) {
-          filteredCommunities.push({
-            ...community._doc,
-            communityListings: listings
-          });
-        }
+      if (keyword) {
+        const keywordRegex = new RegExp(keyword, 'i');
+        filteredCommunities = filteredCommunities.filter(community =>
+          community.communityName && community.communityName.match(keywordRegex)
+        );
       }
   
+      if (environment) {
+        filteredCommunities = filteredCommunities.filter(community =>
+          community.preferences && 
+          community.preferences.environment && 
+          community.preferences.environment.some(env => environment.split(',').includes(env))
+        );
+      }
+  
+      if (facilities) {
+        filteredCommunities = filteredCommunities.filter(community =>
+          community.preferences && 
+          community.preferences.facilities && 
+          community.preferences.facilities.some(facility => facilities.split(',').includes(facility))
+        );
+      }
+  
+      if (ageGroup) {
+        filteredCommunities = filteredCommunities.filter(community =>
+          community.preferences && 
+          community.preferences.ageGroup && 
+          community.preferences.ageGroup.some(age => ageGroup.split(',').includes(age))
+        );
+      }
+  
+      // Respond with the filtered communities
       res.status(200).json(filteredCommunities);
     } catch (error) {
       console.error('Error fetching communities:', error);
       res.status(500).json({ message: 'Error fetching communities', error });
+    }
+  };
+  
+  exports.getCommunityDetails = async (req, res) => {
+    const communityName = req.params.name;
+  
+    try {
+      const community = await Community.findOne({ communityName }).populate('communityListings');
+  
+      if (!community) {
+        return res.status(404).json({ message: 'Community not found' });
+      }
+  
+    
+      const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
+  
+      const responseData = {
+        communityName: community.communityName,
+        communityPicture: community.communityPicture,
+        communityMembers: community.communityMembers,
+        detailedListings,
+      };
+  
+      res.status(200).json(responseData);
+    } catch (error) {
+      console.error('Error fetching community details:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
   };

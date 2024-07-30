@@ -1,13 +1,13 @@
-const Thread = require('../models/threadModel');
+const Thread = require('../models/threadModel'); 
 
-// Create a new thread
+
 exports.createThread = async (req, res) => {
     try {
         const { user_id, community_id, thread_title, thread_description } = req.body; 
         const thread = new Thread({
             user_id,
             community_id,
-            thread_title,  
+            thread_title,
             thread_description,
         });
 
@@ -18,7 +18,7 @@ exports.createThread = async (req, res) => {
     }
 };
 
-// Get threads
+
 exports.getAllThreads = async (req, res) => {
     try {
         const threads = await Thread.find().populate('user_id').populate('community_id');

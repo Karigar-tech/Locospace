@@ -2,10 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const UserRoute = require('./routes/userRoutes')
-const LoginRoute = require('./routes/loginRoutes')
-const ProfileRoutes = require('./routes/profileRoutes')
-const listingRoutes = require('./routes/sellerRoutes')
+const UserRoute = require('./routes/userRoutes');
+const LoginRoute = require('./routes/loginRoutes');
+const ProfileRoutes = require('./routes/profileRoutes');
+const listingRoutes = require('./routes/sellerRoutes');
+const threadRoutes = require('./routes/threadRoutes'); 
 
 dotenv.config();
 
@@ -34,7 +35,7 @@ app.use('/api', UserRoute);
 app.use('/api', LoginRoute);
 app.use('/api', ProfileRoutes);
 app.use('/api/listings', listingRoutes);
-
+app.use('/api/threads', threadRoutes); 
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

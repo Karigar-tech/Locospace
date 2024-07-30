@@ -50,20 +50,43 @@ exports.createCommunity = async (req, res) => {
     }
   };
   exports.getAllCommunities = async (req, res) => {
-    const { environment, facilities, ageGroup, keyword } = req.query;
+    const { environment, facilities, ageGroup, search } = req.query;
   
     try {
-      const communities = await Community.find();
+      // Fetch all communities
+      let communities = await Community.find();
   
+      // If a search is provided, fetch listings that match the search
+      let matchingListings = [];
+      if (search) {
+        const searchRegex = new RegExp(search, 'i');
+        matchingListings = await Listing.find({
+          $or: [
+            { title: searchRegex },
+            { description: searchRegex },
+            { location: searchRegex }
+          ]
+        });
+      }
+  
+      // Filter communities based on the search
       let filteredCommunities = communities;
-  
-      if (keyword) {
-        const keywordRegex = new RegExp(keyword, 'i');
+      if (search) {
+        const searchRegex = new RegExp(search, 'i');
         filteredCommunities = filteredCommunities.filter(community =>
-          community.communityName && community.communityName.match(keywordRegex)
+          community.communityName && community.communityName.match(searchRegex)
+        );
+  
+        // Include communities whose listings match the search
+        const matchingListingIds = matchingListings.map(listing => listing._id.toString());
+        filteredCommunities = filteredCommunities.filter(community =>
+          community.communityListings && community.communityListings.some(listingId =>
+            matchingListingIds.includes(listingId.toString())
+          )
         );
       }
   
+      // Apply other filters
       if (environment) {
         filteredCommunities = filteredCommunities.filter(community =>
           community.preferences && 
@@ -88,8 +111,18 @@ exports.createCommunity = async (req, res) => {
         );
       }
   
-      // Respond with the filtered communities
-      res.status(200).json(filteredCommunities);
+   
+      const communitiesWithDetailedListings = await Promise.all(
+        filteredCommunities.map(async community => {
+          const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
+          return {
+            ...community.toObject(),
+            detailedListings
+          };
+        })
+      );
+  
+      res.status(200).json(communitiesWithDetailedListings);
     } catch (error) {
       console.error('Error fetching communities:', error);
       res.status(500).json({ message: 'Error fetching communities', error });

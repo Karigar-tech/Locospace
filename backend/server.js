@@ -8,7 +8,8 @@ const ProfileRoutes = require('./routes/profileRoutes')
 const listingRoutes = require('./routes/sellerRoutes')
 const messageRoute = require('./routes/messageRoute')
 const communityRoutes = require('./routes/communityRoutes')
-
+const listRoute = require('./routes/listingRoutes') 
+ 
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,7 @@ app.use('/api', ProfileRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/messages', messageRoute);
 app.use('/api/community',communityRoutes);
+app.use('/api/list/', listRoute)
 
 
 app.listen(port, () => {

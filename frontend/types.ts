@@ -1,3 +1,5 @@
+import { List } from "postcss/lib/list";
+
 export interface User {
   address: string;
   contact: string;
@@ -11,7 +13,7 @@ export interface User {
 export interface Listing {
   _id: number;
   ListingPictures: string[];
-  adTitle: string;
+  title: string;
   Description: string;
   location: string;
   bedroom: number;
@@ -29,6 +31,15 @@ export interface Listing {
   
   }
   user: User;
+}
+
+export interface Community{
+  _id: number;
+  communityName:string,
+  communityPicture: string,
+  communityMembers: number,
+  communityListings: Listing []
+
 }
 
 

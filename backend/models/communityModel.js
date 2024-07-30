@@ -2,24 +2,30 @@ const mongoose = require('mongoose');
 
 const CommunitySchema = new mongoose.Schema({
 
-    community_id: {
-        type: Number,
-        required: true,
-    },
-
-    community_name: {
+    communityName: {
         type: String,
         required: true,
     },
-    location: {
-        type: String,
-        required: true,
+    // location: {
+    //     type: String,
+    //     required: true,
 
-    },
+    // },
     communityPicture: {    
-        data: Buffer,
-        contentType: String
-    }
+        type: String,
+    },
+
+    communityMembers:{
+        type: Number
+    },
+
+    communityListings: 
+        [ 
+            {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Listing',}
+        ]
 
     
 });

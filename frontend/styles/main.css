@@ -70,6 +70,40 @@ body {
   font-weight: bold;
 }
 
+.filter-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9); /* Less translucent background */
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1000; /* Ensure it's above other content */
+  max-width: 80vw;
+  width: 600px; /* Adjust width as needed */
+  max-height: 80vh; /* Adjust height as needed */
+  overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
+
+.filter-popup-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.filter-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-box-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 2px solid blue;
+  border-radius: 10px;
+}
+
 .navbar-brand-custom:hover {
   text-decoration: none;
 }
@@ -121,12 +155,13 @@ body {
 }
 
 .right-half {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  flex-direction: column;
 }
+
 
 .landing-image {
   max-width: 100%;
@@ -275,51 +310,167 @@ body {
 }
 /* Listings */
 .listing-box {
-  padding: 1rem;
-  margin: 1rem; /* Margin around each box */
-  border: solid 1px #9c9c9c;
-  border-radius: 10px;
-  width: 100%; /* Ensure full width in the grid */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  background-color: rgb(255, 254, 253);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem; /* Add margin to space out the boxes */
+  padding: 0.65rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 18rem; /* Adjust as needed */
+  height: 25rem; /* Adjust as needed */
+  position: relative; /* Ensure proper positioning */
 }
 
-/* Grid container for listings */
-.listings-list {
+.listing-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.image-wrapper {
+  position: relative;
+  /* width: 100%; */
+  transform: scale(3.5);
+  height: 30%; 
+  overflow: hidden; /* Ensures no overflow of zoomed image */
+}
+
+.fixed-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the entire container */
+  transition: transform 0.3s ease-in-out;
+}
+
+.listing-box:hover .fixed-image {
+  transform: scale(1.1); /* Adjust scale factor for zoom level */
+}
+
+.listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Responsive columns */
-  gap: 0.5rem; /* Space between boxes */
-  margin: 0.5rem 1rem; /* Margin for spacing around the grid */
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal columns */
+  gap: 0.5rem; /* Add space between grid items */
+  padding: 5.5rem; 
+  margin-top: -5rem;/* Add padding to the grid */
+  justify-items: center; /* Center grid items horizontally */
 }
 
 .toggle-container {
-  display: relative;
-  justify-content: center;
+  left: 35%;
+  top: 20%;
+  width: 100%;
+  height: 30%;            /* Ensure it takes full height of its container */
+  position: absolute;      /* Ensure it respects the position of its container */
+  z-index: 3;
+  
   
 }
 .toggle-button {
-  padding: 10px 20px;
-  margin: 0 2px;
-  border: 1px solid #ffffff;
+  width: 12rem;
+  height: 3rem;
+  margin: 0 -5px;
+  border: none !important; 
   background-color: white;
+  color: #444444;
   cursor: pointer;
-  font-size: 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  border-radius: 4rem;
+  transition: background-color 0.6s, color 0.3s, border-radius 0.3s !important;
 }
 
-.toggle-button.active,
-.toggle-button:hover {
-  /* background-color: #007bff; */
-  color: rgb(8, 0, 255);
-  border: none;
-  border-bottom: 2px solid #007bff;
-  border-radius: 0px;
+.toggle-button.active {
+  background-color: #5890ff;
+  color: aliceblue !important;
+  border-radius: 4rem !important;
 }
+
+.toggle-button:hover {
+  background-color: #6c9dff;
+  color: aliceblue !important;
+  border-radius: 1.35rem !important;
+}
+
+
+/* Threads */
+.threads-container {
+  background: whitesmoke;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 16px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.threads-list {
+  max-height: 400px;
+  padding-top: 1rem;
+  padding-right: 1rem;
+  /* background-color: #ffffff; */
+  background: rgb(213, 213, 255);
+  overflow-y: auto;
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.thread-item {
+  padding: 4px;
+  margin-left: -1rem;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.thread-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-direction: column;
+}
+
+.thread-title {
+  font-style: normal;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  
+}
+
+.thread-username{
+  color: #888;
+  align-self: left;
+  padding-left: 2rem;
+  line-height-step: 0.1rem;
+}
+
+.thread-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thread-input {
+  flex-grow: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.thread-add-button {
+  padding: 6px;
+  background-color: #f0f4f8;
+  color: #001e5a;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.5s;
+}
+
+.thread-add-button:hover {
+  color: #3D8BFD;
+}
+
 
 /* Optional: Additional responsiveness */
 @media (max-width: 768px) {
@@ -439,6 +590,7 @@ body {
     width: 100%;
     padding: 2rem;
     text-align: center;
+    
   }
 
   .landing-image {

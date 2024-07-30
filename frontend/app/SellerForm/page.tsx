@@ -12,13 +12,14 @@ import { GiPeaceDove } from "react-icons/gi";
 import Footer from '../../components/LandingFooter';
 import { Listing } from '@/types';
 import '../../styles/sellerform.css'; 
+import CustomCheckbox from '@/components/customcheckbox';
 
 const SellerForm: React.FC = () => {
   
   const [formData, setFormData] = useState<Listing>({
     _id:0,
     ListingPictures: [],
-    adTitle: "",
+    title: "",
     Description: "",
     location: "",
     bedroom: 0,
@@ -110,7 +111,7 @@ const SellerForm: React.FC = () => {
     const formDataToSubmit = new FormData();
     formDataToSubmit.append('listing_type', formData.listing_type);
     formDataToSubmit.append('price', formData.price.toString());
-    formDataToSubmit.append('adTitle', formData.adTitle);
+    formDataToSubmit.append('adTitle', formData.title);
     formDataToSubmit.append('Description', formData.Description);
     formDataToSubmit.append('location', formData.location);
     formDataToSubmit.append('bedroom', formData.bedroom.toString());
@@ -326,8 +327,8 @@ const handleOptionSelect = (option: string) => {
                 <h4>Title</h4>
                 <Form.Control
                   type="text"
-                  name="adTitle"
-                  value={formData.adTitle}
+                  name="titkle"
+                  value={formData.title}
                   onChange={handleChange}
                   placeholder="Enter property title"
                   required
@@ -475,34 +476,19 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-          
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
-                    <Form.Check
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={filteredOptions}
+                    IconMap={environmentIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                ) : (
-                  options.environment.map(option => (
-                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
-                      key={option}
-                      type="checkbox"
-                      label={
-                        <>
-                          {environmentIconMap[option]}
-                          <span style={{ marginLeft: '10px' }}>{option}</span>
-                        </>
-                      }
-                        
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={options.environment}
+                    IconMap={environmentIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                )}
+                
               </Tab.Pane>
 
               <Tab.Pane eventKey="facilities">
@@ -513,32 +499,18 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
-                    <Form.Check
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                <CustomCheckbox
+                    options={filteredOptions}
+                    IconMap={facilitiesIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                ) : (
-                  options.facilities.map(option => (
-                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
-                      key={option}
-                      type="checkbox"
-                      label={
-                        <>
-                        {facilitiesIconMap[option]}
-                        <span style={{ marginLeft: '10px' }}>{option}</span>
-                      </>
-                      }
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={options.facilities}
+                    IconMap={facilitiesIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                )}
               </Tab.Pane>
               <Tab.Pane eventKey="ageGroup">
                 <InputGroup className="mb-3 mt-3">
@@ -548,33 +520,19 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map(option => (
-                    <Form.Check 
-                      key={option}
-                      type="checkbox"
-                      label={option}
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                <CustomCheckbox
+                    options={filteredOptions}
+                    IconMap={ageGroupIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                ) : (
-                  options.ageGroup.map(option => (
-                    <Form.Check style={{padding:'10px', border:'1px solid #219bff' , borderRadius:'5px'}}
-                      
-                      key={option}
-                      type="checkbox"
-                      label={
-                        <>
-                        {ageGroupIconMap[option]}
-                        <span style={{ marginLeft: '10px' }}>{option}</span>
-                        </>
-                      }
-                      checked={selectedOptions.includes(option)}
-                      onChange={() => handleOptionSelect(option)}
+                    <CustomCheckbox
+                    options={options.ageGroup}
+                    IconMap={ageGroupIconMap}
+                    selectedOption={selectedOptions}
+                    handleOptionSelect={handleOptionSelect}
                     />
-                  ))
-                )}
+                
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>

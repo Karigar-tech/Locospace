@@ -274,46 +274,51 @@ body {
   height: 9rem;
 }
 /* Listings */
-/* main.css */
+
 .listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Three cards per row */
-  gap: 16px; /* Space between items */
-  padding: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid for three cards per row */
+  gap: 8px; 
+  padding: 20px;
+  row-gap: 50px;
 }
 
 .listing-box {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  border: 1px solid #ddd; /* Light border */
-  border-radius: 8px; /* Rounded corners */
+  display: relative;
+  height: 95%;
+  width: 80%;
+  border: 10px solid #ffffff; /* Light border */
+  border-radius: 30px; /* Rounded corners */
   overflow: hidden;
-}
-
-.image-wrapper {
-  height: 200px; /* Adjust height as needed */
-  overflow: hidden;
-}
-
-.listing-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures image covers the container */
-}
-
-.card-custom {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   transition: transform 0.3s ease-in-out; /* Smooth hover transition */
 }
 
-.card-custom:hover {
+.listing-box:hover {
   transform: scale(1.02); /* Slightly enlarges on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24); /* Subtle shadow */
+  background-color: #f8fcff;
+  border: 10px solid #f8fcff /* Light border */
+
+}
+
+.listing-image {
+  height: 250px;
+  width: auto;
+  object-fit: fill; /* Ensures image covers the container */
 }
 
 .card-title {
   font-size: 1.25rem; /* Adjust title size */
-  margin-bottom: 1rem; /* Space below the title */
+}
+
+.icon {
+  margin-right: 0.5rem; /* Space between icon and text */
+}
+
+.listing-address{
+  font-size: 1rem;
+  object-fit: contain;
 }
 
 

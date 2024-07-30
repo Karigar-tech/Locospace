@@ -30,7 +30,7 @@ if (mongoURI) {
   });
 } else {
   console.error('MONGODB_URI is not defined in .env file');
-}
+} 
 
 app.use('/api', UserRoute);
 app.use('/api', LoginRoute);

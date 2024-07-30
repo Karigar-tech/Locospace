@@ -50,7 +50,7 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
           </Carousel>
         ) : (
           <Card.Img variant="top" src={item.ListingPictures[0]} alt={`Image of ${item.listing_type}`} />
-        )}
+        )} 
       </div>
       <Card.Body>
         <Card.Title>

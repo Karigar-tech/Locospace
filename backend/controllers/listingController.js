@@ -1,5 +1,6 @@
 const Listing = require('../models/listingModel');
-const Community = require('../models/communityModel');
+const User = require('../models/userModel');
+const { bucket } = require('../firebaseAdmin');
 
 
 exports.getListingsByType = async (req, res) =>{
@@ -20,65 +21,193 @@ exports.getListingsByType = async (req, res) =>{
   }
 }
 
+const generatePublicUrl = (file) => {
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`;
+};
 
-exports.getAllListings = async (req, res) => {
-    const { environment, facilities, ageGroup, search, community } = req.query;
-  
-    try {
-      // Fetch all listings
-      let listings = await Listing.find();
-  
-      // Apply search filter
-      if (search) {
-        const searchRegex = new RegExp(search, 'i');
-        listings = listings.filter(listing =>
-          listing.title.match(searchRegex) ||
-          listing.description.match(searchRegex) ||
-          listing.location.match(searchRegex)
-        );
+exports.createListing = async (req, res) => {
+  try {
+      const userId = req.user.id;
+
+      //check for 2 listings
+      const existingListingsCount = await Listing.countDocuments({ user_id: userId });
+      if (existingListingsCount >= 2) {
+          return res.status(403).json({ error: "You can only create up to 2 listings." });
       }
-  
-      // Apply environment filter
-      if (environment) {
-        listings = listings.filter(listing =>
-          listing.preferences &&
-          listing.preferences.environment &&
-          listing.preferences.environment.some(env => environment.split(',').includes(env))
-        );
+
+      const listingData = {
+          user_id: req.user.id,
+          title: req.body.title,
+          listing_type: req.body.listing_type,
+          price: req.body.price,
+          Description: req.body.Description,
+          location: req.body.location,
+          bedroom: req.body.bedroom,
+          bath: req.body.bath,
+          kitchen: req.body.kitchen,
+          area: req.body.area,
+          preferences: req.body.preferences,
+      };
+
+      if (req.files) {
+          // Upload images to Firebase Storage
+          const uploadPromises = req.files.map(async (file) => {
+              const blob = bucket.file(`listings/${Date.now()}_${file.originalname}`);
+              const blobStream = blob.createWriteStream({
+                  metadata: {
+                      contentType: file.mimetype
+                  }
+              });
+
+              return new Promise((resolve, reject) => {
+                  blobStream.on('error', reject);
+                  blobStream.on('finish', async () => {
+                      try {
+                          const publicUrl = generatePublicUrl(blob);
+                          resolve(publicUrl);
+                      } catch (error) {
+                          reject(error);
+                      }
+                  });
+                  blobStream.end(file.buffer);
+              });
+          });
+
+          const imageUrls = await Promise.all(uploadPromises);
+          listingData.ListingPictures = imageUrls;
       }
-  
-      // Apply facilities filter
-      if (facilities) {
-        listings = listings.filter(listing =>
-          listing.preferences &&
-          listing.preferences.facilities &&
-          listing.preferences.facilities.some(facility => facilities.split(',').includes(facility))
-        );
+
+      const listing = new Listing(listingData);
+      await listing.save();
+      res.status(201).json({ ...listing._doc, listing_id: listing._id });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+
+exports.editListing = async (req, res) => {
+  try {
+      const updateData = {
+          listing_type: req.body.listing_type,
+          price: req.body.price,
+          Description: req.body.Description,
+          location: req.body.location,
+          bedroom: req.body.bedroom,
+          bath: req.body.bath,
+          kitchen: req.body.kitchen,
+          area: req.body.area,
+          preferences: req.body.preferences,
+      };
+
+      if (req.files) {
+          // Upload images to Firebase Storage
+          const uploadPromises = req.files.map(async (file) => {
+              const blob = bucket.file(`listings/${Date.now()}_${file.originalname}`);
+              const blobStream = blob.createWriteStream({
+                  metadata: {
+                      contentType: file.mimetype
+                  }
+              });
+
+              return new Promise((resolve, reject) => {
+                  blobStream.on('error', reject);
+                  blobStream.on('finish', async () => {
+                      try {
+                          const publicUrl = generatePublicUrl(blob);
+                          resolve(publicUrl);
+                      } catch (error) {
+                          reject(error);
+                      }
+                  });
+                  blobStream.end(file.buffer);
+              });
+          });
+
+          const imageUrls = await Promise.all(uploadPromises);
+          updateData.ListingPictures = imageUrls;
       }
-  
-      // Apply age group filter
-      if (ageGroup) {
-        listings = listings.filter(listing =>
-          listing.preferences &&
-          listing.preferences.ageGroup &&
-          listing.preferences.ageGroup.some(age => ageGroup.split(',').includes(age))
-        );
+
+      const listing = await Listing.findByIdAndUpdate(req.params.id, updateData, { new: true });
+      if (!listing) {
+          return res.status(404).json({ error: 'Listing not found' });
       }
-  
-      // Apply community filter
-      if (community) {
-        const communityRegex = new RegExp(community, 'i');
-        const matchingCommunities = await Community.find({ communityName: { $regex: communityRegex } });
-        const matchingCommunityIds = matchingCommunities.map(comm => comm._id.toString());
-  
-        listings = listings.filter(listing =>
-          listing.community && matchingCommunityIds.includes(listing.community.toString())
-        );
+      res.status(200).json({ ...listing._doc, listing_id: listing._id });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+
+exports.deleteListing = async (req, res) => {
+  try {
+      const listing = await Listing.findByIdAndDelete(req.params.id);
+      if (!listing) {
+          return res.status(404).json({ error: 'Listing not found' });
       }
-  
-      res.status(200).json(listings);
-    } catch (error) {
-      console.error('Error fetching listings:', error);
-      res.status(500).json({ message: 'Error fetching listings', error });
-    }
-  };
+
+      // Optionally delete images from Firebase Storage
+      if (listing.ListingPictures) {
+          const deletePromises = listing.ListingPictures.map(async (url) => {
+              const filePath = decodeURIComponent(url.split('/o/')[1].split('?')[0]);
+              const file = bucket.file(filePath);
+              return file.delete();
+          });
+
+          await Promise.all(deletePromises);
+      }
+
+      res.status(200).json({ message: 'Listing deleted successfully', listing_id: listing._id });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getListings = async (req, res) => {
+  try {
+      const listings = await Listing.find(); // Fetch all listings from MongoDB
+
+      if (!listings || listings.length === 0) {
+          return res.status(404).json({ message: 'No listings found' });
+      }
+
+      // Construct response with image URLs
+      const response = listings.map(listing => {
+          return {
+              ...listing._doc, // Include listing data
+              ListingPictures: listing.ListingPictures // Include image URLs
+          };
+      });
+
+      res.status(200).json(response);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getSpecificListing = async (req, res) => {
+  try {
+      // Fetch the listing by ID
+      const listing = await Listing.findById(req.params.id).exec();
+      if (!listing) {
+          return res.status(404).json({ error: 'Listing not found' });
+      }
+
+      // Fetch the user associated with the listing
+      const user = await User.findById(listing.user_id).exec();
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Construct the response with conditional profilePicture
+      const response = {
+          ...listing.toObject(), // Include listing data
+          user: {
+              ...user.toObject(), // Include user data
+              profilePicture: user.profilePicture || null // Set profilePicture to null if it doesn't exist
+          }
+      };
+
+      res.status(200).json(response);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};

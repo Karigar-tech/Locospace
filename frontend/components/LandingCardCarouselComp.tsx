@@ -1,7 +1,5 @@
-'use client'
-
+'use client';
 import React, { useEffect, useState } from 'react';
-import Papa from 'papaparse';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Card, Button, Row, Col } from 'react-bootstrap';
@@ -45,7 +43,7 @@ const CardCarouselComp: React.FC = () => {
   const [data, setData] = useState<Listing[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/listings/') 
+    fetch('http://localhost:5000/api/listings/all') 
       .then(response => response.json())
       .then(data => {
         setData(data);

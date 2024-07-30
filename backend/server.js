@@ -6,13 +6,11 @@ const UserRoute = require('./routes/userRoutes')
 const LoginRoute = require('./routes/loginRoutes')
 const ProfileRoutes = require('./routes/profileRoutes')
 const listingRoutes = require('./routes/sellerRoutes')
-const messageRoute = require('./routes/messageRoute')
-const communityRoutes = require('./routes/communityRoutes')
 
 dotenv.config();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +19,8 @@ const mongoURI = process.env.MONGODB_URI;
 
 if (mongoURI) {
   mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   }).then(() => {
     console.log('Connected to MongoDB');
   }).catch((err) => {
@@ -34,8 +34,6 @@ app.use('/api', UserRoute);
 app.use('/api', LoginRoute);
 app.use('/api', ProfileRoutes);
 app.use('/api/listings', listingRoutes);
-app.use('/api/messages', messageRoute);
-app.use('/api/community',communityRoutes);
 
 
 app.listen(port, () => {

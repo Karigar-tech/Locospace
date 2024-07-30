@@ -8,7 +8,7 @@ import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
 import '../../styles/profile.css';
-import ToggleButton from "../../components/Listings/Toggle"
+import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
 
 interface Thread {
@@ -66,11 +66,9 @@ const Page = () => {
       {view === 'listings' ? (
         <div className="listings-grid">
           {listings.length > 0 ? (
-            <ul>
-              {listings.map((listing) => (
-                <ListingBox key={listing._id} item={listing} />
-              ))}
-            </ul>
+            listings.map((listing) => (
+              <ListingBox key={listing._id} item={listing} />
+            ))
           ) : (
             <p>No listings found</p>
           )}

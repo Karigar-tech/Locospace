@@ -1,4 +1,3 @@
-// ListingBox.tsx
 import React from 'react';
 import "../../styles/main.css";
 import { Card, Button, Row, Col } from 'react-bootstrap';
@@ -30,31 +29,33 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
   };
 
   return (
-    <Card key={index} className="d-block card-custom">
-              <div className="image-wrapper">
-                <Card.Img variant="top" src='placeholder.png' alt={`Image of ${item.title}`} />
-              </div>
-              <Card.Body>
-                <Card.Title>
-                  <Row className="mb-2">
-                    <Col><span>{item.type}</span></Col>
-                    <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
-                  </Row>
-                </Card.Title>
-                <Row className="mb-2">
-                  <Col><FontAwesomeIcon icon={faBed} /> {item.bedrooms}</Col>
-                  <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.baths}</Col>
-                </Row>
-                <hr />
-                <Row className="mb-2">
-                  <Col>
-                    <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-                    <span style={{ marginLeft: '0.5rem' }}>{addressPart}</span>, {item.city}
-                  </Col>
-                </Row>
-                <Button variant="primary" href="#">View</Button>
-              </Card.Body>
-            </Card>
+    <Card className="listing-box">
+      <Card.Img 
+        variant="top" 
+        src={item.ListingPictures[0] || 'placeholder.png'} 
+        alt={`Image of ${item.listing_type}`} 
+        className="listing-image" 
+      />
+      <Card.Body>
+        <Card.Title className="d-flex justify-content-between mb-2">
+          <span>{item.listing_type}</span>
+          <span>{formatPrice(item.price)}</span>
+        </Card.Title>
+        
+        <Col className="d-flex justify-content-between mb-2">
+          <Row><FontAwesomeIcon icon={faBed} /> {item.bedroom} Beds</Row>
+          <Row className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath} Baths</Row>
+        </Col>
+        <hr />
+        <Row className="mb-1">
+          <Col>
+            <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
+            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location} , {item.area}</span>
+          </Col>
+        </Row>
+        <Button onClick={handleClick} variant="primary">View</Button>
+      </Card.Body>
+    </Card>
   );
 }
 

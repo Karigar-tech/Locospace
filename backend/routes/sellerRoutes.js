@@ -25,4 +25,5 @@ router.get('/:id', listingController.getSpecificListing)
 // Get all listings
 router.get('/', listingController.getListings); 
 
+
 module.exports = router;

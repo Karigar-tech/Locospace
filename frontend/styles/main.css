@@ -113,7 +113,7 @@ body {
 
 .left-half {
   margin-top: 5%;
-  flex: 1;
+ 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,11 +121,11 @@ body {
 }
 
 .right-half {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  flex-direction: column;
 }
 
 .landing-image {
@@ -247,14 +247,14 @@ body {
   z-index: 2;
   border-radius: 0.5rem;
   height: 1.3rem;
-  right: -32.5rem;
+  right: -29.5rem;
   display: flex;
 
   
 }
 
 .community-search{
-    width: 40%;
+    width: 30%;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 0.5rem;
@@ -320,6 +320,41 @@ body {
 .listing-address {
   font-size: 1rem;
   object-fit: contain;
+}
+
+
+.filter-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9); /* Less translucent background */
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1000; /* Ensure it's above other content */
+  max-width: 80vw;
+  width: 600px; /* Adjust width as needed */
+  max-height: 80vh; /* Adjust height as needed */
+  overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
+
+.filter-popup-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.filter-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-box-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 2px solid blue;
+  border-radius: 10px;
 }
 
 

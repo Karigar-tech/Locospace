@@ -50,7 +50,7 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
         <Row className="mb-1">
           <Col>
             <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location} , {item.area}</span>
+            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location}</span>
           </Col>
         </Row>
         <Button onClick={handleClick} variant="primary">View</Button>

@@ -60,7 +60,7 @@ const SelectedListing: React.FC = () => {
     const fetchListing = async () => {
       if (!id) return; 
       try {
-        const response = await fetch(`http://localhost:5000/api/listings/${id}`);  
+        const response = await fetch(`http://localhost:5000/api/listings/specific/${id}`);  
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

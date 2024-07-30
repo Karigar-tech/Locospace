@@ -12,10 +12,11 @@ const CommunitiesPage = () => {
   const searchParams = useSearchParams();
 
   const [communities, setCommunities] = useState<Community[]>([]);
-  const [keyword, setKeyword] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
   const token = localStorage.getItem('token');
 
   const fetchCommunities = async (queryString: string) => {
+    console.log(queryString)
     try {
       const response = await fetch(`http://localhost:5000/api/community?${queryString}`, {
         headers: {
@@ -37,13 +38,13 @@ const CommunitiesPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    if (keyword) {
-      params.set('keyword', keyword);
+    if (search) {
+      params.set('search', search);
     } else {
-      params.delete('keyword');
+      params.delete('search');
     }
     fetchCommunities(params.toString());
-  }, [searchParams, keyword]);
+  }, [searchParams, search]);
 
   const handleCommunityClick = (name: string) => {
     localStorage.setItem('selectedCommunity', name);
@@ -51,7 +52,7 @@ const CommunitiesPage = () => {
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
+    setSearch(e.target.value);
   };
 
   return (
@@ -65,7 +66,7 @@ const CommunitiesPage = () => {
             type="text"
             className='community-search'
             placeholder='Search communities'
-            value={keyword}
+            value={search}
             onChange={handleSearchChange}
           />
         </div>

@@ -54,9 +54,15 @@ const Page = () => {
     }
   }, []);
 
+  useEffect( () => {
+    // const storedThreads = localStorage.getItem('selectedThread');
+    // if (storedThreads) {
+    //   setThreads(storedThreads);
+    console.log('here')
     const getThreads = async () => {
+     
       try{
-        const response = await fetch('http://localhost:5000/api/threads/'); // Replace
+        const response = await fetch('http://localhost:5000/api/threads/allThreads'); // Replace
         const data= await response.json();
         console.log(response, "Hello" , data)
         setThreads(data);
@@ -64,7 +70,11 @@ const Page = () => {
       }catch(error){
         console.log("Error fetching threeads: ", error)
       }
-    };
+    }
+    // };
+    getThreads();
+   
+  }, []);
 
   const toggleView = () => {
     setView(view === 'listings' ? 'threads' : 'listings');

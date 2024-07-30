@@ -12,6 +12,9 @@ import '../../styles/profile.css';
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 interface Thread {
   title: string;
@@ -93,6 +96,18 @@ const Page = () => {
     }
   }, []);
 
+    const getThreads = async () => {
+      try{
+        const response = await fetch('http://localhost:5000/api/threads/'); // Replace
+        const data= await response.json();
+        console.log(response, "Hello" , data)
+        setThreads(data);
+        
+      }catch(error){
+        console.log("Error fetching threeads: ", error)
+      }
+    };
+
   const toggleView = () => {
     setView(view === 'listings' ? 'threads' : 'listings');
   };
@@ -104,7 +119,15 @@ const Page = () => {
         <div className="gradient-bar"></div>
         <ToggleButton view={view} setView={setView} />
       </div>
-      <h2 className='p-4 ml-24'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`}</h2>
+      <h2 className='p-4 ml-4'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`}</h2>
+      {view== 'listings'? (
+        <Button>
+          <FontAwesomeIcon icon= {faFilter}/>
+        </Button>
+      ): (
+        <hr/>
+      )}
+      
       {view === 'listings' ? (
         <div className="listings-grid">
           {listings.length > 0 ? (

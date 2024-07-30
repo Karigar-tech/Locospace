@@ -1,10 +1,10 @@
 import React from 'react';
+import "../../styles/main.css";
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Listing } from '../../types';
 import { useRouter } from 'next/navigation';
-import '../../styles/main.css';
 
 interface ListingBoxProps {
   item: Listing;
@@ -25,30 +25,32 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
   };
 
   const handleClick = () => {
-    router.push(`/Listing?id=${item._id}`);
+    router.push(`/Listing?id=${item._id}`); // Use the correct property for listing ID
   };
 
   return (
     <Card className="listing-box">
-      <div className="image-wrapper">
-        <Card.Img variant="top" src={item.ListingPictures[0]} alt={`Image of ${item.listing_type}`} className="fixed-image" />
-      </div>
+      <Card.Img 
+        variant="top" 
+        src={item.ListingPictures[0] || 'placeholder.png'} 
+        alt={`Image of ${item.listing_type}`} 
+        className="listing-image" 
+      />
       <Card.Body>
-        <Card.Title>
-          <Row className="mb-2">
-            <Col><span>{item.listing_type}</span></Col>
-            <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
-          </Row>
+        <Card.Title className="d-flex justify-content-between mb-2">
+          <span>{item.listing_type}</span>
+          <span>{formatPrice(item.price)}</span>
         </Card.Title>
-        <Row className="mb-2">
-          <Col><FontAwesomeIcon icon={faBed} /> {item.bedroom}</Col>
-          <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath}</Col>
-        </Row>
+        
+        <Col className="d-flex justify-content-between mb-2">
+          <Row><FontAwesomeIcon icon={faBed} /> {item.bedroom} Beds</Row>
+          <Row className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath} Baths</Row>
+        </Col>
         <hr />
-        <Row className="mb-2">
+        <Row className="mb-1">
           <Col>
             <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-            <span style={{ marginLeft: '0.5rem' }}>{item.location}</span>, {item.area}
+            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location}</span>
           </Col>
         </Row>
         <Button onClick={handleClick} variant="primary">View</Button>

@@ -35,7 +35,7 @@ const Page = () => {
   const [threads, setThreads] = useState<Thread[]>([
     
   ]);
-
+ 
   useEffect(() => {
     const searchTerm = searchParams.get('search');
     if (searchTerm) {

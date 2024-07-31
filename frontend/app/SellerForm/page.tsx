@@ -9,8 +9,8 @@ import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
 //IconsEnd
-import Footer from '../../components/LandingFooter';
-import { Listing } from '@/types';
+
+import { Listing , User } from '@/types';
 import '../../styles/sellerform.css'; 
 import CustomCheckbox from '@/components/customcheckbox';
 
@@ -36,6 +36,7 @@ const SellerForm: React.FC = () => {
       ageGroup: [],
     },
     user: {
+      username: "",
       address: "",
       contact: "",
       email: "",

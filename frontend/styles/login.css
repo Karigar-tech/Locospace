@@ -100,20 +100,16 @@ button.loginButton:hover {
 
 .homeButton {
   position: absolute;
+  color: black;
+  font-family: 'Gotham';
   top: 20px;
   left: 100px;
   padding: 10px;
-  color: #333;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 25px;
   background-color: #fff;
   border-radius: 5px;
   transition: all 0.3s ease;
-}
-
-.homeButton:hover {
-  background-color: #333;
-  color: #fff;
 }
 
 .accountPrompt {

@@ -253,6 +253,7 @@ const handleOptionSelect = (option: string) => {
               <input
                 type="file"
                 id="fileInput"
+                accept='.jpef,.png,.jpg'
                 multiple
                 style={{ display: 'none' }}
                 onChange={handleFileChange}

@@ -17,8 +17,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 interface Thread {
-  title: string;
-  username: string;
+  _id: string;
+  community_id: string;
+  thread_description: string;
+  createdAt: string;
+  updatedAt: string;
+  communityName: string;
 }
 
 const Page = () => {
@@ -28,13 +32,7 @@ const Page = () => {
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [keyword, setKeyword] = useState<string | null>(null)
-  const [threads, setThreads] = useState<Thread[]>([
-    { title: "Power outage!", username: 'AliAhmed20' },
-    { title: "Communal gathering", username: 'ZahraKhan2001' },
-    { title: "Football Festival", username: 'osamababakhell' },
-    { title: "Half Marathon throughout", username: 'aaarij420' },
-    { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
-  ]);
+  const [threads, setThreads] = useState<Thread[]>([]);
 
   useEffect(() => {
     const keyword = searchParams.get('keyword');
@@ -44,9 +42,9 @@ const Page = () => {
     }
   }, [searchParams]);
 
-  const addThread = (title: string, username: string) => {
-    setThreads(prevThreads => [...prevThreads, { title, username }]);
-  };
+  // const addThread = (title: string, username: string) => {
+  //   setThreads(prevThreads => [...prevThreads, {th}]);
+  // };
 
   const fetchListings = async (keyword: string) => {
     const token = localStorage.getItem('token');
@@ -149,7 +147,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads={threads} addThread={addThread} />
+        <MainBox threads={threads} />
       )}
     </div>
   );

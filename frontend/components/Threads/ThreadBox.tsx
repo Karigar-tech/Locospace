@@ -24,7 +24,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_desc
   }
 
   return (
-    <Container className="thread-box p-3 border rounded mb-3">
+    <Container className="thread-box p-3 mb-3">
       <Row style ={{flexDirection: 'row', }} >
         <div style= {{flex: '0 0px'}}  >
           {user_id.profilePicture && user_id.profilePicture.url ? (

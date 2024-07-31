@@ -409,10 +409,11 @@ body {
 
 /* Threads */
 .threads-container {
-  background: linear-gradient(rgb(182, 187, 255), rgb(215, 240, 255));
-  border-radius: 8px;
+  /* background: linear-gradient(rgb(0, 17, 255), rgb(73, 185, 255)); */
+  border-radius: 20px;
+  background-color: #20096d;
   padding: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
   max-width: 800px;
   margin: 16px auto;
   display: flex;
@@ -420,10 +421,10 @@ body {
 }
 
 .threads-list {
-  max-height: 400px;
+  max-height: 4;
   padding: 1rem;
   max-width: 100%;
-  background-color: #ffffff;
+  background-color: #fafafa;
   overflow-y: auto;
   margin-bottom: 16px;
   border-radius: 20px;
@@ -432,50 +433,52 @@ body {
 .thread-item {
   margin-bottom: 5px;
   max-width: 710px;
+  height: fit-content;
+  
 }
 
 .thread-box {
   padding: 15px;
   width: fill;
-  height: fill;
   border: 1px solid #ddd;
-  border-radius: 20px;
-  background-color: #f8f8f8;
-  transition: all 0.5s ease;
+  border-radius: 30px;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
 }
 
 .thread-box:hover {
   padding: 1px;
   transform: scale(1.01);
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  background-color: #eaedfc;
+  border: 1px solid #d4d3d3;
+  border-radius: 25px;
+  background-color: #f7f7f7;
 }
 
 .thread-description {
   font-size: 1.2rem;
+  align-self: top;
   font-weight: 500;
   color: #333;
 }
 
 .thread-username{
   color: #323232;
-  align-self: left;
+  align-self: top;
   padding: 0px;
-  margin-top: 0.4rem;
+  margin-top: 0.65rem;
   font-weight: 300;
 }
 .profile-pic {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
   transition: all 0.3s ease; /* Optional: for smooth transition */
 }
 
 .profile-pic:hover {
-  width: 43px;
-  height: 43px;
+  width: 54px;
+  height: 54px;
   cursor: pointer;
 }
 
@@ -495,8 +498,8 @@ body {
 
 .thread-add-button {
   padding: 6px;
-  background-color: #f0f4f8;
-  color: #001e5a;
+  background-color: #20096d;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   display: flex;
@@ -506,7 +509,8 @@ body {
 }
 
 .thread-add-button:hover {
-  color: #3D8BFD;
+  color: #cadfff;
+  transform: scale(1.03);
 }
 
 

@@ -50,7 +50,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
 
   return (
     <div className="threads-container">
-      <h3>General</h3>
+      <h3 style={{color: '#ffffff'}}>General</h3>
       <div className="threads-list">
         {threads.length > 0 ? (
           <div>

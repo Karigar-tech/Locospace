@@ -84,10 +84,6 @@
 }
 
 
-.icon-image {
-  width: 200%; /* Adjust size of icon as needed */
-  height: 200%; /* Adjust size of icon as needed */
-}
 
 
 .features-list {
@@ -156,10 +152,7 @@
   max-width: 150px;
 }
 
-.buy-image, .key-image {
-  width: 24px;
-  height: 24px;
-}
+
 
 .publish-btn, .cancel-btn {
   width: 100px;

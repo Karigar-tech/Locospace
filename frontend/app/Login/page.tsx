@@ -5,6 +5,7 @@ import '../../styles/login.css'; // Adjust the path based on your folder structu
 import Link from 'next/link'; // Import Link from Next.js for client-side navigation
 import useAuth from '../../authStore';
 import {useRouter} from 'next/navigation';
+import Image from 'next/image';
 
 
 
@@ -45,7 +46,7 @@ const Login: React.FC = () => {
       </Link>
       
       <Link href="/">
-        <img src="Logo.png" alt="Logo" className="logo" />
+        <Image src="/logo.png" alt="Logo" className="logo" width={80} height={80} />
       </Link>
 
       <div className="loginBox">
@@ -64,7 +65,7 @@ const Login: React.FC = () => {
             </div>
             <button className="loginButton">Login</button> 
             <div className="accountPrompt">
-              <span>Don't have an account? </span>
+              <span>Don&apos;t have an account? </span>
               <Link href="/Signup">
                 <div className="createAccountLink">Create new account</div>
               </Link>

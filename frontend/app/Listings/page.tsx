@@ -17,7 +17,12 @@ import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Thread {
-  title: string;
+  _id: string;
+  user_id: string
+  community_id: string;
+  thread_description: string;
+  createdAt: string;
+  updatedAt: string;
   username: string;
 }
 
@@ -44,9 +49,9 @@ const Page = () => {
     }
   }, [searchParams]); 
 
-  const addThread = (title: string, username: string) => {
-    setThreads(prevThreads => [...prevThreads, { title, username }]);
-  };
+  // const addThread = (title: string, username: string) => {
+  //   setThreads(prevThreads => [...prevThreads, {th}]);
+  // };
 
   const fetchListings = async (searchTerm: string) => {
     const token = localStorage.getItem('token');
@@ -162,7 +167,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads={threads} addThread={addThread} />
+        <MainBox threads={threads} />
       )}
     </div>
   );

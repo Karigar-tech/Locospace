@@ -112,4 +112,22 @@ exports.createCommunity = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
+  exports.getName = async (req, res) => {
+    console.log("WE HERE BIATCH");
+
+    const { community_id } = req.params;
+    try {
+      const community = await Community.findById(community_id);
+      if (!community) {
+        return res.status(404).json({ message: 'No community of that ID found' });
+      }
+      res.status(200).json({ communityName: community.communityName });
+    } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+  
+  
   

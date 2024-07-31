@@ -421,27 +421,22 @@ body {
 
 .threads-list {
   max-height: 400px;
-  padding-top: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
   background-color: #ffffff;
   overflow-y: auto;
   margin-bottom: 16px;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .thread-item {
-  padding: 8px;
-  background-color: #e9ecef;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 5px;
 }
 
 .thread-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  flex-direction: column;
+  padding: 15px;
+  /* border: 1px solid #ddd; */
+  border-radius: 20px;
+  background-color: #d6d6d6;
 }
 
 .thread-title {

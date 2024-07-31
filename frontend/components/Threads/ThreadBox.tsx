@@ -35,10 +35,10 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_desc
             />
           ) : (
             <img
-              src="path/to/placeholder-image.png" // Replace with the actual path to your placeholder image
+              
+              src="/osama.jpg" // Replace with the actual path to your placeholder image
               alt="pfp"
-              className="rounded-circle"
-              style={{ width: '40px', height: '40px' }}
+              className="profile-pic"
             />
           )}
         </div>

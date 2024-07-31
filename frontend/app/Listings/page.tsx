@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import CustomNavbar from '../../components/LandingNavbar';
 import SearchBar from '@/components/SearchBar';
 import Image from 'next/image';
-import { Listing } from '../../types';
+import { Listing, User } from '../../types';
 import { Button } from 'react-bootstrap';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
@@ -18,12 +18,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Thread {
   _id: string;
-  user_id: string
+  user_id: User;
   community_id: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
-  username: string;
 }
 
 const Page = () => {
@@ -34,11 +33,7 @@ const Page = () => {
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
   const [threads, setThreads] = useState<Thread[]>([
-    { title: "Power outage!", username: 'AliAhmed20' },
-    { title: "Communal gathering", username: 'ZahraKhan2001' },
-    { title: "Football Festival", username: 'osamababakhell' },
-    { title: "Half Marathon throughout", username: 'aaarij420' },
-    { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
+    
   ]);
 
   useEffect(() => {

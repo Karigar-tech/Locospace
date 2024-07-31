@@ -434,18 +434,19 @@ body {
 
 .thread-box {
   padding: 15px;
-  /* border: 1px solid #ddd; */
+  border: 1px solid #ddd;
   border-radius: 20px;
-  background-color: #d6d6d6;
+  background-color: #f8f8f8;
 }
 
-.thread-title {
-  font-style: normal;
+.thread-description {
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .thread-username{
-  color: #888;
-  align-self: left;
+  color: #323232;
+  /* align-self: left; */
 }
 
 .thread-input-container {

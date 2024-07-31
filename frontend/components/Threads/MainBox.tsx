@@ -3,15 +3,16 @@ import '../../styles/main.css';
 import { IoMdAddCircle } from 'react-icons/io';
 import ThreadBox from './ThreadBox';
 import { User } from '@/types';
+import { Community } from '@/types';
+
 
 interface Thread {
   _id: string;
-  user_id: string ;
-  community_id: string;
+  user_id: User;
+  community_id: Community;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
-  username: string;
 }
 
 
@@ -22,12 +23,8 @@ interface MainBoxProps {
 
 const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
   const [newThreadTitle, setNewThreadTitle] = useState('');
-  const [usernameMap, setUsernameMap] = useState<{ [key: string]: string }>({});
 
-  // const fetchUsername = async (thread: Thread) => {
-  //   console.log('Fetching username for ID:',  thread.username); // Log the user ID
-  //   return thread.username
-  // };
+  
 
   // useEffect(() => {
   //   const fetchUsernames = async () => {
@@ -66,9 +63,9 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
                   thread_description={thread.thread_description}
                   createdAt={thread.createdAt}
                   updatedAt={thread.updatedAt}
-                  username={thread.username}
+                  
                 />
-                <p>ITS: {thread.username}</p>
+                {/* <p>ITS: {thread.community_id}</p> */}
               </div>
             ))}
           </div>

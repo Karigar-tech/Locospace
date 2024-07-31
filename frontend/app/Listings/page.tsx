@@ -15,15 +15,10 @@ import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Thread } from '@/types';
+import { Community } from '@/types';
 
-interface Thread {
-  _id: string;
-  user_id: User;
-  community_id: string;
-  thread_description: string;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);

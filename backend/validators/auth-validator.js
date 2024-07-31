@@ -18,5 +18,12 @@ const signUpValidator = z.object({
     .string({ required_error: "contact is required" })
     .min(11, { message: "contact should be 3 character long" }),
 });
+const loginValidator = z.object({
+  email: z.string({ required_error: "Email is required" }).email(),
+  password: z.string({ required_error: "Password is Incorrect" })
+  .min(6, { message: "Password length should be 6 or greater" })
+  .max(20, { message: "Password length should be 20 or less" })
+  ,
+});
 
-module.exports = { signUpValidator };
+module.exports = { signUpValidator , loginValidator };

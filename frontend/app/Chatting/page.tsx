@@ -4,8 +4,13 @@ import SideChats from '../../components/Chat/SideChats';
 
 const page = () => {
   return (
-    <div className='d-flex justify-content-center'>
+    <div>
+      <div>
         <SideChats/>
+      </div>
+      <div>
+        <MessageContainer/>
+      </div>
     </div>
   )
 }

@@ -437,9 +437,19 @@ body {
 .thread-box {
   padding: 15px;
   width: fill;
+  height: fill;
   border: 1px solid #ddd;
   border-radius: 20px;
   background-color: #f8f8f8;
+  transition: all 0.5s ease;
+}
+
+.thread-box:hover {
+  padding: 1px;
+  transform: scale(1.01);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: #eaedfc;
 }
 
 .thread-description {
@@ -466,7 +476,7 @@ body {
 .profile-pic:hover {
   width: 43px;
   height: 43px;
-  
+  cursor: pointer;
 }
 
 

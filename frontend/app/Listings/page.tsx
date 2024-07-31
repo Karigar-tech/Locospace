@@ -27,7 +27,7 @@ const Page = () => {
   const searchParams = useSearchParams();
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
-  const [keyword, setKeyword] = useState<string | null>(null);
+  const [search, setSearch] = useState<string | null>(null);
   const [threads, setThreads] = useState<Thread[]>([
     { title: "Power outage!", username: 'AliAhmed20' },
     { title: "Communal gathering", username: 'ZahraKhan2001' },
@@ -37,10 +37,10 @@ const Page = () => {
   ]);
 
   useEffect(() => {
-    const keyword = searchParams.get('keyword');
-    if (keyword) {
-      setKeyword(keyword);
-      fetchListings(keyword);
+    const searchTerm = searchParams.get('search');
+    if (searchTerm) {
+      setSearch(searchTerm);
+      fetchListings(searchTerm);
     }
   }, [searchParams]); 
 
@@ -48,10 +48,10 @@ const Page = () => {
     setThreads(prevThreads => [...prevThreads, { title, username }]);
   };
 
-  const fetchListings = async (keyword: string) => {
+  const fetchListings = async (searchTerm: string) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/alllistings?keyword=${keyword}`, {
+      const response = await fetch(`http://localhost:5000/api/listings/alllistings?search=${searchTerm}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -115,9 +115,9 @@ const Page = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    setKeyword(searchTerm);
+    setSearch(searchTerm);
     fetchListings(searchTerm);
-    router.push(`?keyword=${searchTerm}`);
+    router.push(`?search=${searchTerm}`);
   };
 
   return (
@@ -129,11 +129,11 @@ const Page = () => {
       </div>
       {view === 'listings' && (
         <div className="upper-container" style={{ width: '90%' }}>
-          <div className="row">
+          {/* <div className="row">
             
               <SearchBar onSearch={handleSearch} />
 
-          </div>
+          </div> */}
           <div className="row-listings">
             <div className="col">
               <h4 className="ml-15 mt-36" style={{ fontFamily: 'Source Sans Pro' }}>

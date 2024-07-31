@@ -1,11 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from '../../components/LandingNavbar';
-import SearchBar from '@/components/SearchBar';
 import Image from 'next/image';
 import { Listing, User } from '../../types';
-import { Button } from 'react-bootstrap';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
@@ -19,6 +16,15 @@ import { Thread } from '@/types';
 import { Community } from '@/types';
 
 
+
+interface Thread {
+  _id: string;
+  user_id: User;
+  community_id: string;
+  thread_description: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -157,7 +163,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads={threads} />
+        <MainBox threads= {threads} />
       )}
     </div>
   );

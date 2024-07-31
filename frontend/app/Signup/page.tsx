@@ -35,7 +35,7 @@ const Signup: React.FC = () => {
         throw new Error('User not created');
       } else {
         const data = await response.json();
-        router.push('/');
+        router.push('/Login');
       }
     } catch (error) {
       console.error('Sign Up Error:', error);

@@ -43,7 +43,7 @@ const CardCarouselComp: React.FC = () => {
   const [data, setData] = useState<Listing[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/listings/all') 
+    fetch('http://localhost:5000/api/listings/alllistings') 
       .then(response => response.json())
       .then(data => {
         setData(data);

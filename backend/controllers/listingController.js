@@ -163,17 +163,16 @@ exports.deleteListing = async (req, res) => {
 
 exports.getListings = async (req, res) => {
   try {
-      const listings = await Listing.find(); // Fetch all listings from MongoDB
+      const listings = await Listing.find(); 
 
       if (!listings || listings.length === 0) {
           return res.status(404).json({ message: 'No listings found' });
       }
 
-      // Construct response with image URLs
       const response = listings.map(listing => {
           return {
-              ...listing._doc, // Include listing data
-              ListingPictures: listing.ListingPictures // Include image URLs
+              ...listing._doc, 
+              ListingPictures: listing.ListingPictures 
           };
       });
 
@@ -211,3 +210,71 @@ exports.getSpecificListing = async (req, res) => {
       res.status(400).json({ error: error.message });
   }
 };
+
+exports.getAllListings = async (req, res) => {
+    const { environment, facilities, ageGroup, search, community } = req.query;
+  
+    try {
+      let listings = [];
+  
+      if (community) {
+        //if a community is selected, its listings
+        const communityRegex = new RegExp(community, 'i');
+        const matchingCommunities = await Community.find({ communityName: { $regex: communityRegex } });
+  
+        if (matchingCommunities.length > 0) {
+          const matchingCommunityIds = matchingCommunities.map(comm => comm._id.toString());
+  
+          listings = await Listing.find({ community: { $in: matchingCommunityIds } });
+        }
+      } else {
+        
+        listings = await Listing.find();
+      }
+  
+      
+      if (search) {
+        const searchRegex = new RegExp(search, 'i');
+        listings = listings.filter(listing =>
+          listing.title.match(searchRegex) ||
+          listing.description.match(searchRegex) ||
+          listing.location.match(searchRegex) ||
+          (listing.preferences &&
+            (listing.preferences.environment && listing.preferences.environment.some(env => searchRegex.test(env))) ||
+            (listing.preferences.facilities && listing.preferences.facilities.some(facility => searchRegex.test(facility))) ||
+            (listing.preferences.ageGroup && listing.preferences.ageGroup.some(age => searchRegex.test(age))))
+        );
+      }
+  
+      if (environment) {
+        listings = listings.filter(listing =>
+          listing.preferences &&
+          listing.preferences.environment &&
+          listing.preferences.environment.some(env => environment.split(',').includes(env))
+        );
+      }
+  
+      if (facilities) {
+        listings = listings.filter(listing =>
+          listing.preferences &&
+          listing.preferences.facilities &&
+          listing.preferences.facilities.some(facility => facilities.split(',').includes(facility))
+        );
+      }
+  
+  
+      if (ageGroup) {
+        listings = listings.filter(listing =>
+          listing.preferences &&
+          listing.preferences.ageGroup &&
+          listing.preferences.ageGroup.some(age => ageGroup.split(',').includes(age))
+        );
+      }
+  
+      res.status(200).json(listings);
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+      res.status(500).json({ message: 'Error fetching listings', error });
+    }
+  };
+  

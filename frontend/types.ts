@@ -5,6 +5,7 @@ export interface User {
   contact: string;
   email: string;
   name: string;
+  username: string;
   profilePicture: {
     filePath: string;
     url: string;

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import CustomNavbar from '../../components/LandingNavbar';
-import SearchBar from '@/components/Listings/SearchBar';
-import { Listing } from '../../types';
+import SearchBar from '@/components/SearchBar';
+import Image from 'next/image';
+import { Listing, User } from '../../types';
 import { Button } from 'react-bootstrap';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
@@ -15,10 +16,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 interface Thread {
-  title: string;
-  username: string;
+  _id: string;
+  user_id: User;
+  community_id: string;
+  thread_description: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const Page = () => {
@@ -27,31 +31,27 @@ const Page = () => {
   const searchParams = useSearchParams();
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
-  const [keyword, setKeyword] = useState<string | null>(null)
+  const [search, setSearch] = useState<string | null>(null);
   const [threads, setThreads] = useState<Thread[]>([
-    { title: "Power outage!", username: 'AliAhmed20' },
-    { title: "Communal gathering", username: 'ZahraKhan2001' },
-    { title: "Football Festival", username: 'osamababakhell' },
-    { title: "Half Marathon throughout", username: 'aaarij420' },
-    { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
+    
   ]);
-
+ 
   useEffect(() => {
-    const keyword = searchParams.get('keyword');
-    if (keyword) {
-      setKeyword(keyword);
-      fetchListings(keyword);
+    const searchTerm = searchParams.get('search');
+    if (searchTerm) {
+      setSearch(searchTerm);
+      fetchListings(searchTerm);
     }
-  }, [searchParams]);
+  }, [searchParams]); 
 
-  const addThread = (title: string, username: string) => {
-    setThreads(prevThreads => [...prevThreads, { title, username }]);
-  };
+  // const addThread = (title: string, username: string) => {
+  //   setThreads(prevThreads => [...prevThreads, {th}]);
+  // };
 
-  const fetchListings = async (keyword: string) => {
+  const fetchListings = async (searchTerm: string) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/?keyword=${keyword}`, {
+      const response = await fetch(`http://localhost:5000/api/listings/alllistings?search=${searchTerm}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -65,7 +65,6 @@ const Page = () => {
       console.error('Error fetching listings:', error);
     }
   };
-
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
@@ -96,30 +95,29 @@ const Page = () => {
     }
   }, []);
 
-  useEffect( () => {
-    // const storedThreads = localStorage.getItem('selectedThread');
-    // if (storedThreads) {
-    //   setThreads(storedThreads);
-    console.log('here')
+  useEffect(() => {
+    console.log('here');
     const getThreads = async () => {
-     
-      try{
+      try {
         const response = await fetch('http://localhost:5000/api/threads/allThreads'); // Replace
-        const data= await response.json();
-        console.log(response, "Hello" , data)
+        const data = await response.json();
+        console.log(response, "Hello", data);
         setThreads(data);
-        
-      }catch(error){
-        console.log("Error fetching threeads: ", error)
+      } catch (error) {
+        console.log("Error fetching threads: ", error);
       }
-    }
-    // };
+    };
     getThreads();
-   
   }, []);
 
   const toggleView = () => {
     setView(view === 'listings' ? 'threads' : 'listings');
+  };
+
+  const handleSearch = (searchTerm: string) => {
+    setSearch(searchTerm);
+    fetchListings(searchTerm);
+    router.push(`?search=${searchTerm}`);
   };
 
   return (
@@ -129,13 +127,28 @@ const Page = () => {
         <div className="gradient-bar"></div>
         <ToggleButton view={view} setView={setView} />
       </div>
-      <h2 className='p-4 ml-4'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`}</h2>
-      {view== 'listings'? (
-        <Button>
-          <FontAwesomeIcon icon= {faFilter}/>
-        </Button>
-      ): (
-        <hr/>
+      {view === 'listings' && (
+        <div className="upper-container" style={{ width: '90%' }}>
+          {/* <div className="row">
+            
+              <SearchBar onSearch={handleSearch} />
+
+          </div> */}
+          <div className="row-listings">
+            <div className="col">
+              <h4 className="ml-15 mt-36" style={{ fontFamily: 'Source Sans Pro' }}>
+                Listings for {community ? community : 'All'}
+              </h4>
+              <p style={{ color: 'grey', fontFamily: 'Source Sans Pro' }}>
+                {listings.length} properties
+              </p>
+            </div>
+          
+            <div className="col">
+              <Image src='/Slider.svg' width={40} height={40} alt="Slider" />
+            </div>
+          </div>
+        </div>
       )}
       
       {view === 'listings' ? (
@@ -149,7 +162,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads={threads} addThread={addThread} />
+        <MainBox threads={threads} />
       )}
     </div>
   );

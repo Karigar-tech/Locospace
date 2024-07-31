@@ -24,45 +24,25 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
   const [newThreadTitle, setNewThreadTitle] = useState('');
   const [usernameMap, setUsernameMap] = useState<{ [key: string]: string }>({});
 
-  const fetchUsername = async (thread: Thread) => {
-    console.log('Fetching username for ID:', thread.user_id.name, thread.username); // Log the user ID
-    try {
-      const response = await fetch(`http://localhost:5000/api/profile/${thread.user_id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+  // const fetchUsername = async (thread: Thread) => {
+  //   console.log('Fetching username for ID:',  thread.username); // Log the user ID
+  //   return thread.username
+  // };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  // useEffect(() => {
+  //   const fetchUsernames = async () => {
+  //     const names: { [key: string]: string } = {};
+  //     for (const thread of threads) {
+  //       const userId = thread;
+  //       const name= fetchUsername(userId);
+  //       console.log("ITS: ", name);
+        
+  //     }
+  //     setUsernameMap(name);
+  //   };
 
-      const data = await response.json();
-      console.log(data);
-      return data.user.username;
-    } catch (error) {
-      console.error('Error fetching username:', error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const fetchUsernames = async () => {
-      const names: { [key: string]: string } = {};
-      for (const thread of threads) {
-        const userId = thread.user_id;
-        if (!names[userId]) {
-          const name = await fetchUsername(userId);
-          if (name) {
-            names[userId] = name;
-          }
-        }
-      }
-      setUsernameMap(names);
-    };
-
-    fetchUsernames();
-  }, [threads]);
+  //   fetchUsernames();
+  // }, [threads]);
 
   const handleAddThread = () => {
     if (newThreadTitle.trim() !== '') {
@@ -86,8 +66,9 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
                   thread_description={thread.thread_description}
                   createdAt={thread.createdAt}
                   updatedAt={thread.updatedAt}
-                  username={usernameMap[thread.username]}
+                  username={thread.username}
                 />
+                <p>ITS: {thread.username}</p>
               </div>
             ))}
           </div>

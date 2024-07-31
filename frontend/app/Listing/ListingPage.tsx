@@ -48,35 +48,35 @@ const ListingPage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [url, setUrl] = useState("");
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     setUrl(window.location.href);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUrl(window.location.href);
+    }
+  }, []);
 
   const text = "Check out this listing!";
 
-  // const handleShare = () => {
-  //   if (navigator.share) {
-  //     navigator
-  //       .share({
-  //         title: "My Page",
-  //         text: text,
-  //         url: url,
-  //       })
-  //       .then(() => {
-  //         console.log("Thanks for sharing!");
-  //       })
-  //       .catch((err) => {
-  //         console.error("Error sharing:", err);
-  //       });
-  //   } else {
-  //     window.open(`mailto:?subject=Check out this page&body=${text} ${url}`);
-  //     window.open(`https://api.whatsapp.com/send?text=${text} ${url}`);
-  //     window.open(`https://twitter.com/intent/tweet?text=${text} ${url}`);
-  //     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
-  //   }
-  // };
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "My Page",
+          text: text,
+          url: url,
+        })
+        .then(() => {
+          console.log("Thanks for sharing!");
+        })
+        .catch((err) => {
+          console.error("Error sharing:", err);
+        });
+    } else {
+      window.open(`mailto:?subject=Check out this page&body=${text} ${url}`);
+      window.open(`https://api.whatsapp.com/send?text=${text} ${url}`);
+      window.open(`https://twitter.com/intent/tweet?text=${text} ${url}`);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
+    }
+  };
 
   useEffect(() => {
     const fetchListing = async () => {

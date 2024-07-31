@@ -10,6 +10,12 @@ import '../../styles/profile.css';
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Thread } from '@/types';
+import { Community } from '@/types';
+
+
 
 interface Thread {
   _id: string;

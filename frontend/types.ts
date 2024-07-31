@@ -43,7 +43,14 @@ export interface Community{
 
 }
 
-
+export interface Thread {
+  _id: string;
+  user_id: User;
+  community_id: Community;
+  thread_description: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 

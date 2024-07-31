@@ -128,7 +128,7 @@ const SellerForm: React.FC = () => {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/listings/', {
+        const response = await fetch('http://localhost:5000/api/listings/all/', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

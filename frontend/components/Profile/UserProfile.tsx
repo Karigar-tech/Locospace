@@ -26,7 +26,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
   console.log(token)
   const getData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/myprofile', {
+      const response = await fetch('http://localhost:5000/api/profile/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/edit', {
+      const response = await fetch('http://localhost:5000/api/profile/', {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,

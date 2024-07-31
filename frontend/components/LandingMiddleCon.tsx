@@ -86,7 +86,8 @@ const LandingPageComp: React.FC = () => {
       queryParams.append('ageGroups', selectedAgeGroups.join(','));
     }
 
-    router.push(`/Communities?${queryParams.toString()}`);
+
+    router.push(`/Listings?${queryParams.toString()}`);
   };
 
   const handleCheckboxChange = (setSelected: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
@@ -104,7 +105,13 @@ const LandingPageComp: React.FC = () => {
   };
 
   const handleSearchClick = () => {
-    handleApplyFilters(); 
+    const queryParams = new URLSearchParams();
+
+    if (searchTerm) {
+      queryParams.append('search', searchTerm); 
+    }
+
+    router.push(`/Communities?${queryParams.toString()}`);
   };
 
   const handleBuyClick = () => {

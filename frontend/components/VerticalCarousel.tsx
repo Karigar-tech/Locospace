@@ -1,41 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import Papa from 'papaparse';
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css'; 
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import '../styles/selectedlist.css';
-
-interface CSVData {
-  url: string;
-  title: string;
-  type: string;
-  price: number;
-  area: string;
-  city: string;
-  address: string;
-  bedrooms: string;
-  baths: string;
-}
+import { Listing } from '../types';
 
 const VerticalCardCarousel: React.FC = () => {
-  const [data, setData] = useState<CSVData[]>([]);
+  const [data, setData] = useState<Listing[]>([]);
 
   useEffect(() => {
-    fetch('/zameen.csv')
-      .then(response => response.text())
-      .then(csvText => {
-        Papa.parse<CSVData>(csvText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            console.log('Parsed data:', results.data);
-            setData(results.data);
-          }
-        });
-      });
+    const fetchListings = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/listings/alllistings');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const listings: Listing[] = await response.json();
+        setData(listings);
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+      }
+    };
+
+    fetchListings();
   }, []);
 
   const settings = {
@@ -47,7 +37,6 @@ const VerticalCardCarousel: React.FC = () => {
     vertical: true,
     verticalSwiping: true,
     arrows: true,
-    
   };
 
   const formatPrice = (price: number) => {
@@ -63,32 +52,32 @@ const VerticalCardCarousel: React.FC = () => {
 
   return (
     <div className="vertical-carousel-wrapper">
-      <h4 className="heading">Properties Near By</h4>
+      <h4 className="heading">Properties Nearby</h4>
       <Slider {...settings} className="vertical-carousel">
-        {data.map((item, index) => {
-          const addressPart = item.address?.split(',')[0] || 'Address not available';
+        {data.map((item) => {
+          const addressPart = item.location?.split(',')[0] || 'Address not available';
 
           return (
-            <Card key={index} className="d-block card-custom">
+            <Card key={item._id} className="d-block card-custom">
               <div className="image-wrapper">
-                <Card.Img variant="top" src='placeholder.png' alt={`Image of ${item.title}`} />
+                <Card.Img variant="top" src={item.ListingPictures[0] || 'placeholder.png'} alt={`Image of ${item.title}`} />
               </div>
               <Card.Body>
                 <Card.Title>
                   <Row className="mb-2">
-                    <Col><span>{item.type}</span></Col>
+                    <Col><span>{item.listing_type}</span></Col>
                     <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
                   </Row>
                 </Card.Title>
                 <Row className="mb-2">
-                  <Col><FontAwesomeIcon icon={faBed} /> {item.bedrooms}</Col>
-                  <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.baths}</Col>
+                  <Col><FontAwesomeIcon icon={faBed} /> {item.bedroom}</Col>
+                  <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath}</Col>
                 </Row>
                 <hr />
                 <Row className="mb-2">
                   <Col>
                     <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-                    <span style={{ marginLeft: '0.5rem' }}>{addressPart}</span>, {item.city}
+                    <span style={{ marginLeft: '0.5rem' }}>{addressPart}</span>
                   </Col>
                 </Row>
                 <Button variant="primary" href="#">View</Button>

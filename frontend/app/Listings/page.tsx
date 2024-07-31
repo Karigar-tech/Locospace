@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import CustomNavbar from '../../components/LandingNavbar';
-import SearchBar from '@/components/Listings/SearchBar';
+import SearchBar from '@/components/SearchBar';
+import Image from 'next/image';
 import { Listing } from '../../types';
 import { Button } from 'react-bootstrap';
 import ListingBox from '@/components/Listings/ListingBox';
@@ -14,7 +15,6 @@ import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 
 interface Thread {
   _id: string;
@@ -40,7 +40,7 @@ const Page = () => {
       setKeyword(keyword);
       fetchListings(keyword);
     }
-  }, [searchParams]);
+  }, [searchParams]); 
 
   // const addThread = (title: string, username: string) => {
   //   setThreads(prevThreads => [...prevThreads, {th}]);
@@ -49,7 +49,7 @@ const Page = () => {
   const fetchListings = async (keyword: string) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/list/?keyword=${keyword}`, {
+      const response = await fetch(`http://localhost:5000/api/listings/alllistings?keyword=${keyword}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -63,7 +63,6 @@ const Page = () => {
       console.error('Error fetching listings:', error);
     }
   };
-
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
@@ -94,30 +93,29 @@ const Page = () => {
     }
   }, []);
 
-  useEffect( () => {
-    // const storedThreads = localStorage.getItem('selectedThread');
-    // if (storedThreads) {
-    //   setThreads(storedThreads);
-    console.log('here')
+  useEffect(() => {
+    console.log('here');
     const getThreads = async () => {
-     
-      try{
+      try {
         const response = await fetch('http://localhost:5000/api/threads/allThreads'); // Replace
-        const data= await response.json();
-        console.log(response, "Hello" , data)
+        const data = await response.json();
+        console.log(response, "Hello", data);
         setThreads(data);
-        
-      }catch(error){
-        console.log("Error fetching threeads: ", error)
+      } catch (error) {
+        console.log("Error fetching threads: ", error);
       }
-    }
-    // };
+    };
     getThreads();
-   
   }, []);
 
   const toggleView = () => {
     setView(view === 'listings' ? 'threads' : 'listings');
+  };
+
+  const handleSearch = (searchTerm: string) => {
+    setKeyword(searchTerm);
+    fetchListings(searchTerm);
+    router.push(`?keyword=${searchTerm}`);
   };
 
   return (
@@ -127,13 +125,28 @@ const Page = () => {
         <div className="gradient-bar"></div>
         <ToggleButton view={view} setView={setView} />
       </div>
-      <h2 className='p-4 ml-4'>{view === 'listings' ? `Listings for ${community ? community : 'All'}` : `Threads for ${community ? community : 'All'}`}</h2>
-      {view== 'listings'? (
-        <Button>
-          <FontAwesomeIcon icon= {faFilter}/>
-        </Button>
-      ): (
-        <hr/>
+      {view === 'listings' && (
+        <div className="upper-container" style={{ width: '90%' }}>
+          <div className="row">
+            
+              <SearchBar onSearch={handleSearch} />
+
+          </div>
+          <div className="row-listings">
+            <div className="col">
+              <h4 className="ml-15 mt-36" style={{ fontFamily: 'Source Sans Pro' }}>
+                Listings for {community ? community : 'All'}
+              </h4>
+              <p style={{ color: 'grey', fontFamily: 'Source Sans Pro' }}>
+                {listings.length} properties
+              </p>
+            </div>
+          
+            <div className="col">
+              <Image src='/Slider.svg' width={40} height={40} alt="Slider" />
+            </div>
+          </div>
+        </div>
       )}
       
       {view === 'listings' ? (

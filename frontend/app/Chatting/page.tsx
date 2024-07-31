@@ -1,16 +1,11 @@
 import React from 'react'
-import MessageContainer from '../../components/Chat/messagecontainer';
-import SideChats from '../../components/Chat/sidechats';
+import MessageContainer from '../../components/Chat/MessageContainer';
+import SideChats from '../../components/Chat/SideChats';
 
 const page = () => {
   return (
-    <div>
-      <div>
+    <div className='d-flex justify-content-center'>
         <SideChats/>
-      </div>
-      <div>
-        <MessageContainer/>
-      </div>
     </div>
   )
 }

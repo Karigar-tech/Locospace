@@ -40,7 +40,7 @@ const Page = () => {
     { title: "Half Marathon throughout", username: 'aaarij420' },
     { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
   ]);
-
+ 
   useEffect(() => {
     const searchTerm = searchParams.get('search');
     if (searchTerm) {

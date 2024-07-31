@@ -1,11 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from '../../components/LandingNavbar';
-import SearchBar from '@/components/SearchBar';
 import Image from 'next/image';
 import { Listing, User } from '../../types';
-import { Button } from 'react-bootstrap';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
@@ -13,8 +10,6 @@ import '../../styles/profile.css';
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Thread {
   _id: string;
@@ -162,7 +157,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads={threads} />
+        <MainBox threads= {threads} />
       )}
     </div>
   );

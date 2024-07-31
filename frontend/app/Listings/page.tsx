@@ -18,11 +18,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Thread {
   _id: string;
+  user_id: string
   community_id: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
-  communityName: string;
+  username: string;
 }
 
 const Page = () => {

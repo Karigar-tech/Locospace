@@ -22,6 +22,7 @@ exports.createThread = async (req, res) => {
 exports.getAllThreads = async (req, res) => {
     try {
         const threads = await Thread.find().populate('user_id').populate('community_id');
+        console.log(threads);
         res.status(200).json(threads);
     } catch (error) {
         res.status(500).json({ message: error.message });

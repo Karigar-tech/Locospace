@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/main.css';
 import { IoMdAddCircle } from 'react-icons/io';
 import ThreadBox from './ThreadBox';
+import { User } from '@/types';
 
 interface Thread {
   _id: string;
+  user_id: string ;
   community_id: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
-  communityName: string
+  username: string;
 }
+
+
 
 interface MainBoxProps {
   threads: Thread[];
@@ -18,54 +22,52 @@ interface MainBoxProps {
 
 const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
   const [newThreadTitle, setNewThreadTitle] = useState('');
-  const [username, setUsername] = useState('');
-  const [communityNames, setCommunityNames] = useState<{ [key: string]: string }>({});
+  const [usernameMap, setUsernameMap] = useState<{ [key: string]: string }>({});
 
-  const fetchCommunityName = async (community_id: Thread) => {
-    console.log('Fetching community name for ID:', community_id); // Log the community ID
+  const fetchUsername = async (thread: Thread) => {
+    console.log('Fetching username for ID:', thread.user_id.name, thread.username); // Log the user ID
     try {
-      const response = await fetch(`http://localhost:5000/api/community/commID/${community_id._id}`, {
+      const response = await fetch(`http://localhost:5000/api/profile/${thread.user_id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const data = await response.json();
-      return data.communityName;
+      console.log(data);
+      return data.user.username;
     } catch (error) {
-      console.error('Error fetching community name:', error);
+      console.error('Error fetching username:', error);
       return null;
     }
   };
-  
 
   useEffect(() => {
-    const fetchCommunityNames = async () => {
+    const fetchUsernames = async () => {
       const names: { [key: string]: string } = {};
       for (const thread of threads) {
-        const community_id = thread.community_id;
-        if (!names[community_id]) {
-          const name = await fetchCommunityName(community_id);
+        const userId = thread.user_id;
+        if (!names[userId]) {
+          const name = await fetchUsername(userId);
           if (name) {
-            names[community_id] = name;
+            names[userId] = name;
           }
         }
       }
-      setCommunityNames(names);
+      setUsernameMap(names);
     };
 
-    fetchCommunityNames();
+    fetchUsernames();
   }, [threads]);
 
   const handleAddThread = () => {
     if (newThreadTitle.trim() !== '') {
       // addThread(newThreadTitle, username);
       setNewThreadTitle('');
-      setUsername('');
     }
   };
 
@@ -77,14 +79,14 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
           <div>
             {threads.map((thread) => (
               <div key={thread._id} className="thread-item">
-                <h4>{communityNames[thread.community_id]}</h4>
                 <ThreadBox
                   _id={thread._id}
+                  user_id={thread.user_id}
                   community_id={thread.community_id}
                   thread_description={thread.thread_description}
                   createdAt={thread.createdAt}
                   updatedAt={thread.updatedAt}
-                  communityName= {thread.communityName}
+                  username={usernameMap[thread.username]}
                 />
               </div>
             ))}

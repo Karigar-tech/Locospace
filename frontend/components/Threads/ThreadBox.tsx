@@ -11,18 +11,40 @@ interface BoxProps {
   thread_description: string;
   createdAt: string;
   updatedAt: string;
+  
 }
 
 const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_description, createdAt, updatedAt }) => {
+  
+  const checkPFP = () => {
+    if (user_id.profilePicture.url) {
+      return true;
+  }
+  return false;
+  }
+
   return (
     <Container className="thread-box p-3 border rounded mb-3">
-      <Row className="align-items-center">
-        <Col xs="auto">
-          <img src={user_id.profilePicture} alt="PFP" className="rounded-circle" style={{ width: '40px', height: '40px' }} />
-        </Col>
-        <Col className='thread-username'>
+      <Row style ={{flexDirection: 'row', }} >
+        <div style= {{flex: '0 0px'}}  >
+          {user_id.profilePicture && user_id.profilePicture.url ? (
+            <img
+              src={user_id.profilePicture.url}
+              alt="PFP"
+              className="profile-pic"
+            />
+          ) : (
+            <img
+              src="path/to/placeholder-image.png" // Replace with the actual path to your placeholder image
+              alt="pfp"
+              className="rounded-circle"
+              style={{ width: '40px', height: '40px' }}
+            />
+          )}
+        </div>
+        <div className='thread-username'>
           <strong>{user_id.username}</strong> <span className="text-muted">· Posted: {new Date(createdAt).toLocaleTimeString()}</span>
-        </Col>
+        </div>
       </Row>
       <Row className="mt-2">
         <Col>

@@ -422,6 +422,7 @@ body {
 .threads-list {
   max-height: 400px;
   padding: 1rem;
+  max-width: 100%;
   background-color: #ffffff;
   overflow-y: auto;
   margin-bottom: 16px;
@@ -430,24 +431,43 @@ body {
 
 .thread-item {
   margin-bottom: 5px;
+  max-width: 710px;
 }
 
 .thread-box {
   padding: 15px;
+  width: fill;
   border: 1px solid #ddd;
   border-radius: 20px;
   background-color: #f8f8f8;
 }
 
 .thread-description {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
   color: #333;
 }
 
 .thread-username{
   color: #323232;
-  /* align-self: left; */
+  align-self: left;
+  padding: 0px;
+  margin-top: 0.4rem;
+  font-weight: 300;
 }
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease; /* Optional: for smooth transition */
+}
+
+.profile-pic:hover {
+  width: 43px;
+  height: 43px;
+}
+
 
 .thread-input-container {
   display: flex;

@@ -218,22 +218,21 @@ exports.getAllListings = async (req, res) => {
       let listings = [];
   
       if (community) {
-        // If a community is selected, get its listings
+        //if a community is selected, its listings
         const communityRegex = new RegExp(community, 'i');
         const matchingCommunities = await Community.find({ communityName: { $regex: communityRegex } });
   
         if (matchingCommunities.length > 0) {
           const matchingCommunityIds = matchingCommunities.map(comm => comm._id.toString());
   
-          // Find all listings that belong to the matching communities
           listings = await Listing.find({ community: { $in: matchingCommunityIds } });
         }
       } else {
-        // Fetch all listings if no community is selected
+        
         listings = await Listing.find();
       }
   
-      // Apply search term filter
+      
       if (search) {
         const searchRegex = new RegExp(search, 'i');
         listings = listings.filter(listing =>
@@ -247,7 +246,6 @@ exports.getAllListings = async (req, res) => {
         );
       }
   
-      // Apply environment filter
       if (environment) {
         listings = listings.filter(listing =>
           listing.preferences &&
@@ -256,7 +254,6 @@ exports.getAllListings = async (req, res) => {
         );
       }
   
-      // Apply facilities filter
       if (facilities) {
         listings = listings.filter(listing =>
           listing.preferences &&
@@ -265,7 +262,7 @@ exports.getAllListings = async (req, res) => {
         );
       }
   
-      // Apply ageGroup filter
+  
       if (ageGroup) {
         listings = listings.filter(listing =>
           listing.preferences &&

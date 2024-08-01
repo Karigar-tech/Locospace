@@ -149,9 +149,9 @@ const Page = () => {
               </p>
             </div>
           
-            <div className="col">
+            {/* <div className="col">
               <Image src='/Slider.svg' width={40} height={40} alt="Slider" />
-            </div>
+            </div> */}
           </div>
         </div>
       )}

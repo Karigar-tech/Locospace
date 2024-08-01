@@ -1,23 +1,42 @@
-'use client';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Button, Col, Form, Row, Modal, InputGroup, FormControl, Nav, Tab } from 'react-bootstrap';
-//Icons 
-import { FaBed,FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw , FaChild } from 'react-icons/fa';
-import { MdOutlineSecurity , MdElderly, MdOutlineHiking} from "react-icons/md";
+"use client";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import {
+  Button,
+  Col,
+  Form,
+  Row,
+  Modal,
+  InputGroup,
+  FormControl,
+  Nav,
+  Tab,
+} from "react-bootstrap";
+//Icons
+import {
+  FaParking,
+  FaRunning,
+  FaTree,
+  FaBuilding,
+  FaHandsHelping,
+  FaShieldAlt,
+  FaMoneyBillWave,
+  FaPaw,
+  FaChild,
+} from "react-icons/fa";
+import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
 import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
 //IconsEnd
-import Footer from '../../components/LandingFooter';
-import { Listing } from '@/types';
-import '../../styles/sellerform.css'; 
-import CustomCheckbox from '@/components/customcheckbox';
+
+import { Listing } from "@/types";
+import "../../styles/sellerform.css";
+import CustomCheckbox from "@/components/customcheckbox";
 
 const SellerForm: React.FC = () => {
-  
   const [formData, setFormData] = useState<Listing>({
-    _id:0,
+    _id: 0,
     ListingPictures: [],
     title: "",
     Description: "",
@@ -29,13 +48,14 @@ const SellerForm: React.FC = () => {
     listing_type: "",
     areasize: 0,
     areaunit: "",
-    area:"",
+    area: "",
     preferences: {
       environment: [],
       facilities: [],
       ageGroup: [],
     },
     user: {
+      username: "",
       address: "",
       contact: "",
       email: "",
@@ -47,49 +67,58 @@ const SellerForm: React.FC = () => {
     },
   });
   const [showModal, setShowModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('environment');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState("environment");
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [file, setFile] = useState<FileList | null>(null);
 
-  const token = localStorage.getItem('token');
-  console.log(token);
-
   const options = {
-    environment: ['Busy', 'Peaceful', 'Green', 'Commercial', 'Supportive', 'Safe', 'Affordable', 'Pet Friendly'],
-    facilities: ['Gym', 'Swimming Pool', 'Parking', 'Security', 'Playground'],
-    ageGroup: ['Kids', 'Teens', 'Adults', 'Seniors']
+    environment: [
+      "Busy",
+      "Peaceful",
+      "Green",
+      "Commercial",
+      "Supportive",
+      "Safe",
+      "Affordable",
+      "Pet Friendly",
+    ],
+    facilities: ["Gym", "Swimming Pool", "Parking", "Security", "Playground"],
+    ageGroup: ["Kids", "Teens", "Adults", "Seniors"],
   };
-  const area = ['Marla', 'Kanal', 'Square Feet', 'Acres'];
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const area = ["Marla", "Kanal", "Square Feet", "Acres"];
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
-  const handleArea = (event:any) => {
+  const handleArea = (event: any) => {
     const { name, value } = event.target;
     setFormData((prevData) => {
       const newFormData = { ...prevData, [name]: value };
-      if (name === 'areaunit' || name === 'areasize') {
-        newFormData.area = `${newFormData.areaunit} ${newFormData.areasize}`.trim();
+      if (name === "areaunit" || name === "areasize") {
+        newFormData.area =
+          `${newFormData.areaunit} ${newFormData.areasize}`.trim();
       }
-      console.log(newFormData); 
+      console.log(newFormData);
       return newFormData;
     });
   };
 
   const handleIncrement = (field: keyof Listing) => {
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
       [field]: (prevFormData[field] as number) + 1,
     }));
   };
 
   const handleDecrement = (field: keyof Listing) => {
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
       [field]: Math.max((prevFormData[field] as number) - 1, 0),
     }));
@@ -102,60 +131,66 @@ const SellerForm: React.FC = () => {
   };
 
   const handleHomeIconClick = () => {
-    document.getElementById('fileInput')?.click(); 
+    document.getElementById("fileInput")?.click();
   };
 
- const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
 
     const formDataToSubmit = new FormData();
-    formDataToSubmit.append('listing_type', formData.listing_type);
-    formDataToSubmit.append('price', formData.price.toString());
-    formDataToSubmit.append('adTitle', formData.title);
-    formDataToSubmit.append('Description', formData.Description);
-    formDataToSubmit.append('location', formData.location);
-    formDataToSubmit.append('bedroom', formData.bedroom.toString());
-    formDataToSubmit.append('bath', formData.bath.toString());
-    formDataToSubmit.append('kitchen', formData.kitchen.toString());
-    formDataToSubmit.append('area', formData.area.toString());
-    formDataToSubmit.append('preferences', JSON.stringify(formData.preferences));
-    
+    formDataToSubmit.append("listing_type", formData.listing_type);
+    formDataToSubmit.append("price", formData.price.toString());
+    formDataToSubmit.append("adTitle", formData.title);
+    formDataToSubmit.append("Description", formData.Description);
+    formDataToSubmit.append("location", formData.location);
+    formDataToSubmit.append("bedroom", formData.bedroom.toString());
+    formDataToSubmit.append("bath", formData.bath.toString());
+    formDataToSubmit.append("kitchen", formData.kitchen.toString());
+    formDataToSubmit.append("area", formData.area.toString());
+    formDataToSubmit.append(
+      "preferences",
+      JSON.stringify(formData.preferences)
+    );
+
     // Append files to formData
     if (file) {
-        Array.from(file).forEach((f) => {
-            formDataToSubmit.append('ListingPictures', f);
-        });
+      Array.from(file).forEach((f) => {
+        formDataToSubmit.append("ListingPictures", f);
+      });
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/listings/all/', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formDataToSubmit,
-        });
+      const token = localStorage.getItem("token");
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+      const response = await fetch("http://localhost:5000/api/listings/all/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formDataToSubmit,
+      });
 
-        const data = await response.json();
-        console.log('Done', data.message);
-        
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Done", data.message);
     } catch (error) {
-        console.error('Error:', error);
+      console.error("Error:", error);
     }
-};
+  };
 
-const handleOptionSelect = (option: string) => {
-    setSelectedOptions(prev =>
-      prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]
+  const handleOptionSelect = (option: string) => {
+    setSelectedOptions((prev) =>
+      prev.includes(option)
+        ? prev.filter((o) => o !== option)
+        : [...prev, option]
     );
   };
 
   const handleConfirmSelection = () => {
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
       preferences: {
         ...prevFormData.preferences,
@@ -167,94 +202,127 @@ const handleOptionSelect = (option: string) => {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.trim().replace(/\s+/g, ' ').toLowerCase(); // Trim and normalize spaces
+    const query = e.target.value.trim().replace(/\s+/g, " ").toLowerCase(); // Trim and normalize spaces
     setSearchQuery(query);
     setFilteredOptions(
-      options[activeTab as keyof typeof options].filter(option =>
+      options[activeTab as keyof typeof options].filter((option) =>
         option.toLowerCase().includes(query)
       )
     );
   };
 
   const environmentIconMap: Record<string, React.ReactElement> = {
-    "Busy": <FaRunning/>,
-    "Peaceful": <GiPeaceDove/>,
-    "Green": <FaTree/>,
-    "Commercial": <FaBuilding/>,
-    "Supportive": <FaHandsHelping/>,
-    "Safe": <FaShieldAlt/>,
-    "Affordable": <FaMoneyBillWave/>,
-    "Pet Friendly": <FaPaw/>
-
+    Busy: <FaRunning />,
+    Peaceful: <GiPeaceDove />,
+    Green: <FaTree />,
+    Commercial: <FaBuilding />,
+    Supportive: <FaHandsHelping />,
+    Safe: <FaShieldAlt />,
+    Affordable: <FaMoneyBillWave />,
+    "Pet Friendly": <FaPaw />,
   };
 
-   const facilitiesIconMap: Record<string, React.ReactElement> = {
-    "Gym": <CgGym/>,
-    "Swimming Pool": <FaPersonSwimming/>,
-    "Parking": <FaParking/>,
-    "Security": <MdOutlineSecurity/>,
-    "Playground": <GiBurningRoundShot />
+  const facilitiesIconMap: Record<string, React.ReactElement> = {
+    Gym: <CgGym />,
+    "Swimming Pool": <FaPersonSwimming />,
+    Parking: <FaParking />,
+    Security: <MdOutlineSecurity />,
+    Playground: <GiBurningRoundShot />,
   };
 
   const ageGroupIconMap: Record<string, React.ReactElement> = {
-    "Kids": <FaChild/>,
-    "Teens": <FaPerson/>,
-    "Adults": <MdOutlineHiking/>,
-    "Seniors": <MdElderly />
+    Kids: <FaChild />,
+    Teens: <FaPerson />,
+    Adults: <MdOutlineHiking />,
+    Seniors: <MdElderly />,
   };
 
-  const handleRemoveOption = (option: string, category: keyof typeof formData.preferences) => {
-    setFormData(prevFormData => ({
+  const handleRemoveOption = (
+    option: string,
+    category: keyof typeof formData.preferences
+  ) => {
+    setFormData((prevFormData) => ({
       ...prevFormData,
       preferences: {
         ...prevFormData.preferences,
-        [category]: prevFormData.preferences[category].filter(o => o !== option),
+        [category]: prevFormData.preferences[category].filter(
+          (o) => o !== option
+        ),
       },
     }));
   };
 
   return (
     <div className="container-fluid">
-      <img src="/Sellerform.png" alt="Logo" className="img-fluid pb-3" /> 
-      <Form onSubmit={handleSubmit} className='mb-5'>
-        <div className="card p-3" style={{border:'none'}}>
+      <img src="/Sellerform.png" alt="Logo" className="img-fluid pb-3" />
+      <Form onSubmit={handleSubmit} className="mb-5">
+        <div className="card p-3" style={{ border: "none" }}>
           <Row className="align-items-center">
             <Col s={6} md={6}>
               <Form.Group>
                 <h4>Purpose</h4>
                 <div className="d-flex mt-3">
                   <Button
-                    className={`me-3 rounded-5 px-4 ${formData.listing_type === 'sell' ? 'active' : ''}`}
-                    variant={formData.listing_type === 'sell' ? 'primary' : 'outline-primary'}
-                    onClick={() => setFormData(prev => ({ ...prev, listing_type: 'sell' }))}
+                    className={`me-3 rounded-5 px-4 ${
+                      formData.listing_type === "sell" ? "active" : ""
+                    }`}
+                    variant={
+                      formData.listing_type === "sell"
+                        ? "primary"
+                        : "outline-primary"
+                    }
+                    onClick={() =>
+                      setFormData((prev) => ({ ...prev, listing_type: "sell" }))
+                    }
                   >
-                    <img src="/buy-home.png" alt="Icon" className="buy-image me-2" />
+                    <img
+                      src="/buy-home.png"
+                      alt="Icon"
+                      className="buy-image me-2"
+                    />
                     Sell
                   </Button>
                   <Button
-                    className={`ms-3 rounded-5 px-4 ${formData.listing_type === 'rent' ? 'active' : ''}`}
-                    variant={formData.listing_type === 'rent' ? 'primary' : 'outline-primary'}
-                    onClick={() => setFormData(prev => ({ ...prev, listing_type: 'rent' }))}
+                    className={`ms-3 rounded-5 px-4 ${
+                      formData.listing_type === "rent" ? "active" : ""
+                    }`}
+                    variant={
+                      formData.listing_type === "rent"
+                        ? "primary"
+                        : "outline-primary"
+                    }
+                    onClick={() =>
+                      setFormData((prev) => ({ ...prev, listing_type: "rent" }))
+                    }
                   >
                     <img src="/key.png" alt="Icon" className="key-image me-2" />
                     Rent
                   </Button>
-                </div>  
+                </div>
               </Form.Group>
             </Col>
-            <Col s={5}  md={5} className="p-3 d-flex justify-content-center align-items-center">
+            <Col
+              s={5}
+              md={5}
+              className="p-3 d-flex justify-content-center align-items-center"
+            >
               <Button
                 type="button"
                 className="icon-button d-flex justify-content-center align-items-center rounded-circle"
                 onClick={handleHomeIconClick}
               >
-                <img src="/home-icon.png" alt="Home Icon" className="icon-image" />
+                <img
+                  src="/home-icon.png"
+                  alt="Home Icon"
+                  className="icon-image"
+                />
               </Button>
               <input
                 type="file"
                 id="fileInput"
+                accept=".jpef,.png,.jpg"
                 multiple
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 onChange={handleFileChange}
               />
             </Col>
@@ -273,15 +341,15 @@ const handleOptionSelect = (option: string) => {
                 />
               </Form.Group>
             </Col>
-            <Col md={5} className='mt-3'>
+            <Col md={5} className="mt-3">
               <Form.Group>
                 <h4>Area Size</h4>
                 <Form.Control
-                  type="Number" 
+                  type="Number"
                   name="areaunit"
                   value={formData.areaunit}
                   onChange={handleArea}
-                  placeholder='Enter Area Size'
+                  placeholder="Enter Area Size"
                   required
                   className="mb-1 w-50"
                   min="1"
@@ -300,10 +368,10 @@ const handleOptionSelect = (option: string) => {
                       {option}
                     </option>
                   ))}
-              </Form.Control>
+                </Form.Control>
               </Form.Group>
             </Col>
-            <Col md={5} className='mt-3'>
+            <Col md={5} className="mt-3">
               <Form.Group>
                 <h4>Price</h4>
                 <Form.Control
@@ -318,11 +386,10 @@ const handleOptionSelect = (option: string) => {
               </Form.Group>
             </Col>
           </Row>
-
         </div>
-        <div className="card mb-1 p-3" style={{border:'none'}}>
+        <div className="card mb-1 p-3" style={{ border: "none" }}>
           <Row>
-            <Col md={7} className=''>
+            <Col md={7} className="">
               <Form.Group>
                 <h4>Title</h4>
                 <Form.Control
@@ -334,7 +401,7 @@ const handleOptionSelect = (option: string) => {
                   required
                   className="mb-2 w-100"
                 />
-              </Form.Group> 
+              </Form.Group>
             </Col>
             <Col md={11}>
               <Form.Group>
@@ -353,7 +420,7 @@ const handleOptionSelect = (option: string) => {
           </Row>
         </div>
 
-        <div className="card mb-4 p-3" style={{border:'none'}}>
+        <div className="card mb-4 p-3" style={{ border: "none" }}>
           <Row>
             <Col xs={6} md={6}>
               <h4>Features</h4>
@@ -361,7 +428,12 @@ const handleOptionSelect = (option: string) => {
                 <li className="features-list-item">
                   <label>Bedrooms:</label>
                   <div className="qty">
-                    <span className="minus bg-primary" onClick={() => handleDecrement('bedroom')}>-</span>
+                    <span
+                      className="minus bg-primary"
+                      onClick={() => handleDecrement("bedroom")}
+                    >
+                      -
+                    </span>
                     <input
                       type="text"
                       name="bedroom"
@@ -369,13 +441,23 @@ const handleOptionSelect = (option: string) => {
                       readOnly
                       className="count"
                     />
-                    <span className="plus bg-primary" onClick={() => handleIncrement('bedroom')}>+</span>
+                    <span
+                      className="plus bg-primary"
+                      onClick={() => handleIncrement("bedroom")}
+                    >
+                      +
+                    </span>
                   </div>
                 </li>
                 <li className="features-list-item">
                   <label>Kitchen:</label>
                   <div className="qty">
-                    <span className="minus bg-primary" onClick={() => handleDecrement('kitchen')}>-</span>
+                    <span
+                      className="minus bg-primary"
+                      onClick={() => handleDecrement("kitchen")}
+                    >
+                      -
+                    </span>
                     <input
                       type="text"
                       name="kitchen"
@@ -383,13 +465,23 @@ const handleOptionSelect = (option: string) => {
                       readOnly
                       className="count"
                     />
-                    <span className="plus bg-primary" onClick={() => handleIncrement('kitchen')}>+</span>
+                    <span
+                      className="plus bg-primary"
+                      onClick={() => handleIncrement("kitchen")}
+                    >
+                      +
+                    </span>
                   </div>
                 </li>
                 <li className="features-list-item">
                   <label>Bathrooms:</label>
                   <div className="qty">
-                    <span className="minus bg-primary" onClick={() => handleDecrement('bath')}>-</span>
+                    <span
+                      className="minus bg-primary"
+                      onClick={() => handleDecrement("bath")}
+                    >
+                      -
+                    </span>
                     <input
                       type="text"
                       name="bath"
@@ -397,7 +489,12 @@ const handleOptionSelect = (option: string) => {
                       readOnly
                       className="count"
                     />
-                    <span className="plus bg-primary" onClick={() => handleIncrement('bath')}>+</span>
+                    <span
+                      className="plus bg-primary"
+                      onClick={() => handleIncrement("bath")}
+                    >
+                      +
+                    </span>
                   </div>
                 </li>
               </ul>
@@ -408,30 +505,48 @@ const handleOptionSelect = (option: string) => {
                 <Button
                   variant="primary"
                   className="btn-sm"
-                  onClick={() => { setShowModal(true); setActiveTab('environment'); }}
+                  onClick={() => {
+                    setShowModal(true);
+                    setActiveTab("environment");
+                  }}
                 >
                   Select Preferences
                 </Button>
                 <div className="selected-options-container">
                   {formData.preferences.environment.map((env, index) => (
-                    <span key={index}className="selected-option">
+                    <span key={index} className="selected-option">
                       {environmentIconMap[env]}
-                      <span style={{ marginLeft: '5px' }}>{env}</span>
-                      <span className="remove-option" onClick={() => handleRemoveOption(env, 'environment')}>×</span>
+                      <span style={{ marginLeft: "5px" }}>{env}</span>
+                      <span
+                        className="remove-option"
+                        onClick={() => handleRemoveOption(env, "environment")}
+                      >
+                        ×
+                      </span>
                     </span>
                   ))}
                   {formData.preferences.facilities.map((fac, index) => (
                     <span key={index} className="selected-option">
-                      {facilitiesIconMap[fac]} 
-                      <span style={{ marginLeft: '5px' }}>{fac}</span>
-                      <span className="remove-option" onClick={() => handleRemoveOption(fac, 'facilities')}>×</span>
+                      {facilitiesIconMap[fac]}
+                      <span style={{ marginLeft: "5px" }}>{fac}</span>
+                      <span
+                        className="remove-option"
+                        onClick={() => handleRemoveOption(fac, "facilities")}
+                      >
+                        ×
+                      </span>
                     </span>
                   ))}
                   {formData.preferences.ageGroup.map((age, index) => (
                     <span key={index} className="selected-option">
                       {ageGroupIconMap[age]}
-                      <span style={{ marginLeft: '5px' }}>{age}</span>
-                      <span className="remove-option" onClick={() => handleRemoveOption(age, 'ageGroup')}>×</span>
+                      <span style={{ marginLeft: "5px" }}>{age}</span>
+                      <span
+                        className="remove-option"
+                        onClick={() => handleRemoveOption(age, "ageGroup")}
+                      >
+                        ×
+                      </span>
                     </span>
                   ))}
                 </div>
@@ -444,7 +559,11 @@ const handleOptionSelect = (option: string) => {
           <Button type="submit" className="me-2 btn-primary rounded-5 px-4">
             Publish
           </Button>
-          <Button type="button" variant="primary" className="btn-cancel rounded-5 px-4">
+          <Button
+            type="button"
+            variant="primary"
+            className="btn-cancel rounded-5 px-4"
+          >
             Cancel
           </Button>
         </div>
@@ -458,13 +577,28 @@ const handleOptionSelect = (option: string) => {
           <Tab.Container activeKey={activeTab}>
             <Nav variant="pills">
               <Nav.Item>
-                <Nav.Link eventKey="environment" onClick={() => setActiveTab('environment')}>Environment</Nav.Link>
+                <Nav.Link
+                  eventKey="environment"
+                  onClick={() => setActiveTab("environment")}
+                >
+                  Environment
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="facilities" onClick={() => setActiveTab('facilities')}>Facilities</Nav.Link>
+                <Nav.Link
+                  eventKey="facilities"
+                  onClick={() => setActiveTab("facilities")}
+                >
+                  Facilities
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="ageGroup" onClick={() => setActiveTab('ageGroup')}>Age Group</Nav.Link>
+                <Nav.Link
+                  eventKey="ageGroup"
+                  onClick={() => setActiveTab("ageGroup")}
+                >
+                  Age Group
+                </Nav.Link>
               </Nav.Item>
             </Nav>
             <Tab.Content>
@@ -476,19 +610,18 @@ const handleOptionSelect = (option: string) => {
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                    <CustomCheckbox
-                    options={filteredOptions}
-                    IconMap={environmentIconMap}
-                    selectedOption={selectedOptions}
-                    handleOptionSelect={handleOptionSelect}
-                    />
-                    <CustomCheckbox
-                    options={options.environment}
-                    IconMap={environmentIconMap}
-                    selectedOption={selectedOptions}
-                    handleOptionSelect={handleOptionSelect}
-                    />
-                
+                <CustomCheckbox
+                  options={filteredOptions}
+                  IconMap={environmentIconMap}
+                  selectedOption={selectedOptions}
+                  handleOptionSelect={handleOptionSelect}
+                />
+                <CustomCheckbox
+                  options={options.environment}
+                  IconMap={environmentIconMap}
+                  selectedOption={selectedOptions}
+                  handleOptionSelect={handleOptionSelect}
+                />
               </Tab.Pane>
 
               <Tab.Pane eventKey="facilities">
@@ -500,17 +633,17 @@ const handleOptionSelect = (option: string) => {
                   />
                 </InputGroup>
                 <CustomCheckbox
-                    options={filteredOptions}
-                    IconMap={facilitiesIconMap}
-                    selectedOption={selectedOptions}
-                    handleOptionSelect={handleOptionSelect}
-                    />
-                    <CustomCheckbox
-                    options={options.facilities}
-                    IconMap={facilitiesIconMap}
-                    selectedOption={selectedOptions}
-                    handleOptionSelect={handleOptionSelect}
-                    />
+                  options={filteredOptions}
+                  IconMap={facilitiesIconMap}
+                  selectedOption={selectedOptions}
+                  handleOptionSelect={handleOptionSelect}
+                />
+                <CustomCheckbox
+                  options={options.facilities}
+                  IconMap={facilitiesIconMap}
+                  selectedOption={selectedOptions}
+                  handleOptionSelect={handleOptionSelect}
+                />
               </Tab.Pane>
               <Tab.Pane eventKey="ageGroup">
                 <InputGroup className="mb-3 mt-3">
@@ -521,28 +654,28 @@ const handleOptionSelect = (option: string) => {
                   />
                 </InputGroup>
                 <CustomCheckbox
-                    options={filteredOptions}
-                    IconMap={ageGroupIconMap}
-                    selectedOption={selectedOptions}
-                    handleOptionSelect={handleOptionSelect}
-                    />
-                    <CustomCheckbox
-                    options={options.ageGroup}
-                    IconMap={ageGroupIconMap}
-                    selectedOption={selectedOptions}
-                    handleOptionSelect={handleOptionSelect}
-                    />
-                
+                  options={filteredOptions}
+                  IconMap={ageGroupIconMap}
+                  selectedOption={selectedOptions}
+                  handleOptionSelect={handleOptionSelect}
+                />
+                <CustomCheckbox
+                  options={options.ageGroup}
+                  IconMap={ageGroupIconMap}
+                  selectedOption={selectedOptions}
+                  handleOptionSelect={handleOptionSelect}
+                />
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleConfirmSelection}>Confirm</Button>
+          <Button variant="primary" onClick={handleConfirmSelection}>
+            Confirm
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
-
   );
 };
 

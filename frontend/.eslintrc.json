@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "jsx-a11y/alt-text": [
+      "error",
+      {
+        "elements": ["img"],
+        "img": ["Image"],
+        "object": [],
+        "area": [],
+        "input[type='image']": []
+      }
+    ]
+  }
 }

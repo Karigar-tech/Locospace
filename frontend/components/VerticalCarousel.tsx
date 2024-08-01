@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css'; 
-import 'slick-carousel/slick/slick-theme.css'; 
-import { Card, Button, Row, Col } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import '../styles/selectedlist.css';
-import { Listing } from '../types';
+"use client";
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Card, Button, Row, Col } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBed,
+  faBath,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import "../styles/selectedlist.css";
+import { Listing } from "../types";
 
 const VerticalCardCarousel: React.FC = () => {
   const [data, setData] = useState<Listing[]>([]);
@@ -14,14 +19,16 @@ const VerticalCardCarousel: React.FC = () => {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/listings/alllistings');
+        const response = await fetch(
+          "http://localhost:5000/api/listings/alllistings"
+        );
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const listings: Listing[] = await response.json();
         setData(listings);
       } catch (error) {
-        console.error('Error fetching listings:', error);
+        console.error("Error fetching listings:", error);
       }
     };
 
@@ -40,8 +47,8 @@ const VerticalCardCarousel: React.FC = () => {
   };
 
   const formatPrice = (price: number) => {
-    if (typeof price !== 'number') {
-      return 'Invalid price';
+    if (typeof price !== "number") {
+      return "Invalid price";
     }
     if (price >= 10000000) {
       return `${(price / 10000000).toFixed(2)} crore`;
@@ -55,32 +62,47 @@ const VerticalCardCarousel: React.FC = () => {
       <h4 className="heading">Properties Nearby</h4>
       <Slider {...settings} className="vertical-carousel">
         {data.map((item) => {
-          const addressPart = item.location?.split(',')[0] || 'Address not available';
+          const addressPart =
+            item.location?.split(",")[0] || "Address not available";
 
           return (
             <Card key={item._id} className="d-block card-custom">
               <div className="image-wrapper">
-                <Card.Img variant="top" src={item.ListingPictures[0] || 'placeholder.png'} alt={`Image of ${item.title}`} />
+                <Card.Img
+                  variant="top"
+                  src={item.ListingPictures[0] || "placeholder.png"}
+                  alt={`Image of ${item.title}`}
+                />
               </div>
               <Card.Body>
                 <Card.Title>
                   <Row className="mb-2">
-                    <Col><span>{item.listing_type}</span></Col>
-                    <Col className="text-right"><span>{formatPrice(item.price)}</span></Col>
+                    <Col>
+                      <span>{item.listing_type}</span>
+                    </Col>
+                    <Col className="text-right">
+                      <span>{formatPrice(item.price)}</span>
+                    </Col>
                   </Row>
                 </Card.Title>
                 <Row className="mb-2">
-                  <Col><FontAwesomeIcon icon={faBed} /> {item.bedroom}</Col>
-                  <Col className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath}</Col>
+                  <Col>
+                    <FontAwesomeIcon icon={faBed} /> {item.bedroom}
+                  </Col>
+                  <Col className="text-right">
+                    <FontAwesomeIcon icon={faBath} /> {item.bath}
+                  </Col>
                 </Row>
                 <hr />
                 <Row className="mb-2">
                   <Col>
                     <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-                    <span style={{ marginLeft: '0.5rem' }}>{addressPart}</span>
+                    <span style={{ marginLeft: "0.5rem" }}>{addressPart}</span>
                   </Col>
                 </Row>
-                <Button variant="primary" href="#">View</Button>
+                <Button variant="primary" href="#">
+                  View
+                </Button>
               </Card.Body>
             </Card>
           );

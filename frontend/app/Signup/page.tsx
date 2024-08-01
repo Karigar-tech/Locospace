@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import '../../styles/signup.css';
 import Link from 'next/link';
-import MapComponent from '../../components/Map/Map';
-import SignupNavbar from '../../components/Signup/SignupNavbar';
+import Image from 'next/image';
+
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -17,8 +17,6 @@ const Signup: React.FC = () => {
   const [address, setAddress] = useState('');
   const [contact, setContact] = useState('');
   const [error, setError] = useState('');
-  const [community, setCommunity] = useState('');
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const router = useRouter();
 
   const handleSignup = async () => {
@@ -53,7 +51,7 @@ const Signup: React.FC = () => {
       </Link>
 
       <Link href="/">
-        <img src="Logo.png" alt="Logo" className="logo" />
+        <Image src="/logo.png" alt="Logo" className="logo" width={80} height={80} />
       </Link>
       {/* <SignupNavbar/> */}
       <div className="signUpBox">

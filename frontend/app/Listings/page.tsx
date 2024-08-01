@@ -1,11 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import CustomNavbar from '../../components/LandingNavbar';
-import SearchBar from '@/components/SearchBar';
+import React, { Suspense,useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Listing } from '../../types';
-import { Button } from 'react-bootstrap';
+import { Listing, User } from '../../types';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
@@ -15,16 +12,8 @@ import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Thread } from '@/types';
 
-interface Thread {
-  _id: string;
-  user_id: string
-  community_id: string;
-  thread_description: string;
-  createdAt: string;
-  updatedAt: string;
-  username: string;
-}
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -34,11 +23,7 @@ const Page = () => {
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
   const [threads, setThreads] = useState<Thread[]>([
-    { title: "Power outage!", username: 'AliAhmed20' },
-    { title: "Communal gathering", username: 'ZahraKhan2001' },
-    { title: "Football Festival", username: 'osamababakhell' },
-    { title: "Half Marathon throughout", username: 'aaarij420' },
-    { title: "Iron-Man Triathlon", username: 'MinaKhanCode69' }
+    
   ]);
  
   useEffect(() => {
@@ -167,10 +152,17 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads={threads} />
+        <MainBox threads= {threads} />
       )}
     </div>
   );
 };
 
-export default Page;
+const ListingsPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Page/>
+  </Suspense>
+);
+
+
+export default ListingsPage;

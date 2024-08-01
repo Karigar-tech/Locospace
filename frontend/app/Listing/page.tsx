@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { Suspense, useEffect, useState } from "react";
 import ImageGallery from "../../components/ImageGallery";
 import { Button } from "react-bootstrap";
 import "../../styles/selectedlist.css";
 import { Listing, User } from "../../types";
 import { BsHeart, BsShare } from "react-icons/bs";
 import Image from "next/image";
-import Footer from "../../components/LandingFooter"
-//Icons 
-import { FaParking, FaChild } from 'react-icons/fa';
-import { MdOutlineSecurity , MdElderly, MdOutlineHiking} from "react-icons/md";
+
+//Icons
+import { FaParking, FaChild } from "react-icons/fa";
+import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
 import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
@@ -35,11 +34,9 @@ import { geocodeAddress } from "../../utils/geocode";
 import NavBar from "../../components/NavBar";
 import { useSearchParams } from "next/navigation";
 
-const SelectedListing: React.FC = () => {
-  const router = useRouter();
+const ListingPage = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  console.log(id);
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
@@ -85,7 +82,9 @@ const SelectedListing: React.FC = () => {
     const fetchListing = async () => {
       if (!id) return;
       try {
-        const response = await fetch(`http://localhost:5000/api/listings/specific/${id}`);  
+        const response = await fetch(
+          `http://localhost:5000/api/listings/specific/${id}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -134,32 +133,30 @@ const SelectedListing: React.FC = () => {
   };
 
   const environmentIconMap: Record<string, React.ReactElement> = {
-    "Busy": <FaRunning/>,
-    "Peaceful": <GiPeaceDove/>,
-    "Green": <FaTree/>,
-    "Commercial": <FaBuilding/>,
-    "Supportive": <FaHandsHelping/>,
-    "Safe": <FaShieldAlt/>,
-    "Affordable": <FaMoneyBillWave/>,
-    "Pet Friendly": <FaPaw/>
-
+    Busy: <FaRunning />,
+    Peaceful: <GiPeaceDove />,
+    Green: <FaTree />,
+    Commercial: <FaBuilding />,
+    Supportive: <FaHandsHelping />,
+    Safe: <FaShieldAlt />,
+    Affordable: <FaMoneyBillWave />,
+    "Pet Friendly": <FaPaw />,
   };
 
-   const facilitiesIconMap: Record<string, React.ReactElement> = {
-    "Gym": <CgGym/>,
-    "Swimming Pool": <FaPersonSwimming/>,
-    "Parking": <FaParking/>,
-    "Security": <MdOutlineSecurity/>,
-    "Playground": <GiBurningRoundShot />
+  const facilitiesIconMap: Record<string, React.ReactElement> = {
+    Gym: <CgGym />,
+    "Swimming Pool": <FaPersonSwimming />,
+    Parking: <FaParking />,
+    Security: <MdOutlineSecurity />,
+    Playground: <GiBurningRoundShot />,
   };
 
   const ageGroupIconMap: Record<string, React.ReactElement> = {
-    "Kids": <FaChild/>,
-    "Teens": <FaPerson/>,
-    "Adults": <MdOutlineHiking/>,
-    "Seniors": <MdElderly />
+    Kids: <FaChild />,
+    Teens: <FaPerson />,
+    Adults: <MdOutlineHiking />,
+    Seniors: <MdElderly />,
   };
-
 
   return (
     <div className="row">
@@ -189,7 +186,7 @@ const SelectedListing: React.FC = () => {
                 <Button
                   variant="outline-secondary"
                   className="btn-listing"
-                  onClick={handleShare}
+                  // onClick={handleShare}
                 >
                   <BsShare />
                   Share
@@ -272,7 +269,12 @@ const SelectedListing: React.FC = () => {
         <div className="rectangle rec2">
           <h2>Location</h2>
           <div className="location-content">{listing.location}</div>
-          {coordinates && <MapComponent latitude={coordinates.latitude} longitude={coordinates.longitude} />}  
+          {coordinates && (
+            <MapComponent
+              latitude={coordinates.latitude}
+              longitude={coordinates.longitude}
+            />
+          )}
         </div>
       </div>
       <div className="col-md-4 d-flex flex-column gap-3">
@@ -350,10 +352,9 @@ const SelectedListing: React.FC = () => {
         <div className="rectangle side-2 p-3 mb-3">
           <VerticalCardCarousel />
         </div>
-        
       </div>
     </div>
   );
 };
 
-export default SelectedListing;
+export default ListingPage;

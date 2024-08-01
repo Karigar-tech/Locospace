@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Modal, Carousel } from 'react-bootstrap';
 import '../styles/selectedlist.css';
+import Image from 'next/image';
 
 const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
     const [showModal, setShowModal] = useState(false);
@@ -23,8 +24,10 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
             {images.length > 0 ? (
                 <>
                     <div className="main-image">
-                        <img 
+                        <Image
                             src={images[0]} 
+                            width={100}
+                            height={100}
                             alt="Main" 
                             className="img-fluid" 
                             onClick={() => handleThumbnailClick(0)} 
@@ -33,7 +36,7 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
                     <div className="thumbnail-row d-flex mt-1">
                         {thumbnails.map((image, index) => (
                             <div key={index} className="thumbnail" onClick={() => handleThumbnailClick(index)}>
-                                <img src={image} alt={`Thumbnail ${index}`} className="img-thumbnail" />
+                                <Image src={image} alt={`Thumbnail ${index}`} className="img-thumbnail" width={100} height={100} />
                             </div>
                         ))}
                     </div>
@@ -51,7 +54,7 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
                     >
                         {images.map((image, index) => (
                             <Carousel.Item key={index}>
-                                <img className="d-block w-100" src={image} alt={`Slide ${index}`} />
+                                <Image className="d-block w-100" src={image} alt={`Slide ${index}`} />
                             </Carousel.Item>
                         ))}
                     </Carousel>

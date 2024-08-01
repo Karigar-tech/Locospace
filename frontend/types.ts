@@ -5,6 +5,7 @@ export interface User {
   contact: string;
   email: string;
   name: string;
+  username: string;
   profilePicture: {
     filePath: string;
     url: string;
@@ -42,7 +43,14 @@ export interface Community{
 
 }
 
-
+export interface Thread {
+  _id: string;
+  user_id: User;
+  community_id: Community;
+  thread_description: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 

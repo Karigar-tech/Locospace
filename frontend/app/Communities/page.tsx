@@ -1,58 +1,65 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import NavBar from '../../components/NavBar';
-import Image from 'next/image';
-import CommunityBox from '../../components/Communities/CommunityBox';
-import '../../styles/main.css';
-import { Button } from 'react-bootstrap';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Community } from '../../types';
+import React, { useEffect, useState } from "react";
+import NavBar from "../../components/NavBar";
+import CommunityBox from "../../components/Communities/CommunityBox";
+import "../../styles/main.css";
+import { Button } from "react-bootstrap";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Community } from "../../types";
+import { Suspense } from "react";
+
 const CommunitiesPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [communities, setCommunities] = useState<Community[]>([]);
-  const [search, setSearch] = useState<string>('');
-  const token = localStorage.getItem('token');
+  const [search, setSearch] = useState<string>("");
 
   const fetchCommunities = async (searchTerm: string) => {
     try {
-      const searchQueryString = searchTerm ? `search=${encodeURIComponent(searchTerm)}` : '';
-      console.log('Search Query String:', searchQueryString);
+      const searchQueryString = searchTerm
+        ? `search=${encodeURIComponent(searchTerm)}`
+        : "";
+      console.log("Search Query String:", searchQueryString);
 
-      const response = await fetch(`http://localhost:5000/api/community/?${searchQueryString}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `http://localhost:5000/api/community/?${searchQueryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data: Community[] = await response.json();
-      console.log('Fetched communities:', data);
+      console.log("Fetched communities:", data);
 
       if (Array.isArray(data)) {
         setCommunities(data);
       } else {
-        console.error('Expected an array but got:', data);
+        console.error("Expected an array but got:", data);
         setCommunities([]);
       }
     } catch (error) {
-      console.error('Error fetching communities:', error);
+      console.error("Error fetching communities:", error);
     }
   };
 
   useEffect(() => {
-    const search = searchParams.get('search') || '';
+    const search = searchParams.get("search") || "";
     setSearch(search);
     fetchCommunities(search);
   }, [searchParams]);
 
   const handleCommunityClick = (name: string) => {
-    localStorage.setItem('selectedCommunity', name);
-    router.push('/Listings');
+    localStorage.setItem("selectedCommunity", name);
+    router.push("/Listings");
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,18 +71,18 @@ const CommunitiesPage = () => {
       <NavBar />
       <div className="gradient-bar-container">
         <div className="gradient-bar"></div>
-        <div className='search-bar-container'>
+        <div className="search-bar-container">
           <Button onClick={() => fetchCommunities(search)}>Search</Button>
           <input
             type="text"
-            className='community-search'
-            placeholder='Search communities'
+            className="community-search"
+            placeholder="Search communities"
             value={search}
             onChange={handleSearchChange}
           />
         </div>
       </div>
-      <div className="upper-container" style={{ width: '90%' }}>
+      <div className="upper-container" style={{ width: "90%" }}>
         <div className="row">
           <div className="col">
             <h4 className="ml-15 mt-36">All Communities</h4>
@@ -89,7 +96,7 @@ const CommunitiesPage = () => {
             name={community.communityName}
             picture={community.communityPicture}
             members={community.communityMembers}
-            listings={community.communityListings.length} 
+            listings={community.communityListings.length}
             onClick={() => handleCommunityClick(community.communityName)}
           />
         ))}
@@ -98,4 +105,12 @@ const CommunitiesPage = () => {
   );
 };
 
-export default CommunitiesPage;
+const SuspenseWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CommunitiesPage />
+    </Suspense>
+  );
+};
+
+export default SuspenseWrapper;

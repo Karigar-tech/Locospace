@@ -15,5 +15,6 @@ router.get('/',authenticateToken, communtiyController.getAllCommunities )
 router.get('/:name', authenticateToken, communtiyController.getCommunityDetails);
 
 router.get('/commID/:community_id', authenticateToken, communtiyController.getName);
+//case senstivity check 
 
 module.exports = router;

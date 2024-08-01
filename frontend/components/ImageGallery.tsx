@@ -26,6 +26,8 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
                     <div className="main-image">
                         <Image
                             src={images[0]} 
+                            width={100}
+                            height={100}
                             alt="Main" 
                             className="img-fluid" 
                             onClick={() => handleThumbnailClick(0)} 
@@ -34,7 +36,7 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
                     <div className="thumbnail-row d-flex mt-1">
                         {thumbnails.map((image, index) => (
                             <div key={index} className="thumbnail" onClick={() => handleThumbnailClick(index)}>
-                                <Image src={image} alt={`Thumbnail ${index}`} className="img-thumbnail" />
+                                <Image src={image} alt={`Thumbnail ${index}`} className="img-thumbnail" width={100} height={100} />
                             </div>
                         ))}
                     </div>

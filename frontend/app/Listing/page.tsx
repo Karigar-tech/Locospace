@@ -34,7 +34,7 @@ import { geocodeAddress } from "../../utils/geocode";
 import NavBar from "../../components/NavBar";
 import { useSearchParams } from "next/navigation";
 
-const ListingPage: React.FC = () => {
+const ListingPage = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 

@@ -31,8 +31,11 @@ import { GiPeaceDove } from "react-icons/gi";
 //IconsEnd
 
 import { Listing } from "@/types";
-import "../../styles/sellerform.css";
+import styles from "./sellerform.module.css";
 import CustomCheckbox from "@/components/customcheckbox";
+
+//navbar
+import NavBar from "@/components/NavBar";
 
 const SellerForm: React.FC = () => {
   const [formData, setFormData] = useState<Listing>({
@@ -253,8 +256,11 @@ const SellerForm: React.FC = () => {
   };
 
   return (
+    <div>
+      <NavBar/>
+      <img src="/Sellerform.png" alt="Logo" className={styles.imgFluid} />
+    <div className={styles.sellerFormUuterdiv}>
     <div className="container-fluid">
-      <img src="/Sellerform.png" alt="Logo" className="img-fluid pb-3" />
       <Form onSubmit={handleSubmit} className="mb-5">
         <div className="card p-3" style={{ border: "none" }}>
           <Row className="align-items-center">
@@ -675,6 +681,8 @@ const SellerForm: React.FC = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+    </div>
+    </div>
     </div>
   );
 };

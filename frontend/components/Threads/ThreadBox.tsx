@@ -21,8 +21,8 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
   
 
   return (
-    <Container className="thread-box p-3 mb-3" >
-      <Row style ={{flexDirection: 'row', }} >
+    <Container className="thread-box p-4 mb-2" >
+      <Row style ={{flexDirection: 'row', marginTop: '0.1rem' }} >
         <div style= {{flex: '0 0px'}}  >
           {user_id.profilePicture && user_id.profilePicture.url ? (
             <img
@@ -45,7 +45,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
       </Row>
       <Row className="mt-2">
         <Col>
-          <p className="thread-title">{thread_title}</p>
+          <p className="box-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
       </Row>

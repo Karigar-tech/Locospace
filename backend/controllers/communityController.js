@@ -100,6 +100,7 @@ exports.createCommunity = async (req, res) => {
       const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
   
       const responseData = {
+        communityID: community._id,
         communityName: community.communityName,
         communityPicture: community.communityPicture,
         communityMembers: community.communityMembers,

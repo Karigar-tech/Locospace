@@ -5,26 +5,23 @@ import { Community } from '@/types';
 import { Container, Row, Col } from 'react-bootstrap'; // Import Bootstrap components
 
 interface BoxProps {
-  _id: string;
+  _id: number;
   user_id: User;
   community_id: Community;
+  thread_title: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
   
 }
 
-const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_description, createdAt, updatedAt }) => {
+const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt }) => {
   
-  const checkPFP = () => {
-    if (user_id.profilePicture.url) {
-      return true;
-  }
-  return false;
-  }
+  
+  
 
   return (
-    <Container className="thread-box p-3 border rounded mb-3">
+    <Container className="thread-box p-3 mb-3" >
       <Row style ={{flexDirection: 'row', }} >
         <div style= {{flex: '0 0px'}}  >
           {user_id.profilePicture && user_id.profilePicture.url ? (
@@ -48,6 +45,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_desc
       </Row>
       <Row className="mt-2">
         <Col>
+          <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
       </Row>

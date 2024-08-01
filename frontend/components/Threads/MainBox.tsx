@@ -1,56 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../styles/main.css';
 import { IoMdAddCircle } from 'react-icons/io';
 import ThreadBox from './ThreadBox';
-import { User } from '@/types';
-import { Community } from '@/types';
-
-
-interface Thread {
-  _id: string;
-  user_id: User;
-  community_id: Community;
-  thread_description: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-
+import { Thread } from '@/types';
 
 interface MainBoxProps {
   threads: Thread[];
+  commID: string;
 }
 
-const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
+const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) => {
+  const [threads, setThreads] = useState<Thread[]>(initialThreads);
   const [newThreadTitle, setNewThreadTitle] = useState('');
+  const [newThreadDescription, setNewThreadDescription] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  const handleAddThread = async () => {
+    
+    if (newThreadTitle.trim() !== '' && newThreadDescription.trim() !== '') {
+      const threadData = {
+        title: newThreadTitle,
+        description: newThreadDescription,
+        community_id: commID,
+      };
   
-
-  // useEffect(() => {
-  //   const fetchUsernames = async () => {
-  //     const names: { [key: string]: string } = {};
-  //     for (const thread of threads) {
-  //       const userId = thread;
-  //       const name= fetchUsername(userId);
-  //       console.log("ITS: ", name);
-        
-  //     }
-  //     setUsernameMap(name);
-  //   };
-
-  //   fetchUsernames();
-  // }, [threads]);
-
-  const handleAddThread = () => {
-    if (newThreadTitle.trim() !== '') {
-      // addThread(newThreadTitle, username);
-      setNewThreadTitle('');
+      try {
+        const response = await fetch("http://localhost:5000/api/threads/createThread", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify(threadData),
+        });
+  
+        if (response.ok) {
+          const newThread = await response.json();
+          setThreads([...threads, newThread]);
+          setNewThreadTitle('');
+          setNewThreadDescription('');
+        } else {
+          console.error('Failed to add thread');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
   };
+  
 
   return (
     <div className="threads-container">
-      <h3>General</h3>
+      <h3 style={{ color: '#ffffff' }}>General</h3>
       <div className="threads-list">
         {threads.length > 0 ? (
           <div>
@@ -61,11 +62,10 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
                   user_id={thread.user_id}
                   community_id={thread.community_id}
                   thread_description={thread.thread_description}
+                  thread_title={thread.thread_title}
                   createdAt={thread.createdAt}
                   updatedAt={thread.updatedAt}
-                  
                 />
-                {/* <p>ITS: {thread.community_id}</p> */}
               </div>
             ))}
           </div>
@@ -77,10 +77,21 @@ const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
         <input
           type="text"
           className="thread-input"
-          placeholder="Add new thread"
+          placeholder="Thread title"
           value={newThreadTitle}
           onChange={(e) => setNewThreadTitle(e.target.value)}
         />
+        <textarea
+          className="thread-input"
+          placeholder="Thread description"
+          value={newThreadDescription}
+          onChange={(e) => setNewThreadDescription(e.target.value)}
+        />
+        {/* <input
+          type="file"
+          className="thread-input"
+          onChange={handleFileChange}
+        /> */}
         <button className="thread-add-button" onClick={handleAddThread}>
           <IoMdAddCircle size={32} />
         </button>

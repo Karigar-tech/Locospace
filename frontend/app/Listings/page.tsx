@@ -2,7 +2,7 @@
 
 import React, { Suspense,useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Listing, User } from '../../types';
+import { Listing, User, Thread, Community } from '../../types';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import "../../styles/main.css";
@@ -12,31 +12,26 @@ import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Thread } from '@/types';
+
 
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [threads, setThreads] = useState<Thread[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
-  const [threads, setThreads] = useState<Thread[]>([
-    
-  ]);
- 
+  const [commID, setCommID] = useState<string>('');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     const searchTerm = searchParams.get('search');
     if (searchTerm) {
       setSearch(searchTerm);
       fetchListings(searchTerm);
     }
-  }, [searchParams]); 
-
-  // const addThread = (title: string, username: string) => {
-  //   setThreads(prevThreads => [...prevThreads, {th}]);
-  // };
+  }, [searchParams]);
 
   const fetchListings = async (searchTerm: string) => {
     const token = localStorage.getItem('token');
@@ -59,9 +54,8 @@ const Page = () => {
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
     const token = localStorage.getItem('token');
-    
+
     if (storedCommunity && token) {
-      setCommunity(storedCommunity);
       const fetchCommunityDetails = async () => {
         try {
           const response = await fetch(`http://localhost:5000/api/community/${storedCommunity}`, {
@@ -70,13 +64,9 @@ const Page = () => {
             },
           });
           const data = await response.json();
-          console.log(data);
-          if (data.detailedListings) {
-            setListings(data.detailedListings);
-          } else {
-            console.error('No listings found for this community');
-            setListings([]);
-          }
+          console.log("Community: ", storedCommunity, "Id:", data.communityID);
+          setCommID(data.communityID); // Update state
+          setCommunity(storedCommunity);
         } catch (error) {
           console.error('Error fetching community details:', error);
         }
@@ -86,15 +76,17 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    console.log('here');
+    console.log("ID Updated: ", commID); // Log updated commID
+  }, [commID]);
+
+  useEffect(() => {
     const getThreads = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/threads/allThreads'); // Replace
+        const response = await fetch('http://localhost:5000/api/threads/allThreads');
         const data = await response.json();
-        console.log(response, "Hello", data);
         setThreads(data);
       } catch (error) {
-        console.log("Error fetching threads: ", error);
+        console.log('Error fetching threads:', error);
       }
     };
     getThreads();
@@ -119,11 +111,6 @@ const Page = () => {
       </div>
       {view === 'listings' && (
         <div className="upper-container" style={{ width: '90%' }}>
-          {/* <div className="row">
-            
-              <SearchBar onSearch={handleSearch} />
-
-          </div> */}
           <div className="row-listings">
             <div className="col">
               <h4 className="ml-15 mt-36" style={{ fontFamily: 'Source Sans Pro' }}>
@@ -133,14 +120,12 @@ const Page = () => {
                 {listings.length} properties
               </p>
             </div>
-          
             {/* <div className="col">
               <Image src='/Slider.svg' width={40} height={40} alt="Slider" />
             </div> */}
           </div>
         </div>
       )}
-      
       {view === 'listings' ? (
         <div className="listings-grid">
           {listings.length > 0 ? (
@@ -152,7 +137,7 @@ const Page = () => {
           )}
         </div>
       ) : (
-        <MainBox threads= {threads} />
+        <MainBox threads={threads} commID={commID} />
       )}
     </div>
   );

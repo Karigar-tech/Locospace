@@ -2,15 +2,19 @@ const Thread = require('../models/threadModel');
 
 
 exports.createThread = async (req, res) => {
+    
+    const id= req.user.id
+    
     try {
-        const { user_id, community_id, thread_title, thread_description } = req.body; 
+        const { title, description, community_id } = req.body; 
+        
         const thread = new Thread({
-            user_id,
+            user_id: id,
             community_id,
-            thread_title,
-            thread_description,
+            thread_title: title,
+            thread_description: description,
         });
-
+        console.log("Thread added:", thread)
         await thread.save();
         res.status(201).json(thread);
     } catch (error) {

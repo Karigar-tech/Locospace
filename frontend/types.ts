@@ -1,6 +1,7 @@
 import { List } from "postcss/lib/list";
 
 export interface User {
+  _id: number;
   address: string;
   contact: string;
   email: string;
@@ -44,9 +45,10 @@ export interface Community{
 }
 
 export interface Thread {
-  _id: string;
+  _id: number;
   user_id: User;
   community_id: Community;
+  thread_title: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;

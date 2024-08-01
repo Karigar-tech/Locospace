@@ -1,3 +1,5 @@
+"use client";
+
 // frontend/components/Dropdown.tsx
 import React from 'react';
 import styles from './Dropdown.module.css';

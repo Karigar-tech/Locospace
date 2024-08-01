@@ -1,13 +1,14 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
-import styles from './seachBar.module.css';
+"use client";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
+import styles from "./seachBar.module.css";
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -19,7 +20,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <Form onSubmit={handleSearch} className={`d-flex ${styles.searchBarContainer}`}>
+    <Form
+      onSubmit={handleSearch}
+      className={`d-flex ${styles.searchBarContainer}`}
+    >
       <InputGroup className={styles.inputGroup}>
         <FormControl
           type="text"
@@ -35,6 +39,5 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     </Form>
   );
 };
-
 
 export default SearchBar;

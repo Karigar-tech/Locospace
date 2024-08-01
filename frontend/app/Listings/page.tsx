@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { Suspense,useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Listing, User, Thread, Community } from '../../types';
 import ListingBox from '@/components/Listings/ListingBox';
@@ -10,6 +10,10 @@ import '../../styles/profile.css';
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Thread } from '@/types';
+
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -116,9 +120,9 @@ const Page = () => {
                 {listings.length} properties
               </p>
             </div>
-            <div className="col">
+            {/* <div className="col">
               <Image src='/Slider.svg' width={40} height={40} alt="Slider" />
-            </div>
+            </div> */}
           </div>
         </div>
       )}
@@ -139,4 +143,11 @@ const Page = () => {
   );
 };
 
-export default Page;
+const ListingsPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Page/>
+  </Suspense>
+);
+
+
+export default ListingsPage;

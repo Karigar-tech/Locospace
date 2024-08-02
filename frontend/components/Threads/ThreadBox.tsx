@@ -32,7 +32,6 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
             />
           ) : (
             <img
-              
               src="/osama.jpg" // Replace with the actual path to your placeholder image
               alt="pfp"
               className="profile-pic"
@@ -45,7 +44,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
       </Row>
       <Row className="mt-2">
         <Col>
-          <p className="box-title">{thread_title}</p>
+          <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
       </Row>

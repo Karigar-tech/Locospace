@@ -9,4 +9,6 @@ router.post('/createThread', authenticateToken, threadController.createThread);
 
 router.get('/allThreads', threadController.getAllThreads);
 
+router.get('/userThreads',authenticateToken, threadController.getUserThreads);
+
 module.exports = router;

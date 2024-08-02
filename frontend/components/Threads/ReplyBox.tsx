@@ -4,7 +4,7 @@ import MainBox from './MainBox'
 const ReplyBox = () => {
   return (
     <div>
-      Replies yoooo
+      Replies yooooh
       {/* <button onClick={setIsOpenThread(false)}>Back</button> */}
     </div>
   )

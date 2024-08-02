@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import {
   Button,
   Col,
@@ -22,6 +22,7 @@ import {
   FaMoneyBillWave,
   FaPaw,
   FaChild,
+  FaInfoCircle 
 } from "react-icons/fa";
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
 import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
@@ -37,11 +38,15 @@ import CustomCheckbox from "@/components/customcheckbox";
 //navbar
 import NavBar from "@/components/NavBar";
 
+//file
+import ImageUploadSection from "../../components/Seller/FileComp";
+
 const SellerForm: React.FC = () => {
   const [formData, setFormData] = useState<Listing>({
     _id: 0,
     ListingPictures: [],
     title: "",
+    numberOfStories:0,
     Description: "",
     location: "",
     bedroom: 0,
@@ -58,6 +63,7 @@ const SellerForm: React.FC = () => {
       ageGroup: [],
     },
     user: {
+      _id:0,
       username: "",
       address: "",
       contact: "",
@@ -71,11 +77,19 @@ const SellerForm: React.FC = () => {
   });
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState("environment");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
+  const [searchQueries, setSearchQueries] = useState({
+    environment: "",
+    facilities: "",
+    ageGroup: ""
+  });
+  
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [file, setFile] = useState<FileList | null>(null);
 
+  const [files, setFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [mainImage, setMainImage] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [isHomeIconVisible, setIsHomeIconVisible] = useState(true);
   const options = {
     environment: [
       "Busy",
@@ -90,7 +104,17 @@ const SellerForm: React.FC = () => {
     facilities: ["Gym", "Swimming Pool", "Parking", "Security", "Playground"],
     ageGroup: ["Kids", "Teens", "Adults", "Seniors"],
   };
+  const [filteredOptions, setFilteredOptions] = useState({
+    environment: options.environment,
+    facilities: options.facilities,
+    ageGroup: options.ageGroup
+  });
   const area = ["Marla", "Kanal", "Square Feet", "Acres"];
+  //images on the sell rent buttons
+  const SELL_IMAGE = "/buy-home.png";
+  const RENT_IMAGE = "/key.png";
+  const ACTIVE_SELL_IMAGE = "/white-buy-home.png"; 
+  const ACTIVE_RENT_IMAGE = "/white-key.png"; 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -100,6 +124,11 @@ const SellerForm: React.FC = () => {
       [name]: value,
     }));
   };
+
+  const handleListingTypeChange = (type: string) => {
+    setFormData((prev) => ({ ...prev, listing_type: type }));
+  };
+
   const handleArea = (event: any) => {
     const { name, value } = event.target;
     setFormData((prevData) => {
@@ -128,17 +157,65 @@ const SellerForm: React.FC = () => {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFile(e.target.files);
+    const newFiles = e.target.files;
+    if (newFiles) {
+      const fileArray = Array.from(newFiles);
+      if (imagePreviews.length + fileArray.length > 5) {
+        alert("You can only upload up to 5 images.");
+        return;
+      }
+  
+      //creatingg previews for new files
+      const previews = fileArray.map(file => URL.createObjectURL(file));
+  
+      let updatedPreviews = [...imagePreviews];
+      let updatedFiles = [...files];
+  
+      if (selectedImageIndex !== null) {
+        //updatinf the selected
+        updatedPreviews[selectedImageIndex] = previews[0];
+        updatedFiles[selectedImageIndex] = fileArray[0];
+  
+        //main update
+        if (selectedImageIndex === 0) {
+          setMainImage(previews[0]);
+        }
+      } else {
+        //more imgs
+        updatedPreviews = [...updatedPreviews, ...previews];
+        updatedFiles = [...updatedFiles, ...fileArray];
+
+        if (!mainImage && updatedPreviews.length > 0) {
+          setMainImage(previews[0]);
+        }
+      }
+  
+     
+      setImagePreviews(updatedPreviews);
+      setFiles(updatedFiles);
+      setIsHomeIconVisible(updatedPreviews.length === 0);
+      setSelectedImageIndex(null);
     }
   };
-
-  const handleHomeIconClick = () => {
-    document.getElementById("fileInput")?.click();
+  
+  
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
+    document.getElementById('fileInput')?.click();
   };
 
+  const handleMainImageChange = () => {
+    setSelectedImageIndex(0);
+    document.getElementById('fileInput')?.click();
+  };
+
+  const handleAddMoreClick = () => {
+    document.getElementById('fileInput')?.click();
+  };
+
+  
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); 
 
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("listing_type", formData.listing_type);
@@ -150,17 +227,32 @@ const SellerForm: React.FC = () => {
     formDataToSubmit.append("bath", formData.bath.toString());
     formDataToSubmit.append("kitchen", formData.kitchen.toString());
     formDataToSubmit.append("area", formData.area.toString());
+    formDataToSubmit.append("numberOfStories", formData.numberOfStories.toString());
     formDataToSubmit.append(
       "preferences",
       JSON.stringify(formData.preferences)
     );
 
-    // Append files to formData
-    if (file) {
-      Array.from(file).forEach((f) => {
-        formDataToSubmit.append("ListingPictures", f);
-      });
-    }
+    // // Append files to formData
+    // if (files) {
+    //   Array.from(files).forEach((f) => {
+    //     formDataToSubmit.append("ListingPictures", f);
+    //   });
+    // }
+
+     // Append files to FormData
+     Array.from(files).forEach((file, index) => {
+      formDataToSubmit.append(`image_${index}`, file);
+    });
+
+    // Update ListingPictures state
+    setFormData(prevState => ({
+      ...prevState,
+      ListingPictures: [
+        ...prevState.ListingPictures,
+        ...Array.from(files).map(file => URL.createObjectURL(file))
+      ]
+    }));
 
     try {
       const token = localStorage.getItem("token");
@@ -205,15 +297,23 @@ const SellerForm: React.FC = () => {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.trim().replace(/\s+/g, " ").toLowerCase(); // Trim and normalize spaces
-    setSearchQuery(query);
-    setFilteredOptions(
-      options[activeTab as keyof typeof options].filter((option) =>
-        option.toLowerCase().includes(query)
-      )
+    const query = e.target.value.trim().replace(/\s+/g, " ").toLowerCase();
+    
+    setSearchQueries(prevQueries => ({
+      ...prevQueries,
+      [activeTab]: query
+    }));
+  
+    const currentOptions = options[activeTab as keyof typeof options];
+    const filtered = currentOptions.filter(option =>
+      option.toLowerCase().includes(query)
     );
-  };
-
+    
+    setFilteredOptions(prevOptions => ({
+      ...prevOptions,
+      [activeTab]: filtered
+    }));
+  }
   const environmentIconMap: Record<string, React.ReactElement> = {
     Busy: <FaRunning />,
     Peaceful: <GiPeaceDove />,
@@ -255,6 +355,16 @@ const SellerForm: React.FC = () => {
     }));
   };
 
+  useEffect(() => {
+    if (showModal) {
+      document.body.classList.add(styles.modalOpen);
+    } else {
+      document.body.classList.remove(styles.modalOpen);
+    }
+    return () => document.body.classList.remove(styles.modalOpen);
+  }, [showModal]);
+
+
   return (
     <div>
       <NavBar/>
@@ -263,93 +373,71 @@ const SellerForm: React.FC = () => {
     <div className="container-fluid">
       <Form onSubmit={handleSubmit} className="mb-5">
         <div className="card p-3" style={{ border: "none" }}>
-          <Row className="align-items-center">
+          <Row>
             <Col s={6} md={6}>
               <Form.Group>
-                <h4>Purpose</h4>
+                <h4 className = {styles.fontStyle}>Purpose</h4>
                 <div className="d-flex mt-3">
-                  <Button
-                    className={`me-3 rounded-5 px-4 ${
-                      formData.listing_type === "sell" ? "active" : ""
-                    }`}
-                    variant={
-                      formData.listing_type === "sell"
-                        ? "primary"
-                        : "outline-primary"
-                    }
-                    onClick={() =>
-                      setFormData((prev) => ({ ...prev, listing_type: "sell" }))
-                    }
-                  >
-                    <img
-                      src="/buy-home.png"
-                      alt="Icon"
-                      className="buy-image me-2"
-                    />
-                    Sell
-                  </Button>
-                  <Button
-                    className={`ms-3 rounded-5 px-4 ${
-                      formData.listing_type === "rent" ? "active" : ""
-                    }`}
-                    variant={
-                      formData.listing_type === "rent"
-                        ? "primary"
-                        : "outline-primary"
-                    }
-                    onClick={() =>
-                      setFormData((prev) => ({ ...prev, listing_type: "rent" }))
-                    }
-                  >
-                    <img src="/key.png" alt="Icon" className="key-image me-2" />
-                    Rent
-                  </Button>
+                <button
+                      className={`${styles.button} ${formData.listing_type === "sell" ? styles.active : styles.inactive}`}
+                      onClick={() => handleListingTypeChange("sell")}
+                    >
+                      <img
+                        src={formData.listing_type === "sell" ? ACTIVE_SELL_IMAGE : SELL_IMAGE}
+                        alt="Sell Icon"
+                        className={styles.image}
+                      />
+                      Sell
+                  </button>
+                  <button
+                      className={`${styles.button} ${formData.listing_type === "rent" ? styles.active : styles.inactive}`}
+                      onClick={() => handleListingTypeChange("rent")}
+                    >
+                      <img
+                         src={formData.listing_type === "rent" ? ACTIVE_RENT_IMAGE : RENT_IMAGE}
+                         alt="Rent Icon"
+                         className={styles.image}
+                      />
+                      Rent
+                  </button>
+    
                 </div>
               </Form.Group>
-            </Col>
-            <Col
-              s={5}
-              md={5}
-              className="p-3 d-flex justify-content-center align-items-center"
-            >
-              <Button
-                type="button"
-                className="icon-button d-flex justify-content-center align-items-center rounded-circle"
-                onClick={handleHomeIconClick}
-              >
-                <img
-                  src="/home-icon.png"
-                  alt="Home Icon"
-                  className="icon-image"
-                />
-              </Button>
-              <input
-                type="file"
-                id="fileInput"
-                accept=".jpef,.png,.jpg"
-                multiple
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={7} md={7}>
               <Form.Group>
-                <h4>Location</h4>
+                <h4 className ={styles.labels}>Address</h4>
                 <Form.Control
-                  type="textarea"
+                  as="textarea"
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
-                  placeholder="Enter the Address"
+                  placeholder="Enter your full address"
+                  className = {styles.AddressField}
                   required
                 />
+           
               </Form.Group>
             </Col>
+            <Col
+             
+              className={`d-flex justify-content-end align-items-center ${styles.imageAligment}`}
+            >
+               <ImageUploadSection
+                 mainImage={mainImage}
+                 imagePreviews={imagePreviews}
+                 isHomeIconVisible={isHomeIconVisible}
+                 onMainImageChange={handleMainImageChange}
+                 onImageClick={handleImageClick}
+                 onAddMoreClick={handleAddMoreClick}
+                 onFileChange={handleFileChange}
+                />
+       
+            </Col>
+          </Row>
+          <Row>
+           
             <Col md={5} className="mt-3">
               <Form.Group>
-                <h4>Area Size</h4>
+                <h4 className = {styles.fontStyle}>Area Size</h4>
                 <Form.Control
                   type="Number"
                   name="areaunit"
@@ -357,7 +445,7 @@ const SellerForm: React.FC = () => {
                   onChange={handleArea}
                   placeholder="Enter Area Size"
                   required
-                  className="mb-1 w-50"
+                  className = {`mb-4 w-50 ${styles.AreaField}`}
                   min="1"
                 />
                 <Form.Control
@@ -366,7 +454,7 @@ const SellerForm: React.FC = () => {
                   value={formData.areasize}
                   onChange={handleArea}
                   required
-                  className="w-50"
+                  className= {`w-50 ${styles.AreaField}`}
                 >
                   <option value="">Select Area Unit</option>
                   {area.map((option, index) => (
@@ -378,17 +466,31 @@ const SellerForm: React.FC = () => {
               </Form.Group>
             </Col>
             <Col md={5} className="mt-3">
-              <Form.Group>
-                <h4>Price</h4>
+            <Form.Group className={styles.paddingLeft}>
+              <h4 className = {styles.fontStyle}>{formData.listing_type === "rent" ? "Amount per month" : "Price"}</h4>
                 <Form.Control
                   type="text"
                   name="price"
                   value={formData.price}
                   onChange={handleChange}
-                  placeholder="Enter the price"
+                  placeholder={`Enter the ${formData.listing_type === "rent" ? "amount per month" : "price"}`}
                   required
-                  className="w-50"
+                  className={`w-50 ${styles.AreaField}`}
                 />
+               {formData.listing_type === "rent" && (
+                      <Form.Group className="mt-3">
+                        <h4 className = {styles.fontStyle}>Number of Stories</h4>
+                        <Form.Control
+                          type="number"
+                          name="numberOfStories"
+                          value={formData.numberOfStories}
+                          onChange={handleChange}
+                          placeholder="Enter number of stories"
+                          required
+                          className={`w-50 ${styles.AreaField}`}
+                        />
+                      </Form.Group>
+                )}
               </Form.Group>
             </Col>
           </Row>
@@ -397,29 +499,29 @@ const SellerForm: React.FC = () => {
           <Row>
             <Col md={7} className="">
               <Form.Group>
-                <h4>Title</h4>
+                <h4 className = {styles.fontStyle}>Title</h4>
                 <Form.Control
                   type="text"
-                  name="titkle"
+                  name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="Enter property title"
+                  placeholder="Enter title for your property"
                   required
-                  className="mb-2 w-100"
+                  className={`${styles.AddressField} mb-2 w-90`}
                 />
               </Form.Group>
             </Col>
             <Col md={11}>
               <Form.Group>
-                <h4>Description</h4>
+                <h4 className ={styles.labels}>Description</h4>
                 <Form.Control
                   as="textarea"
                   name="Description"
                   value={formData.Description}
                   onChange={handleChange}
-                  placeholder="Enter property description"
+                  placeholder="Provide a captivating description highligting key features and environment factors that will appeal to potential buyers or renters."
                   required
-                  className="w-60"
+                  className={`${styles.DescField}`}
                 />
               </Form.Group>
             </Col>
@@ -429,13 +531,13 @@ const SellerForm: React.FC = () => {
         <div className="card mb-4 p-3" style={{ border: "none" }}>
           <Row>
             <Col xs={6} md={6}>
-              <h4>Features</h4>
-              <ul className="features-list">
-                <li className="features-list-item">
-                  <label>Bedrooms:</label>
-                  <div className="qty">
+            <h4 className={styles.fontStyle}>Features</h4>
+              <ul className={styles.featuresList}>
+                <li className={styles.featuresListItem}>
+                  <label  className= {styles.stylesFeatures} >Bedrooms:</label>
+                  <div className={styles.qty}>
                     <span
-                      className="minus bg-primary"
+                      className={styles.minus}
                       onClick={() => handleDecrement("bedroom")}
                     >
                       -
@@ -445,21 +547,21 @@ const SellerForm: React.FC = () => {
                       name="bedroom"
                       value={formData.bedroom}
                       readOnly
-                      className="count"
+                      className={styles.count}
                     />
                     <span
-                      className="plus bg-primary"
+                      className={styles.plus}
                       onClick={() => handleIncrement("bedroom")}
                     >
                       +
                     </span>
                   </div>
                 </li>
-                <li className="features-list-item">
-                  <label>Kitchen:</label>
-                  <div className="qty">
+                <li className={styles.featuresListItem}>
+                  <label className= {styles.stylesFeatures}>Kitchen:</label>
+                  <div className={styles.qty}>
                     <span
-                      className="minus bg-primary"
+                      className={styles.minus}
                       onClick={() => handleDecrement("kitchen")}
                     >
                       -
@@ -469,21 +571,21 @@ const SellerForm: React.FC = () => {
                       name="kitchen"
                       value={formData.kitchen}
                       readOnly
-                      className="count"
+                      className={styles.count}
                     />
                     <span
-                      className="plus bg-primary"
+                      className={styles.plus}
                       onClick={() => handleIncrement("kitchen")}
                     >
                       +
                     </span>
                   </div>
                 </li>
-                <li className="features-list-item">
-                  <label>Bathrooms:</label>
-                  <div className="qty">
+                <li className={styles.featuresListItem}>
+                  <label className= {styles.stylesFeatures} >Bathrooms:</label>
+                  <div className={styles.qty}>
                     <span
-                      className="minus bg-primary"
+                      className={styles.minus}
                       onClick={() => handleDecrement("bath")}
                     >
                       -
@@ -493,10 +595,10 @@ const SellerForm: React.FC = () => {
                       name="bath"
                       value={formData.bath}
                       readOnly
-                      className="count"
+                      className={styles.count}
                     />
                     <span
-                      className="plus bg-primary"
+                      className={styles.plus}
                       onClick={() => handleIncrement("bath")}
                     >
                       +
@@ -504,82 +606,98 @@ const SellerForm: React.FC = () => {
                   </div>
                 </li>
               </ul>
+
             </Col>
             <Col xs={6} md={5}>
-              <h4>Preferences</h4>
+              <h4 className = {styles.fontStyle}>Preferences</h4>
               <div>
                 <Button
-                  variant="primary"
-                  className="btn-sm"
+                  
+                  className= {styles.preferenceButton}
                   onClick={() => {
                     setShowModal(true);
                     setActiveTab("environment");
                   }}
                 >
-                  Select Preferences
+                  + Add Preferences
                 </Button>
-                <div className="selected-options-container">
-                  {formData.preferences.environment.map((env, index) => (
-                    <span key={index} className="selected-option">
+                <div className={styles.selectedOptionsContainer}>
+                {formData.preferences.environment.map((env, index) => (
+                    <span
+                      key={index}
+                      className={`${styles.selectedOption} ${styles.environment}`}
+                    >
                       {environmentIconMap[env]}
-                      <span style={{ marginLeft: "5px" }}>{env}</span>
+                      <span className={styles.optionText}>{env}</span>
                       <span
-                        className="remove-option"
-                        onClick={() => handleRemoveOption(env, "environment")}
+                        className={styles.removeOption}
+                        onClick={() => handleRemoveOption(env, 'environment')}
                       >
                         ×
                       </span>
                     </span>
                   ))}
                   {formData.preferences.facilities.map((fac, index) => (
-                    <span key={index} className="selected-option">
+                    <span
+                      key={index}
+                      className={`${styles.selectedOption} ${styles.facilities}`}
+                    >
                       {facilitiesIconMap[fac]}
-                      <span style={{ marginLeft: "5px" }}>{fac}</span>
+                      <span className={styles.optionText}>{fac}</span>
                       <span
-                        className="remove-option"
-                        onClick={() => handleRemoveOption(fac, "facilities")}
+                        className={styles.removeOption}
+                        onClick={() => handleRemoveOption(fac, 'facilities')}
                       >
                         ×
                       </span>
                     </span>
                   ))}
                   {formData.preferences.ageGroup.map((age, index) => (
-                    <span key={index} className="selected-option">
+                    <span
+                      key={index}
+                      className={`${styles.selectedOption} ${styles.ageGroup}`}
+                    >
                       {ageGroupIconMap[age]}
-                      <span style={{ marginLeft: "5px" }}>{age}</span>
+                      <span className={styles.optionText}>{age}</span>
                       <span
-                        className="remove-option"
-                        onClick={() => handleRemoveOption(age, "ageGroup")}
+                        className={styles.removeOption}
+                        onClick={() => handleRemoveOption(age, 'ageGroup')}
                       >
                         ×
                       </span>
                     </span>
                   ))}
+
                 </div>
               </div>
             </Col>
           </Row>
         </div>
 
-        <div>
-          <Button type="submit" className="me-2 btn-primary rounded-5 px-4">
+        <div className= {styles.textEnd}>
+          <Button type="submit" className="me-2 btn-primary rounded-3 px-4">
             Publish
           </Button>
           <Button
             type="button"
             variant="primary"
-            className="btn-cancel rounded-5 px-4"
+            className={`${styles.btnCancel} rounded-3 px-4`}
           >
             Cancel
           </Button>
         </div>
       </Form>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Preferences</Modal.Title>
+      <Modal 
+        show={showModal} 
+        onHide={() => setShowModal(false)} 
+        centered
+        className={styles.modalDialogFixedHeight}
+        >
+        <Modal.Header closeButton className = {styles.modalCustom}>
+          <Modal.Title>Choose the Preferences</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={styles.modalBodyFixedHeight}>
           <Tab.Container activeKey={activeTab}>
             <Nav variant="pills">
               <Nav.Item>
@@ -612,18 +730,12 @@ const SellerForm: React.FC = () => {
                 <InputGroup className="mb-3 mt-3">
                   <FormControl
                     placeholder="Search Environment..."
-                    value={searchQuery}
+                    value={searchQueries.environment}
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
-                <CustomCheckbox
-                  options={filteredOptions}
-                  IconMap={environmentIconMap}
-                  selectedOption={selectedOptions}
-                  handleOptionSelect={handleOptionSelect}
-                />
-                <CustomCheckbox
-                  options={options.environment}
+                <CustomCheckbox 
+                  options={filteredOptions.environment}
                   IconMap={environmentIconMap}
                   selectedOption={selectedOptions}
                   handleOptionSelect={handleOptionSelect}
@@ -634,18 +746,12 @@ const SellerForm: React.FC = () => {
                 <InputGroup className="mb-3 mt-3">
                   <FormControl
                     placeholder="Search Facilities..."
-                    value={searchQuery}
+                    value={searchQueries.facilities}
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
                 <CustomCheckbox
-                  options={filteredOptions}
-                  IconMap={facilitiesIconMap}
-                  selectedOption={selectedOptions}
-                  handleOptionSelect={handleOptionSelect}
-                />
-                <CustomCheckbox
-                  options={options.facilities}
+                  options={filteredOptions.facilities}
                   IconMap={facilitiesIconMap}
                   selectedOption={selectedOptions}
                   handleOptionSelect={handleOptionSelect}
@@ -655,18 +761,12 @@ const SellerForm: React.FC = () => {
                 <InputGroup className="mb-3 mt-3">
                   <FormControl
                     placeholder="Search Age Group..."
-                    value={searchQuery}
+                    value={searchQueries.ageGroup}
                     onChange={handleSearchChange}
                   />
                 </InputGroup>
                 <CustomCheckbox
-                  options={filteredOptions}
-                  IconMap={ageGroupIconMap}
-                  selectedOption={selectedOptions}
-                  handleOptionSelect={handleOptionSelect}
-                />
-                <CustomCheckbox
-                  options={options.ageGroup}
+                  options={filteredOptions.ageGroup}
                   IconMap={ageGroupIconMap}
                   selectedOption={selectedOptions}
                   handleOptionSelect={handleOptionSelect}
@@ -675,7 +775,7 @@ const SellerForm: React.FC = () => {
             </Tab.Content>
           </Tab.Container>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className = {styles.modelFooter}>
           <Button variant="primary" onClick={handleConfirmSelection}>
             Confirm
           </Button>

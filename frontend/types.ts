@@ -17,6 +17,7 @@ export interface Listing {
   ListingPictures: string[];
   title: string;
   Description: string;
+  numberOfStories: number;
   location: string;
   bedroom: number;
   bath: number;

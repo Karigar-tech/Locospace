@@ -30,8 +30,10 @@ exports.createReply = async (req, res) => {
 exports.getRepliesByThread = async (req, res) => {
     try {
         const { thread_id } = req.params;
+        console.log("Fetching", thread_id)
         
         if (!ObjectId.isValid(thread_id)) {
+            
             return res.status(400).json({ error: 'Invalid thread ID' });
         }
         

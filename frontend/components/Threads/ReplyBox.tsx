@@ -19,12 +19,20 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
   const [threadID, setThreadID] = useState<number>();
   useEffect(() => {
     const fetchReplies = async () => {
-      // Replace the following lines with an actual API call
-      const mockReplies: Reply[] = [
-        { _id: 1, user_id: 'user1', content: 'This is a reply', createdAt: '2024-01-01', updatedAt: '2024-01-02' },
-        { _id: 2, user_id: 'user2', content: 'This is another reply', createdAt: '2024-01-03', updatedAt: '2024-01-04' },
-      ];
-      setReplies(mockReplies);
+      try {
+        console.log("Fetching for: ", threadId)
+        const response= await fetch(`http://localhost:5000/api/replies/thread/${threadId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        const data = await response.json();
+        console.log("From backend we got:", data)
+        setReplies(data);
+      } catch (error) {
+        console.log("Error fetching replies ", error)
+      }
     };
 
     fetchReplies();
@@ -36,9 +44,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
 
   const handleReplySubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setThreadID(420);
     try {
-      setThreadID(420);
       console.log("I set it to: ",threadID, "Props wali: ",threadId)
       const response = await fetch('http://localhost:5000/api/replies/createReply', {
         method: 'POST',
@@ -69,7 +75,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
         replies.map(reply => (
           <div key={reply._id} className="reply-item">
             <h4>{reply.content}</h4>
-            <p>By: {reply.user_id}</p>
+            {/* <p>By: {reply.user_id}</p> */}
             <p>Posted on: {new Date(reply.createdAt).toLocaleString()}</p>
           </div>
         ))

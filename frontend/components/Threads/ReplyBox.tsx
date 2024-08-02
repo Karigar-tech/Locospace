@@ -1,16 +1,91 @@
-import React from 'react';
-import '../../styles/main.css'
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import '../../styles/main.css';
+
+interface Reply {
+  _id: number;
+  user_id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface ReplyBoxProps {
   threadId: number;
 }
 
 const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
+  const [replies, setReplies] = useState<Reply[]>([]);
+  const [newReply, setNewReply] = useState<string>('');
+  const [threadID, setThreadID] = useState<number>();
+  useEffect(() => {
+    const fetchReplies = async () => {
+      // Replace the following lines with an actual API call
+      const mockReplies: Reply[] = [
+        { _id: 1, user_id: 'user1', content: 'This is a reply', createdAt: '2024-01-01', updatedAt: '2024-01-02' },
+        { _id: 2, user_id: 'user2', content: 'This is another reply', createdAt: '2024-01-03', updatedAt: '2024-01-04' },
+      ];
+      setReplies(mockReplies);
+    };
+
+    fetchReplies();
+  }, [threadId]);
+
+  const handleReplyChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setNewReply(event.target.value);
+  };
+
+  const handleReplySubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setThreadID(420);
+    try {
+      setThreadID(420);
+      console.log("I set it to: ",threadID, "Props wali: ",threadId)
+      const response = await fetch('http://localhost:5000/api/replies/createReply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ threadId, content: newReply }),
+      });
+      console.log("Reponse is ", response)
+
+      if (response.ok) {
+        const reply: Reply = await response.json();
+        setReplies([...replies, reply]);
+        setNewReply('');
+      } else {
+        console.error('Failed to add reply');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
-    <div className='threads-list'>
+    <div className="threads-list">
       <h2>Replies for Thread ID: {threadId}</h2>
-      {/* Your logic to display replies goes here */}
-      <h1>Reply 1</h1>
-      <h1>Reply 2</h1>
+      {replies.length > 0 ? (
+        replies.map(reply => (
+          <div key={reply._id} className="reply-item">
+            <h4>{reply.content}</h4>
+            <p>By: {reply.user_id}</p>
+            <p>Posted on: {new Date(reply.createdAt).toLocaleString()}</p>
+          </div>
+        ))
+      ) : (
+        <p>No replies found</p>
+      )}
+
+      <form onSubmit={handleReplySubmit}>
+        <textarea
+          value={newReply}
+          onChange={handleReplyChange}
+          placeholder="Write your reply here..."
+          required
+        />
+        <button type="submit">Add Reply</button>
+      </form>
     </div>
   );
 };

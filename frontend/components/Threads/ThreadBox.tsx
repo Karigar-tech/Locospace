@@ -3,6 +3,7 @@ import '../../styles/main.css';
 import { User } from '@/types';
 import { Community } from '@/types';
 import { Container, Row, Col } from 'react-bootstrap'; // Import Bootstrap components
+import { FaReply } from 'react-icons/fa';
 
 interface BoxProps {
   _id: number;
@@ -46,6 +47,9 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
         <Col>
           <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
+        </Col>
+        <Col>
+          <FaReply  />
         </Col>
       </Row>
     </Container>

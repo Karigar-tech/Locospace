@@ -605,6 +605,8 @@ body {
   background-color: #6c757d;
 }
 
+
+
 /* Ensure clicking on modal content doesn't close it */
 .modal-content {
   position: relative;

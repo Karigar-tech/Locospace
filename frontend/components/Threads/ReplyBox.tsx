@@ -5,7 +5,7 @@ const ReplyBox = () => {
   return (
     <div>
       Replies yoooo
-      <button onClick={setIsOpenThread(false)}>Back</button>
+      {/* <button onClick={setIsOpenThread(false)}>Back</button> */}
     </div>
   )
 }

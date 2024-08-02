@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import '../../styles/main.css';
-import { IoMdAddCircle} from 'react-icons/io';
 import { IoAdd } from "react-icons/io5";
 import ThreadBox from './ThreadBox';
 import { Thread } from '@/types';
 import AddThread from './AddThread';
-import { useRouter } from "next/navigation";
-import { faL } from '@fortawesome/free-solid-svg-icons';
 import ReplyBox from './ReplyBox';
 
 interface MainBoxProps {
@@ -17,18 +14,7 @@ interface MainBoxProps {
 const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) => {
   const [threads, setThreads] = useState<Thread[]>(initialThreads);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isThread, setIsOpenThread] = useState(false); //temp
   const [selectedThreadId, setSelectedThreadId] = useState<number | null>(null);
-
-
-  const openThread= (thread_id : number)=>{
-    console.log("YEEHAWW")
-    if(thread_id!==null){
-      setIsOpenThread(!isThread);
-      setSelectedThreadId(thread_id);
-    }
-    
-  }
 
   const handleAddThread = async (title: string, description: string) => {
     const threadData = {
@@ -59,6 +45,32 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
     }
   };
 
+  const handleThreadClick = (thread_id: number) => {
+    setSelectedThreadId(thread_id);
+  };
+
+  const handleBackButtonClick = () => {
+    setSelectedThreadId(null); // Reset selected thread ID to show thread list again
+  };
+
+  if (selectedThreadId !== null) {
+    // Render the ReplyBox when a thread is selected
+    return (
+      <div className="threads-container">
+        <div className="reply-box-container">
+        <div className="header-container">
+          <h3 className="box-title">Replies</h3>
+          <button onClick={handleBackButtonClick} className="back-button">
+            Back
+          </button>
+            <ReplyBox threadId={selectedThreadId} />
+          
+        </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="threads-container">
       <div className="header-container">
@@ -75,15 +87,8 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
       <div className="threads-list">
         {threads.length > 0 ? (
           <div>
-            <p>Selected Thread: {selectedThreadId}</p>
-            
             {threads.map((thread) => (
-              <div key={thread._id} className="thread-item" onClick={() => openThread(thread._id)}>
-                {isThread ? (<p>
-                  <ReplyBox/>
-                </p>
-                
-                  ) :(
+              <div key={thread._id} className="thread-item" onClick={() => handleThreadClick(thread._id)}>
                 <ThreadBox
                   _id={thread._id}
                   user_id={thread.user_id}
@@ -93,9 +98,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
                   createdAt={thread.createdAt}
                   updatedAt={thread.updatedAt}
                 />
-              ) }
               </div>
-              
             ))}
           </div>
         ) : (

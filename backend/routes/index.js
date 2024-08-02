@@ -4,6 +4,8 @@ const ProfileRoutes = require('./profileRoutes');
 const listingRoutes = require('./listingRoutes');
 const threadRoutes = require('./threadRoutes'); 
 const communityRoute = require('./communityRoutes');
+const replyRoute = require('./replyRoutes');
+
 
 const express = require('express');
 const router = express.Router();
@@ -19,6 +21,8 @@ router.use('/listings', listingRoutes);
 router.use('/threads', threadRoutes);
 
 router.use('/community', communityRoute);
+
+router.use('/replies', replyRoute);
 
 
 module.exports = router;

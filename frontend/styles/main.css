@@ -70,6 +70,10 @@ body {
   font-weight: bold;
 }
 
+.threads-content{
+  align-self: left;
+}
+
 .navbar-brand-custom:hover {
   text-decoration: none;
 }
@@ -408,8 +412,8 @@ body {
 
 
 /* Threads */
+
 .threads-container {
-  /* background: linear-gradient(rgb(0, 17, 255), rgb(73, 185, 255)); */
   border-radius: 20px;
   background-color: #20096d;
   padding: 16px;
@@ -418,7 +422,53 @@ body {
   margin: 16px auto;
   display: flex;
   flex-direction: column;
+  height: 800px;
 }
+
+.header-container {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.thread-add-button {
+  padding: 6px;
+  background-color: #20096d;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.5s;
+  margin-right: 16px; /* Add space between button and text */
+}
+
+
+.thread-add-button:hover {
+  color: #60a0ff;
+  transform: scale(1.06);
+}
+
+.thread-title {
+  display: flex;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #313131; /* Ensure text color is visible */
+  margin-bottom: 0;
+}
+
+.box-title {
+  display: flex;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #ffffff; /* Ensure text color is visible */
+  margin-bottom: 0;
+}
+
+
+
 
 .threads-list {
   max-height: 4;
@@ -433,17 +483,19 @@ body {
 .thread-item {
   margin-bottom: 5px;
   max-width: 710px;
-  height: fit-content;
+  /* height: fit-content; */
   
 }
 
 .thread-box {
   padding: 15px;
   width: fill;
+  height: fit-content;
   border: 1px solid #ddd;
   border-radius: 30px;
   background-color: #ffffff;
   transition: all 0.2s ease;
+  padding: 0px;
 }
 
 .thread-box:hover {
@@ -455,22 +507,19 @@ body {
   cursor: pointer;
 }
 
-.thread-title {
-  font-size: 1.2rem;
-  align-self: top;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 0px;
-}
+
 .thread-description {
-  font-size: 1rem;
-  align-self: top;
+  font-size: 1.2rem;
+  margin-bottom: 0px;
+  display: flex;
+  align-self: flex-start;
   font-weight: 400;
   color: #3b3b3b;
 }
 
 .thread-username{
   color: #323232;
+  display: flex;
   align-self: top;
   padding: 0px;
   margin-top: 0.5rem;
@@ -491,13 +540,6 @@ body {
 }
 
 
-.thread-input-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 20px;
-}
-
 .thread-input {
   flex-grow: 1;
   padding: 8px;
@@ -505,22 +547,71 @@ body {
   border: 1px solid #ccc;
 }
 
-.thread-add-button {
-  padding: 6px;
-  background-color: #20096d;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
+
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.5s;
+  z-index: 1000; 
+}
+.modal-content {
+  background: white;
+  border-color: #007bff;
+  padding: 30px;
+  border-radius: 20px;
+  width: 300px;
+  max-width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.thread-add-button:hover {
-  color: #cadfff;
-  transform: scale(1.03);
+.modal-input,
+.modal-textarea {
+  width: 100%;
+  border-radius: 5px;
+  border-color: #686868;
+  border-width: 0.01rem;
+  margin-bottom: 10px;
 }
+
+.modal-textarea {
+  height: 100px;
+}
+
+.modal-submit-button,
+.modal-close-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+  padding: .5rem;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-submit-button {
+  background-color: #007bff;
+}
+
+.modal-close-button {
+  background-color: #6c757d;
+}
+
+
+
+/* Ensure clicking on modal content doesn't close it */
+.modal-content {
+  position: relative;
+}
+
 
 
 /* Optional: Additional responsiveness */

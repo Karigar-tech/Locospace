@@ -1,37 +1,37 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import '../../styles/main.css';
+import '../../styles/main.css'; // Make sure to use a separate CSS file for replies
+import { User } from '@/types';
+import { Thread } from '@/types';
 
 interface Reply {
   _id: number;
-  user_id: string;
+  user_id: User;
   content: string;
   createdAt: string;
   updatedAt: string;
 }
 
 interface ReplyBoxProps {
-  threadId: number;
+  threadId: Thread;
 }
 
 const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [newReply, setNewReply] = useState<string>('');
-  const [threadID, setThreadID] = useState<number>();
+
   useEffect(() => {
     const fetchReplies = async () => {
       try {
-        console.log("Fetching for: ", threadId)
-        const response= await fetch(`http://localhost:5000/api/replies/thread/${threadId}`, {
+        const response = await fetch(`http://localhost:5000/api/replies/thread/${threadId._id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
-        })
+        });
         const data = await response.json();
-        console.log("From backend we got:", data)
         setReplies(data);
       } catch (error) {
-        console.log("Error fetching replies ", error)
+        console.error('Error fetching replies:', error);
       }
     };
 
@@ -44,17 +44,17 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
 
   const handleReplySubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    
     try {
-      console.log("I set it to: ",threadID, "Props wali: ",threadId)
+      const thread_id = threadId._id;
       const response = await fetch('http://localhost:5000/api/replies/createReply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ threadId, content: newReply }),
+        body: JSON.stringify({ thread_id, content: newReply }),
       });
-      console.log("Reponse is ", response)
 
       if (response.ok) {
         const reply: Reply = await response.json();
@@ -70,13 +70,31 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
 
   return (
     <div className="threads-list">
-      <h2>Replies for Thread ID: {threadId}</h2>
+      <h2>Replies for {threadId.thread_title} </h2>
+      <h5>{threadId.thread_description}</h5>
       {replies.length > 0 ? (
         replies.map(reply => (
-          <div key={reply._id} className="reply-item">
+          <div key={reply._id} className="reply-box">
+            <div className="reply-header">
+              {reply.user_id.profilePicture && reply.user_id.profilePicture.url ? (
+                <img
+                  src={reply.user_id.profilePicture.url}
+                  alt="PFP"
+                  className="profile-pic"
+                />
+              ) : (
+                <img
+                  src="/osama.jpg" // Replace with the actual path to your placeholder image
+                  alt="pfp"
+                  className="profile-pic"
+                />
+              )}
+              <div className="username-posted">
+                <strong>{reply.user_id.username}</strong> 
+                <span className="text-muted">· Posted: {new Date(reply.createdAt).toLocaleTimeString()}</span>
+              </div>
+            </div>
             <h4>{reply.content}</h4>
-            {/* <p>By: {reply.user_id}</p> */}
-            <p>Posted on: {new Date(reply.createdAt).toLocaleString()}</p>
           </div>
         ))
       ) : (

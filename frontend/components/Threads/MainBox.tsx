@@ -15,9 +15,9 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
   const [threads, setThreads] = useState<Thread[]>(initialThreads);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isThreadOpen, setIsThreadOpen] = useState(false);
-  const [selectedThreadId, setSelectedThreadId] = useState<number | null>(null);
+  const [selectedThreadId, setSelectedThreadId] = useState<Thread | null>(null);
 
-  const openThread = (thread_id: number) => {
+  const openThread = (thread_id: Thread) => {
     if (thread_id !== null) {
       setIsThreadOpen(true);
       setSelectedThreadId(thread_id);
@@ -63,7 +63,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
       {isThreadOpen && selectedThreadId !== null ? (
         <div className="reply-box-container">
           <div className="header-container">
-            <button onClick={handleBackButtonClick} className="back-button">
+            <button className="back-button" onClick={handleBackButtonClick} >
               Back
             </button>
             <h3 className="box-title">Replies</h3>
@@ -86,7 +86,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
           <div className="threads-list">
             {threads.length > 0 ? (
               threads.map(thread => (
-                <div key={thread._id} className="thread-item" onClick={() => openThread(thread._id)}>
+                <div key={thread._id} className="thread-item" onClick={() => openThread(thread)}>
                   <ThreadBox
                     _id={thread._id}
                     user_id={thread.user_id}

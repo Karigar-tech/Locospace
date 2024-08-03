@@ -90,6 +90,7 @@ exports.editListing = async (req, res) => {
       const updateData = {
           listing_type: req.body.listing_type,
           price: req.body.price,
+          numberOfStories: req.body.numberOfStories,
           Description: req.body.Description,
           location: req.body.location,
           bedroom: req.body.bedroom,

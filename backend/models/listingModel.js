@@ -43,6 +43,9 @@ const ListingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numberOfStories:{
+        type: Number
+    },
     preferences: {
         environment: {
             type: [String],

@@ -7,15 +7,15 @@ exports.createReply = async (req, res) => {
     const user_id = req.user.id;
     try {
         console.log("Here2: ", req.body)
-        const { threadId, content } = req.body;
+        const { thread_id, content } = req.body;
         
-        if (!ObjectId.isValid(threadId)) {
-            console.log("THREAD ID WRONMG", threadId, content)
+        if (!ObjectId.isValid(thread_id)) {
+            console.log("THREAD ID WRONMG", thread_id, content)
             return res.status(400).json({ error: 'Invalid thread ID' });
         }
         
         const reply = new Reply({
-            thread_id: new ObjectId(threadId),
+            thread_id: new ObjectId(thread_id),
             user_id: new ObjectId(user_id),
             content
         });

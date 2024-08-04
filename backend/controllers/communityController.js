@@ -69,7 +69,7 @@ exports.createCommunity = async (req, res) => {
    
       const communitiesWithDetailedListings = await Promise.all(
         communities.map(async community => {
-          const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
+          const detailedListings = await Listing.find({ community: community.communityName });
           return {
             ...community.toObject(),
             detailedListings
@@ -97,8 +97,8 @@ exports.createCommunity = async (req, res) => {
       }
   
     
-      const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
-  
+      const detailedListings = await Listing.find({ community: communityName });
+
       const responseData = {
         communityID: community._id,
         communityName: community.communityName,

@@ -102,7 +102,7 @@ const LandingPageComp: React.FC = () => {
   };
   
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(e.target.value); 
   };
 

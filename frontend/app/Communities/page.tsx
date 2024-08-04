@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import CommunityBox from "../../components/Communities/CommunityBox";
-import "../../styles/main.css";
+import styles from "./communitypage.module.css";
 import { Button } from "react-bootstrap";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Community } from "../../types";
@@ -62,6 +62,10 @@ const CommunitiesPage = () => {
     router.push("/Listings");
   };
 
+  useEffect(() => {
+    fetchCommunities(search);
+  }, [search]);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
@@ -69,37 +73,39 @@ const CommunitiesPage = () => {
   return (
     <div>
       <NavBar />
-      <div className="gradient-bar-container">
-        <div className="gradient-bar"></div>
-        <div className="search-bar-container">
+      <div className={styles.gradientBarContainer}>
+        <div className={styles.gradientBar}></div>
+        <div className={styles.searchBarContainer}>
           <Button onClick={() => fetchCommunities(search)}>Search</Button>
           <input
             type="text"
-            className="community-search"
+            className={styles.communitySearch}
             placeholder="Search communities"
             value={search}
             onChange={handleSearchChange}
           />
         </div>
       </div>
-      <div className="upper-container" style={{ width: "90%" }}>
+      <div className={styles.upperContainer} style={{ width: "90%" }}>
         <div className="row">
           <div className="col">
             <h4 className="ml-15 mt-36">All Communities</h4>
           </div>
         </div>
       </div>
-      <div className="community-list">
+    <div className={styles.commContainer}>
+    <div className={styles.communityList}>
         {communities.map((community) => (
           <CommunityBox
             key={community._id}
             name={community.communityName}
             picture={community.communityPicture}
             members={community.communityMembers}
-            listings={community.communityListings.length}
+            listings={community.detailedListings.length}
             onClick={() => handleCommunityClick(community.communityName)}
           />
         ))}
+      </div>
       </div>
     </div>
   );

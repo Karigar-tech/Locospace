@@ -12,6 +12,13 @@ export interface User {
     url: string;
 };
 }
+
+export interface Preferences {
+  environment: string[];
+  facilities: string[];
+  ageGroup: string[];
+}
+
 export interface Listing {
   _id: number;
   ListingPictures: string[];
@@ -27,12 +34,8 @@ export interface Listing {
   areasize: number;
   areaunit: string;
   area: string;
-  preferences: {
-    environment: string[];
-    facilities: string[];
-    ageGroup: string[];
-  
-  }
+  community: string;
+  preferences: Preferences;
   user: User;
 }
 
@@ -41,7 +44,7 @@ export interface Community{
   communityName:string,
   communityPicture: string,
   communityMembers: number,
-  communityListings: Listing []
+  detailedListings: Listing []
 
 }
 

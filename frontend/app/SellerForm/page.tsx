@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import {
   Button,
   Col,
@@ -11,6 +12,7 @@ import {
   Nav,
   Tab,
 } from "react-bootstrap";
+
 //Icons
 import {
   FaParking,
@@ -31,12 +33,15 @@ import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
 //IconsEnd
 
-import { Listing } from "@/types";
+import { Listing, Preferences } from "@/types";
 import styles from "./sellerform.module.css";
 import CustomCheckbox from "@/components/customcheckbox";
 
 //navbar
 import NavBar from "@/components/NavBar";
+
+//message pop up
+import Notification from '../../components/Seller/MessageComp';
 
 //file
 import ImageUploadSection from "../../components/Seller/FileComp";
@@ -62,6 +67,7 @@ const SellerForm: React.FC = () => {
       facilities: [],
       ageGroup: [],
     },
+    community: "",
     user: {
       _id:0,
       username: "",
@@ -82,14 +88,22 @@ const SellerForm: React.FC = () => {
     facilities: "",
     ageGroup: ""
   });
-  
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
+  const [selectedOptions, setSelectedOptions] = useState<Record<keyof Preferences, string[]>>({
+    environment: [],
+    facilities: [],
+    ageGroup: [],
+  });
+  
+  const router = useRouter();
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('')
   const [files, setFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [mainImage, setMainImage] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [isHomeIconVisible, setIsHomeIconVisible] = useState(true);
+  
   const options = {
     environment: [
       "Busy",
@@ -109,6 +123,9 @@ const SellerForm: React.FC = () => {
     facilities: options.facilities,
     ageGroup: options.ageGroup
   });
+  const communities = [
+   'DHA-1', 'DHA-2', 'Bahria Phase 1-6', 'Bahria Phase 7-9', 'Gulberg Greens', 'PWD'
+];
   const area = ["Marla", "Kanal", "Square Feet", "Acres"];
   //images on the sell rent buttons
   const SELL_IMAGE = "/buy-home.png";
@@ -216,11 +233,17 @@ const SellerForm: React.FC = () => {
   
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); 
+   
+    if (!mainImage && (!files || files.length === 0)) {
+      setNotificationMessage("Please upload at least one image.");
+      setShowNotification(true);
+      return;
+    }
 
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("listing_type", formData.listing_type);
     formDataToSubmit.append("price", formData.price.toString());
-    formDataToSubmit.append("adTitle", formData.title);
+    formDataToSubmit.append("title", formData.title);
     formDataToSubmit.append("Description", formData.Description);
     formDataToSubmit.append("location", formData.location);
     formDataToSubmit.append("bedroom", formData.bedroom.toString());
@@ -228,24 +251,19 @@ const SellerForm: React.FC = () => {
     formDataToSubmit.append("kitchen", formData.kitchen.toString());
     formDataToSubmit.append("area", formData.area.toString());
     formDataToSubmit.append("numberOfStories", formData.numberOfStories.toString());
-    formDataToSubmit.append(
-      "preferences",
-      JSON.stringify(formData.preferences)
-    );
+    formDataToSubmit.append("community", formData.community);
+    
+  Object.keys(formData.preferences).forEach((category) => {
+    const prefs = formData.preferences[category as keyof Preferences];
+    prefs.forEach((pref) => formDataToSubmit.append(`preferences[${category}][]`, pref));
+  });
+    
+    if (files) {
+      Array.from(files).forEach((f) => {
+        formDataToSubmit.append("ListingPictures", f);
+      });
+    }
 
-    // // Append files to formData
-    // if (files) {
-    //   Array.from(files).forEach((f) => {
-    //     formDataToSubmit.append("ListingPictures", f);
-    //   });
-    // }
-
-     // Append files to FormData
-     Array.from(files).forEach((file, index) => {
-      formDataToSubmit.append(`image_${index}`, file);
-    });
-
-    // Update ListingPictures state
     setFormData(prevState => ({
       ...prevState,
       ListingPictures: [
@@ -257,7 +275,7 @@ const SellerForm: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/listings/all/", {
+      const response = await fetch("http://localhost:5000/api/listings/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -271,30 +289,64 @@ const SellerForm: React.FC = () => {
 
       const data = await response.json();
       console.log("Done", data.message);
+      setNotificationMessage(data.message);
+      setShowNotification(true);
+
+      setTimeout(() => {
+        router.push(`/Listing/?id=${data.listing_id}`);
+      }, 2000);
+
+      
     } catch (error) {
+      
       console.error("Error:", error);
     }
   };
 
-  const handleOptionSelect = (option: string) => {
-    setSelectedOptions((prev) =>
-      prev.includes(option)
-        ? prev.filter((o) => o !== option)
-        : [...prev, option]
-    );
+  const handleOptionSelect = (option: string, category: keyof Preferences) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [category]: prev[category]?.includes(option)
+        ? prev[category].filter((o) => o !== option)
+        : [...(prev[category] || []), option],
+    }));
   };
+  
+  
 
   const handleConfirmSelection = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      preferences: {
-        ...prevFormData.preferences,
-        [activeTab]: selectedOptions,
-      },
-    }));
+    setFormData((prevFormData) => {
+      //creating a new object with updated preferences
+      const updatedPreferences = { ...prevFormData.preferences };
+  
+      //diff by cat
+      Object.keys(selectedOptions).forEach((category) => {
+        const key = category as keyof Preferences;
+        updatedPreferences[key] = Array.from(new Set([
+          ...(prevFormData.preferences[key] || []),
+          ...(selectedOptions[key] || []),
+        ]));
+      });
+  
+      return {
+        ...prevFormData,
+        preferences: updatedPreferences,
+      };
+    });
+  
     setShowModal(false);
-    setSelectedOptions([]);
+    setSelectedOptions({
+      environment: [],
+      facilities: [],
+      ageGroup: [],
+    });
   };
+   
+  
+  const handleCloseNotification = () => {
+    setShowNotification(false);
+  };
+  
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.trim().replace(/\s+/g, " ").toLowerCase();
@@ -339,21 +391,16 @@ const SellerForm: React.FC = () => {
     Adults: <MdOutlineHiking />,
     Seniors: <MdElderly />,
   };
-
-  const handleRemoveOption = (
-    option: string,
-    category: keyof typeof formData.preferences
-  ) => {
+  const handleRemoveOption = (option: string, type: 'environment' | 'facilities' | 'ageGroup') => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       preferences: {
         ...prevFormData.preferences,
-        [category]: prevFormData.preferences[category].filter(
-          (o) => o !== option
-        ),
+        [type]: prevFormData.preferences[type].filter((item) => item !== option),
       },
     }));
   };
+  
 
   useEffect(() => {
     if (showModal) {
@@ -488,6 +535,7 @@ const SellerForm: React.FC = () => {
                           placeholder="Enter number of stories"
                           required
                           className={`w-50 ${styles.AreaField}`}
+                           min="1"
                         />
                       </Form.Group>
                 )}
@@ -497,7 +545,7 @@ const SellerForm: React.FC = () => {
         </div>
         <div className="card mb-1 p-3" style={{ border: "none" }}>
           <Row>
-            <Col md={7} className="">
+            <Col md={6} className="">
               <Form.Group>
                 <h4 className = {styles.fontStyle}>Title</h4>
                 <Form.Control
@@ -510,6 +558,25 @@ const SellerForm: React.FC = () => {
                   className={`${styles.AddressField} mb-2 w-90`}
                 />
               </Form.Group>
+            </Col>
+            <Col md={6} className="">
+            <Form.Group >
+              <h4 className = {styles.fontStyle}>Community</h4>
+                <Form.Control
+                    as="select"
+                    name="community"
+                    value={formData.community}
+                    onChange={handleChange}
+                    className={`${styles.AddressField} mb-2 w-90`}
+                >
+                    <option value="">Select Community</option>
+                    {communities.map((community) => (
+                        <option key={community} value={community}>
+                            {community}
+                        </option>
+                    ))}
+                </Form.Control>
+            </Form.Group>
             </Col>
             <Col md={11}>
               <Form.Group>
@@ -622,53 +689,73 @@ const SellerForm: React.FC = () => {
                   + Add Preferences
                 </Button>
                 <div className={styles.selectedOptionsContainer}>
-                {formData.preferences.environment.map((env, index) => (
-                    <span
-                      key={index}
-                      className={`${styles.selectedOption} ${styles.environment}`}
-                    >
-                      {environmentIconMap[env]}
-                      <span className={styles.optionText}>{env}</span>
-                      <span
-                        className={styles.removeOption}
-                        onClick={() => handleRemoveOption(env, 'environment')}
-                      >
-                        ×
-                      </span>
-                    </span>
-                  ))}
-                  {formData.preferences.facilities.map((fac, index) => (
-                    <span
-                      key={index}
-                      className={`${styles.selectedOption} ${styles.facilities}`}
-                    >
-                      {facilitiesIconMap[fac]}
-                      <span className={styles.optionText}>{fac}</span>
-                      <span
-                        className={styles.removeOption}
-                        onClick={() => handleRemoveOption(fac, 'facilities')}
-                      >
-                        ×
-                      </span>
-                    </span>
-                  ))}
-                  {formData.preferences.ageGroup.map((age, index) => (
-                    <span
-                      key={index}
-                      className={`${styles.selectedOption} ${styles.ageGroup}`}
-                    >
-                      {ageGroupIconMap[age]}
-                      <span className={styles.optionText}>{age}</span>
-                      <span
-                        className={styles.removeOption}
-                        onClick={() => handleRemoveOption(age, 'ageGroup')}
-                      >
-                        ×
-                      </span>
-                    </span>
-                  ))}
+                  
+                  {formData.preferences.environment.length > 0 && (
+                    <div className={styles.categorySection}>
+                     
+                      {formData.preferences.environment.map((env, index) => (
+                        <span
+                          key={index}
+                          className={`${styles.selectedOption} ${styles.environment}`}
+                        >
+                          {environmentIconMap[env] || null} 
+                          <span className={styles.optionText}>{env}</span>
+                          <span
+                            className={styles.removeOption}
+                            onClick={() => handleRemoveOption(env, 'environment')}
+                          >
+                            ×
+                          </span>
+                        </span>
+                      ))}
+                      <hr className={styles.separator} />
+                    </div>
+                  )}
 
+                  {formData.preferences.facilities.length > 0 && (
+                    <div className={styles.categorySection}>
+                      
+                      {formData.preferences.facilities.map((fac, index) => (
+                        <span
+                          key={index}
+                          className={`${styles.selectedOption} ${styles.facilities}`}
+                        >
+                          {facilitiesIconMap[fac] || null}
+                          <span className={styles.optionText}>{fac}</span>
+                          <span
+                            className={styles.removeOption}
+                            onClick={() => handleRemoveOption(fac, 'facilities')}
+                          >
+                            ×
+                          </span>
+                        </span>
+                      ))}
+                      <hr className={styles.separator} />
+                    </div>
+                  )}
+
+                  {formData.preferences.ageGroup.length > 0 && (
+                    <div className={styles.categorySection}>
+                      
+                      {formData.preferences.ageGroup.map((age, index) => (
+                        <span
+                          key={index}
+                          className={`${styles.selectedOption} ${styles.ageGroup}`}
+                        >
+                          {ageGroupIconMap[age] || null}
+                          <span className={styles.optionText}>{age}</span>
+                          <span
+                            className={styles.removeOption}
+                            onClick={() => handleRemoveOption(age, 'ageGroup')}
+                          >
+                            ×
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
+
               </div>
             </Col>
           </Row>
@@ -687,17 +774,21 @@ const SellerForm: React.FC = () => {
           </Button>
         </div>
       </Form>
-
+    
       <Modal 
         show={showModal} 
         onHide={() => setShowModal(false)} 
         centered
-        className={styles.modalDialogFixedHeight}
+        className={`{${styles.modalDialogFixedHeight} .modal-content}`}
+        dialogClassName={styles.modalDialogFixedHeight} 
+        contentClassName={styles.modalContent}
         >
+         
         <Modal.Header closeButton className = {styles.modalCustom}>
           <Modal.Title>Choose the Preferences</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={styles.modalBodyFixedHeight}>
+       
+        <Modal.Body className={styles.modalBodyFixedHeight} >
           <Tab.Container activeKey={activeTab}>
             <Nav variant="pills">
               <Nav.Item>
@@ -738,7 +829,8 @@ const SellerForm: React.FC = () => {
                   options={filteredOptions.environment}
                   IconMap={environmentIconMap}
                   selectedOption={selectedOptions}
-                  handleOptionSelect={handleOptionSelect}
+                  handleOptionSelect={(option) => handleOptionSelect(option,'environment')}
+                  activeCategory="environment"
                 />
               </Tab.Pane>
 
@@ -754,7 +846,8 @@ const SellerForm: React.FC = () => {
                   options={filteredOptions.facilities}
                   IconMap={facilitiesIconMap}
                   selectedOption={selectedOptions}
-                  handleOptionSelect={handleOptionSelect}
+                  handleOptionSelect={(option) => handleOptionSelect(option,'facilities')}
+                  activeCategory="facilities"
                 />
               </Tab.Pane>
               <Tab.Pane eventKey="ageGroup">
@@ -769,21 +862,33 @@ const SellerForm: React.FC = () => {
                   options={filteredOptions.ageGroup}
                   IconMap={ageGroupIconMap}
                   selectedOption={selectedOptions}
-                  handleOptionSelect={handleOptionSelect}
+                  handleOptionSelect={(option) => handleOptionSelect(option,'ageGroup')}
+                   activeCategory="ageGroup"
                 />
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
         </Modal.Body>
+        
         <Modal.Footer className = {styles.modelFooter}>
           <Button variant="primary" onClick={handleConfirmSelection}>
             Confirm
           </Button>
         </Modal.Footer>
+       
       </Modal>
+
+      {showNotification && (
+        <Notification
+          message={notificationMessage}
+          onClose={handleCloseNotification}
+        />
+      )}
+      </div>
     </div>
+   
     </div>
-    </div>
+
   );
 };
 

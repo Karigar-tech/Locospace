@@ -3,13 +3,12 @@
     width: 12rem; 
     height: 3rem;
     margin-left:35rem;
-    margin-bottom: 30px;
   }
   
   .toggleButton {
     position: absolute;
     width: 12rem;
-    height: 2rem; 
+    height: 3rem; 
     border: none !important;
     background-color: white;
     color: #444444;
@@ -36,7 +35,7 @@
   }
   
   .toggleButton.threads {
-    left: 90%;
+    left: 80%;
    
   }
   

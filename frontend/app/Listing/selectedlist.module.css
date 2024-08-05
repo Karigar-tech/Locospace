@@ -1,16 +1,17 @@
-/* .row{
-    align-items: center;
-    justify-content: center;
-} */
-
-.image-gallery {
+.SLContainer{
+  display: flex;
+  flex-direction: row;
+  margin-left:80px;
+  gap:2%;
+}
+.SLimageGallery {
   max-width: 100%;
   border-radius: 3%;
   border: solid 1px #949494;
   padding: 1%;
 }
 
-.image-gallery .main-image {
+.SLimageGallery .SLmainImage {
   text-align: center;
   max-height: 400px;
   overflow: hidden;
@@ -19,36 +20,41 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  object-fit: cover;
 }
 
-.image-gallery .main-image img {
+.SLimageGallery .SLmainImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.image-gallery .thumbnail-row {
+.SLimageGallery .SLthumbnailRow {
   justify-content: flex-start;
+  object-fit: cover;
+  gap:10px;
 }
 
-.image-gallery .thumbnail {
+.SLimageGallery .SLthumbnail {
   cursor: pointer;
-  width: 80%;
+  width: 20%;
+  object-fit: cover;
 }
 
-.img-thumbnail {
+.SLimgThumbnail {
   border: 1px solid transparent;
+  
 }
 
-.image-gallery .thumbnail img {
+.SLimageGallery .SLthumbnail img {
   width: 100%;
   height: 100px;
   border-radius: 20px;
   object-fit: cover;
 }
 
-.btn-listing {
+.SLbtnListing {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -61,29 +67,30 @@
   gap: 0.5rem;
 }
 
-.btn-listing:hover {
+.SLbtnListing:hover {
   background-color: #0d6efd;
   border: 1px solid #0d6efd;
 }
 
-.col-12 {
+.col12 {
   display: flex;
   gap: 10%;
   margin-top: 2%;
 }
 
-.bedroom-info,
-.bathroom-info,
-.area-info {
+
+.bedroomInfo,
+.bathroomInfo,
+.areaInfo {
   display: flex;
   align-items: center;
   color: #a5a5a5;
   font-size: 15px;
 }
 
-.bed-icon,
-.bathroom-icon,
-.area-icon {
+.bedIcon,
+.bathroomIcon,
+.areaIcon {
   margin-right: 10px;
   color: #a5a5a5;
   font-size: 18px;
@@ -110,43 +117,49 @@
   border-bottom: solid 1px #a5a5a5;
 }
 
-.row > * {
-  padding-left: 0;
-}
 
 .tags {
   background-color: #0d6efd;
   color: white;
   border-radius: 30px;
-  cursor: none;
+  cursor:default !important;
 }
 
+.SellerProfileTag{
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 30px;
+  cursor:default !important;
+  border: none !important;
+  margin-bottom: 20px;
+ margin-right: 15rem;
+}
 .prefernece {
   gap: 3%;
   cursor: none;
 }
 
-.vertical-carousel-wrapper {
+.verticalCarouselWrapper {
   height: 500px;
 }
 
-.vertical-carousel .slick-slide {
+.verticalCarousel .slick-slide {
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-.card-custom {
+.VCcardCustom {
   margin: 0;
   display: flex;
   flex-direction: column;
 }
 
-.card-custom .image-wrapper {
+.VCcardCustom .VCimageWrapper {
   height: 200px;
 }
 
-.card-custom .image-wrapper img {
+.VCcardCustom .VCimageWrapper img {
   height: 100%;
   object-fit: cover;
 }
@@ -156,32 +169,32 @@
   z-index: 1;
 }
 
-.row {
+.SListingRow {
   align-items: flex-start;
   margin-right: 0;
   margin-left: 0;
 }
 
-.row > * {
-  padding-left: 30px;
-}
 
-.justify-content-end {
+.justifyContentEnd {
   justify-content: flex-start !important;
+  
 }
-.side {
+.SLSide {
   margin-left: 20px;
   border: solid 1px #949494;
   margin-top: 20px;
   border-radius: 20px;
   margin-right: 0;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.upper {
-  margin-right: 0;
-}
 
-.side-2 {
+
+.SLside2 {
   margin-left: 20px;
   border: solid 1px #949494;
   margin-top: 5px;
@@ -197,22 +210,22 @@
   margin-left: 40px;
 }
 
-.heading {
+.VCheading {
   text-align: left;
   margin-bottom: 1rem;
 }
-.location-content {
+.SLlocationContent {
   margin-bottom: 1rem;
 }
 
-.rounded-input-container {
+.SLroundedInputContainer {
   position: relative;
   display: flex;
   align-items: center;
   width: 300px;
 }
 
-.rounded-input {
+.SLroundedInput {
   border-radius: 25px;
   pointer-events: none;
   background-color: #ffffff;
@@ -222,12 +235,12 @@
   width: 300px;
 }
 
-.rounded-input:focus {
+.SLroundedInput:focus {
   outline: none;
   box-shadow: none;
 }
 
-.copy-icon {
+.SLcopyIcon {
   position: absolute;
   right: 10px;
   color: grey;
@@ -235,47 +248,48 @@
   z-index: 1;
 }
 
-.copy-icon:hover {
+.SLcopyIcon:hover {
   color: #0d6efd;
 }
 
-.form-control[readonly] {
+.SLformControl[readonly] {
   pointer-events: none;
   background-color: #f8f9fa;
 }
 
-.form-control[readonly]:focus {
+.SLformControl[readonly]:focus {
   box-shadow: none;
   outline: none;
 }
 
-.upper {
+.SLUpper {
   display: flex;
   align-items: center;
   text-align: center;
+  margin-right: 0;
 }
 
-.form-label {
+.SLformLabel {
   margin-left: 2px;
 }
 
-.circle-image {
+.SLcircleImage {
   border-radius: 50%;
   object-fit: cover;
 }
 
-.circle-image-container {
+.SLcircleImageContainer {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.text-center h5 {
+.SLtextCenter h5 {
   margin-top: 10px;
 }
 
-.chat-btn {
+.SLchatBtn {
   width: 120px;
-  height: 40px;
-  border-radius: 15px;
+  height: 35px;
+  border-radius: 30px;
 }

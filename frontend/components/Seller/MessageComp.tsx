@@ -8,14 +8,17 @@ interface NotificationProps {
 
 const Notification: React.FC<NotificationProps> = ({ message, onClose }) => {
   return (
-    <div className={styles.notificationContainer}>
-      <div className={styles.notificationMessage}>
-        {message}
+    <>
+      <div className={styles.overlay}></div>
+      <div className={styles.notificationContainer}>
+        <div className={styles.notificationMessage}>
+          {message}
+        </div>
+        <button className={styles.closeButton} onClick={onClose}>
+          &times;
+        </button>
       </div>
-      <button className={styles.closeButton} onClick={onClose}>
-        &times;
-      </button>
-    </div>
+    </>
   );
 };
 

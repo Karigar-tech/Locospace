@@ -285,3 +285,39 @@ exports.getAllListings = async (req, res) => {
       res.status(500).json({ message: 'Error fetching listings', error });
   }
 };
+
+exports.addSavedListing = async (req, res) => {
+    const { listingId } = req.body;
+    try {
+      const user = await User.findById(req.user._id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+  
+      if (!user.savedListings.includes(listingId)) {
+        user.savedListings.push(listingId);
+        await user.save();
+        res.status(200).json({ message: 'Listing saved' });
+      } else {
+        res.status(400).json({ message: 'Listing already saved' });
+      }
+    } catch (error) {
+      console.error('Error saving listing:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
+ 
+exports.removeSavedListing = async (req, res) => {
+    const { listingId } = req.body;
+    try {
+      const user = await User.findById(req.user._id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+  
+      user.savedListings = user.savedListings.filter(id => id.toString() !== listingId);
+      await user.save();
+      res.status(200).json({ message: 'Listing removed' });
+    } catch (error) {
+      console.error('Error removing listing:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+  

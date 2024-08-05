@@ -11,6 +11,7 @@ export interface User {
     filePath: string;
     url: string;
 };
+ listingID: string []
 }
 
 export interface Preferences {

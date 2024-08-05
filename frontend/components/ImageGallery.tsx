@@ -16,7 +16,7 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
 
     const handleClose = () => setShowModal(false);
 
-    // Handle case where images might be empty
+  
     const thumbnails = images.length > 0 ? images.slice(0, 6) : [];
 
     return (
@@ -26,8 +26,8 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
                     <div className="main-image">
                         <Image
                             src={images[0]} 
-                            width={100}
-                            height={100}
+                            width={90}
+                            height={90}
                             alt="Main" 
                             className="img-fluid" 
                             onClick={() => handleThumbnailClick(0)} 
@@ -54,7 +54,7 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
                     >
                         {images.map((image, index) => (
                             <Carousel.Item key={index}>
-                                <Image className="d-block w-100" src={image} alt={`Slide ${index}`} />
+                                <Image width = {100} height={100} className="d-block w-100" src={image} alt={`Slide ${index}`} />
                             </Carousel.Item>
                         ))}
                     </Carousel>

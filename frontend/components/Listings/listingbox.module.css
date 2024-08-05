@@ -1,0 +1,85 @@
+.listingBox {
+    height: auto;
+    width: 100%;
+    max-width: 300px;
+    border: 10px solid #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    margin: 0 auto;
+  }
+  
+  .listingBox:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24);
+    background-color: #f8fcff;
+    border: 10px solid #f8fcff;
+  }
+  
+  .listingImage {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .icon {
+    color: grey;
+    margin-right: 0.7rem;
+    width: 2rem;
+    height: 2rem;
+    
+  }
+
+  .navIcon{
+    color: grey;
+    margin-right: 0.7rem;
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .infoRow {
+    color: grey;
+    margin:0px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .infoText {
+    color: grey;
+    width:200px;
+    
+  }
+  .listingRow{
+    display: flex;
+    flex-direction: row;
+    gap:20px;
+    margin-top: 1rem;
+  }
+  
+  .listingTitle {
+    font-family: 'Gotham', sans-serif;
+    font-weight: bold;
+    color: #290661;
+   
+  }
+  
+  .listingAddressWrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+
+  .listingAddress {
+    font-size: 1rem;
+    color: grey;
+    margin-left: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .buttonListingView{
+    margin-right: 1rem;
+  }
+  

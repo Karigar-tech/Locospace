@@ -257,10 +257,15 @@
   align-items: center;
  
 }
+.modalContent{
+  width:500px;
+}
 
 .modalBodyFixedHeight {
   height: 480px; 
+
 }
+
 
 .modalOpen {
   overflow: hidden;
@@ -349,58 +354,49 @@
 }
 
 
-
 .selectedOptionsContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px; 
-  margin-top: 10px; /* Space from other content */
+  flex-direction: column;
 }
 
-/* General style for selected options */
+.categorySection {
+  margin-bottom: 5px;
+}
+
+.categoryTitle {
+  margin-bottom: 10px;
+  font-family: "Source Sans 3";
+  font-size:1.6rem;
+  font-weight:500;
+}
+
 .selectedOption {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  padding: 8px 12px; /* Space inside the button */
-  border-radius: 12px; /* Rounded corners */
-  font-size: 14px; /* Font size */
-  cursor: pointer;
-  background-color: #e0e0e0; /* Default background color */
-  border: 1px solid transparent; /* Border color */
-  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions */
+  background-color: #007bff; 
+  color: white;
+  border-radius: 20px; 
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 0.9rem;
 }
 
-/* Differentiating styles for each type of preference */
-.selectedOption.environment {
-  background-color: #d4edda; /* Light green background */
-  border-color: #c3e6cb; /* Green border */
-}
-
-.selectedOption.facilities {
-  background-color: #cce5ff; /* Light blue background */
-  border-color: #b8daff; /* Blue border */
-}
-
-.selectedOption.ageGroup {
-  background-color: #fff3cd; /* Light yellow background */
-  border-color: #ffeeba; /* Yellow border */
-}
-
-/* Style for option text */
 .optionText {
-  margin-left: 5px; /* Space between text and icon */
+  margin-left: 5px;
 }
 
-/* Style for remove option (×) */
 .removeOption {
-  margin-left: 8px; /* Space between text and × */
-  color: #dc3545; /* Red color */
+  margin-left: 10px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 16px; /* Size of × */
 }
 
-/* Hover effect for selected options */
-.selectedOption:hover {
-  background-color: #d3d3d3; /* Slightly darker background on hover */
+.separator {
+  border: none;
+  border-top: 3px solid #A5A5A5; 
+  margin: 10px 0;
+}
+
+.defaultIcon {
+  color: white; 
+  font-size: 1rem; 
 }

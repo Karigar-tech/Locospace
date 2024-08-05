@@ -1,20 +1,25 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import { Preferences } from '@/types';
 import styles from './checkbox.module.css';  
 
 interface CustomCheckboxProps {
     options: string[];
-    IconMap: { [key: string]: JSX.Element };
-    selectedOption: string[];
-    handleOptionSelect: (option: string) => void;
-}
+    IconMap: Record<string, React.ReactElement>;
+    selectedOption: Record<keyof Preferences, string[]>;
+    handleOptionSelect: (option: string, category: keyof Preferences) => void;
+    activeCategory: keyof Preferences;
+  }
+  
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
     options,
     IconMap,
     handleOptionSelect,
     selectedOption,
+    activeCategory, 
 }) => (
+    
     <div className={styles.customCheckbox}>
         {options.map((option) => (
             <Form.Check className= {styles.formCheck}
@@ -28,8 +33,8 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
                         <span className={styles.addSign}>+</span>
                     </div>
                 }
-                checked={selectedOption.includes(option)}
-                onChange={() => handleOptionSelect(option)}
+                checked={selectedOption[activeCategory]?.includes(option) || false}
+                onChange={() => handleOptionSelect(option, activeCategory)}
             />
         ))}
     </div>

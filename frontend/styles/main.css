@@ -559,34 +559,7 @@ textarea {
   border: 1px solid #ccc;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #20096d;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  border-radius: 30px;
-  transition: all 0.4s;
-}
 
-button:hover {
-  background-color: #4891ff;
-  border-radius: 15px;
-}
-
-back-button {
-  padding: 10px 20px;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: all 0.5s;
-}
-
-back-button:hover {
-  background-color: #3f506a;
-  border-radius: 15px;
-}
 
 
 .thread-box {

@@ -39,7 +39,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           )}
         </Col>
         <Col className='thread-username'>
-          <strong>{user_id.username}</strong> <span className="text-muted">· Posted: {new Date(createdAt).toLocaleTimeString()}</span>
+          <strong>{user_id.username}</strong> <span className="text-mute">· Posted: {new Date(createdAt).toLocaleTimeString()}</span>
         </Col>
       </Row>
       <Row className="mt-2">

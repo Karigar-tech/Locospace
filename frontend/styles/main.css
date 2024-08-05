@@ -528,10 +528,15 @@ body {
   object-fit: cover;
   margin-right: 10px;
 }
+.text-mute{
+  margin-top: 3px;
+  font-size: small;
+  color: #444444;
+}
 
 .username-posted {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .username-posted strong {
@@ -596,6 +601,17 @@ body {
   color: #20096d;
 }
 
+.delete-button{
+  margin-right: 1rem;
+  color: #646464;
+  transition: all 0.4s;
+}
+.delete-button:hover{
+  transform: scale(1.05);
+  color: #313131;
+  cursor: pointer;
+}
+
 
 
 textarea {
@@ -629,6 +645,7 @@ textarea {
   border: 1px solid #525ac4;
   border-radius: 20px;
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 .thread-box:hover {
@@ -659,16 +676,16 @@ textarea {
   font-weight: 300;
 }
 .profile-pic {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   object-fit: cover;
   transition: all 0.3s ease; /* Optional: for smooth transition */
 }
 
 .profile-pic:hover {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
 }
 

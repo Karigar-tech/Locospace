@@ -22,6 +22,8 @@ router.get('/specific/:id', listingController.getSpecificListing)
 
 router.get('/alllistings', listingController.getListings); 
 
+router.get('/nearby',listingController.getNearbyListings)
+
 router.get('/', listingController.getListingsByType);
 
 router.get('/listingserach', listingController.getAllListings);

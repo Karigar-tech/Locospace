@@ -318,7 +318,7 @@ const ListingPage = () => {
           </div>
         </div>
         <div className={`rectangle ${styles.rec2}`}>
-          <h2>Environment</h2>
+          <h3>Environment</h3>
           <div className={`${styles.col12} ${styles.prefernece}`}>
             {listing.preferences.environment.map((preference, index) => (
               <Button
@@ -332,7 +332,7 @@ const ListingPage = () => {
           </div>
         </div>
         <div className={`rectangle ${styles.rec2}`}>
-          <h2>Facilities</h2>
+          <h3>Facilities</h3>
           <div className={`${styles.col12} ${styles.prefernece}`}>
             {listing.preferences.facilities.map((preference, index) => (
               <Button
@@ -346,7 +346,7 @@ const ListingPage = () => {
           </div>
         </div>
         <div className={`rectangle ${styles.rec2}`}>
-          <h2>Age Group</h2>
+          <h3>Age Group</h3>
           <div className={`${styles.col12} ${styles.prefernece}`}>
             {listing.preferences.ageGroup.map((preference, index) => (
               <Button
@@ -360,11 +360,11 @@ const ListingPage = () => {
           </div>
         </div>
         <div className={`rectangle ${styles.rec2}`}>
-          <h2>Description</h2>
+          <h3>Description</h3>
           {listing.Description}
         </div>
         <div className={`rectangle ${styles.rec2}`}>
-          <h2>Location</h2>
+          <h3>Location</h3>
           <div className={styles.SLlocationContent}>{listing.location}</div>
           {coordinates && (
             <MapComponent
@@ -375,7 +375,7 @@ const ListingPage = () => {
         </div>
       </div>
       <div className="col-md-4 d-flex flex-column gap-3">
-      <div className={`${styles.SLSide} rectangle p-4 mb-3`}>
+      <div className={`${styles.SLSide} rectangle p-3 mb-3`}>
           <Button className={styles.SellerProfileTag}>Seller Profile</Button>
           <div className={`${styles.SLUpper} d-flex align-items-center mb-3`}>
             <div className={`${styles.SLcircleImageContainer} me-3`}>
@@ -448,7 +448,7 @@ const ListingPage = () => {
           </div>
         </div>
         <div className={`rectangle ${styles.SLside2} p-3 mb-3`}>
-          <VerticalCardCarousel />
+        <VerticalCardCarousel listingId={listing._id.toString()} />
         </div>
       </div>
       

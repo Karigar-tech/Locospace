@@ -320,4 +320,34 @@ exports.removeSavedListing = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
+
+  exports.getNearbyListings = async (req, res) =>{
+
+    try {
+        const { id } = req.query;
+    
+        if (!id) {
+          return res.status(400).json({ error: 'Listing ID is required' });
+        }
+    
+        const listing = await Listing.findById(id).exec();
+    
+        if (!listing) {
+          return res.status(404).json({ error: 'Listing not found' });
+        }
+    
+    
+        const community = listing.community;
+    
+        const listingsInCommunity = await Listing.find({ 
+            community,
+            _id: { $ne: id }  //excluding the specific lisitng 
+          }).exec();
+
+        res.json(listingsInCommunity);
+      } catch (error) {
+        console.error('Error retrieving listings by community:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+  }
   

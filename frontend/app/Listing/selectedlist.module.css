@@ -7,8 +7,9 @@
 .SLimageGallery {
   max-width: 100%;
   border-radius: 3%;
-  border: solid 1px #949494;
+  border: solid 1px #a5a5a5;
   padding: 1%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .SLimageGallery .SLmainImage {
@@ -113,16 +114,29 @@
 }
 
 .rec2 {
+  position: relative;
   padding-bottom: 2rem;
   border-bottom: solid 1px #a5a5a5;
+ 
 }
 
+.rec2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 8px; 
+  box-shadow: 0 2px 4px rgba(156, 155, 155, 0.2);
+  pointer-events: none;
+}
 
 .tags {
   background-color: #0d6efd;
   color: white;
   border-radius: 30px;
   cursor:default !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .SellerProfileTag{
@@ -136,7 +150,7 @@
 }
 .prefernece {
   gap: 3%;
-  cursor: none;
+  cursor: default !important;
 }
 
 .verticalCarouselWrapper {
@@ -153,6 +167,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  padding: 2px;
 }
 
 .VCcardCustom .VCimageWrapper {
@@ -167,6 +182,11 @@
 .slick-prev,
 .slick-next {
   z-index: 1;
+}
+
+.IGContainer{
+  width: 800px !important;
+  height: 400px;
 }
 
 .SListingRow {
@@ -190,6 +210,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
 }
 
 
@@ -211,7 +232,7 @@
 }
 
 .VCheading {
-  text-align: left;
+  text-align: center;
   margin-bottom: 1rem;
 }
 .SLlocationContent {
@@ -223,6 +244,13 @@
   display: flex;
   align-items: center;
   width: 300px;
+}
+
+.VCCarouselImage{
+  object-fit: cover;
+  width: 100%; 
+  height: 380px;
+  border-radius: 10px;
 }
 
 .SLroundedInput {

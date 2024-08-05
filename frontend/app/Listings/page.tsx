@@ -189,7 +189,7 @@ const Page = () => {
                 width={40} 
                 height={40} 
                 alt="Slider" 
-                onClick={toggleFilters} // Open filter popup when clicked
+                onClick={toggleFilters} 
                 style={{ cursor: 'pointer' }} 
               />
             </div>

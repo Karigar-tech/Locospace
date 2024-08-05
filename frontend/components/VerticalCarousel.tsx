@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -12,28 +11,40 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "../app/Listing/selectedlist.module.css";
 import { Listing } from "../types";
+import { useRouter } from 'next/navigation';
 
-const VerticalCardCarousel: React.FC = () => {
+interface VerticalCardCarouselProps {
+  listingId: string;
+}
+
+const VerticalCardCarousel: React.FC<VerticalCardCarouselProps> = ({ listingId }) => {
   const [data, setData] = useState<Listing[]>([]);
+  const router = useRouter(); 
 
   useEffect(() => {
-    const fetchListings = async () => {
+    const fetchNearbyListings = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/listings/alllistings"
-        );
+        const response = await fetch(`http://localhost:5000/api/listings/nearby?id=${listingId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const listings: Listing[] = await response.json();
+        console.log("nearby listings", listings);
         setData(listings);
       } catch (error) {
-        console.error("Error fetching listings:", error);
+        console.error("Error fetching nearby listings:", error);
       }
-    };
+    };    
 
-    fetchListings();
-  }, []);
+    if (listingId) {
+      fetchNearbyListings();
+    }
+  }, [listingId]);
 
   const settings = {
     dots: false,
@@ -55,6 +66,10 @@ const VerticalCardCarousel: React.FC = () => {
     } else {
       return `Rs. ${price.toLocaleString()}`;
     }
+  };
+
+  const handleClick = (id: string) => {
+    router.push(`/Listing?id=${id}`);
   };
 
   return (
@@ -100,7 +115,7 @@ const VerticalCardCarousel: React.FC = () => {
                     <span style={{ marginLeft: "0.5rem" }}>{addressPart}</span>
                   </Col>
                 </Row>
-                <Button variant="primary" href="#">
+                <Button variant="primary"  onClick={() => handleClick(item._id.toString())}>
                   View
                 </Button>
               </Card.Body>

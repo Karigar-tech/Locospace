@@ -45,6 +45,7 @@ exports.getRepliesByThread = async (req, res) => {
 };
 
 exports.updateReply = async (req, res) => {
+    clg("Here")
     try {
         const { id } = req.params;
         const { content } = req.body;
@@ -68,11 +69,21 @@ exports.updateReply = async (req, res) => {
 exports.deleteReply = async (req, res) => {
     try {
         const { id } = req.params;
-        
+        const userId = req.user.id; // Assumes authenticateToken middleware sets req.user
+
         if (!ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid reply ID' });
         }
-        
+
+        const reply = await Reply.findById(id);
+        if (!reply) {
+            return res.status(404).json({ error: 'Reply not found' });
+        }
+
+        if (reply.user_id.toString() !== userId.toString()) {
+            return res.status(403).json({ error: 'Unauthorized to delete this reply' });
+        }
+
         const deletedReply = await Reply.findByIdAndDelete(id);
         res.status(200).json(deletedReply);
     } catch (error) {

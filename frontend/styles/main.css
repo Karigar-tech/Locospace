@@ -504,7 +504,7 @@ body {
 .reply-box {
   padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #ffffff;
   margin-bottom: 10px;
   transition: all 0.4s ease;
@@ -528,10 +528,15 @@ body {
   object-fit: cover;
   margin-right: 10px;
 }
+.text-mute{
+  margin-top: 3px;
+  font-size: small;
+  color: #444444;
+}
 
 .username-posted {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .username-posted strong {
@@ -551,6 +556,64 @@ body {
   color: #3b3b3b;
 }
 
+.reply-button{
+  background-color: #e3e3e3;
+  color: #313131;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 20px;
+  border: #007bff;
+  transition: all 0.4s;
+}
+.reply-button:hover{
+  background-color: #cde0ff;
+  color: #313131;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: 0px #007bff;
+}
+
+.replybox-button{
+  color: #ffffff;
+  background-color: #00088f;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: #007bff;
+  transition: all 0.4s;
+}
+.replybox-button:hover{
+  background-color: #cde0ff;
+  color: #313131;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: 0px #007bff;
+}
+
+.reply-icon{
+  font-size: 1.5rem;
+  padding-right: 0.5rem;
+  color: #20096d;
+}
+
+.delete-button{
+  margin-right: 1rem;
+  color: #646464;
+  transition: all 0.4s;
+}
+.delete-button:hover{
+  transform: scale(1.05);
+  color: #313131;
+  cursor: pointer;
+}
+
+
+
 textarea {
   width: 100%;
   padding: 10px;
@@ -559,7 +622,10 @@ textarea {
   border: 1px solid #ccc;
 }
 
-
+.title-container {
+  display: flex;
+  align-items: center;
+}
 
 
 .thread-box {
@@ -571,6 +637,15 @@ textarea {
   background-color: #ffffff;
   transition: all 0.2s ease;
   padding: 0px;
+}
+.thread-box2 {
+  padding: 10px;
+  max-width: 700px;
+  height: fit-content;
+  border: 1px solid #525ac4;
+  border-radius: 20px;
+  background-color: #ffffff;
+  overflow: hidden;
 }
 
 .thread-box:hover {
@@ -601,16 +676,16 @@ textarea {
   font-weight: 300;
 }
 .profile-pic {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   object-fit: cover;
   transition: all 0.3s ease; /* Optional: for smooth transition */
 }
 
 .profile-pic:hover {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
 }
 

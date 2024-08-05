@@ -8,6 +8,7 @@ const profileController = require('../controllers/profileController');
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
+router.get('/user', authenticateToken , profileController.getUser);
 
 router.get('/', authenticateToken , profileController.getMyProfile);
 

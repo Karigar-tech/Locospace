@@ -63,7 +63,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
       {isThreadOpen && selectedThreadId !== null ? (
         <div className="reply-box-container">
           <div className="header-container">
-            <button className="back-button" onClick={handleBackButtonClick} >
+            <button className="replybox-button" onClick={handleBackButtonClick} >
               Back
             </button>
             <h3 className="box-title">Replies</h3>

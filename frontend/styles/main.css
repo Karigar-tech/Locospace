@@ -504,7 +504,7 @@ body {
 .reply-box {
   padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #ffffff;
   margin-bottom: 10px;
   transition: all 0.4s ease;
@@ -551,6 +551,53 @@ body {
   color: #3b3b3b;
 }
 
+.reply-button{
+  background-color: #e3e3e3;
+  color: #313131;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 20px;
+  border: #007bff;
+  transition: all 0.4s;
+}
+.reply-button:hover{
+  background-color: #cde0ff;
+  color: #313131;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: 0px #007bff;
+}
+
+.replybox-button{
+  color: #ffffff;
+  background-color: #00088f;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: #007bff;
+  transition: all 0.4s;
+}
+.replybox-button:hover{
+  background-color: #cde0ff;
+  color: #313131;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: 0px #007bff;
+}
+
+.reply-icon{
+  font-size: 1.5rem;
+  padding-right: 0.5rem;
+  color: #20096d;
+}
+
+
+
 textarea {
   width: 100%;
   padding: 10px;
@@ -559,7 +606,10 @@ textarea {
   border: 1px solid #ccc;
 }
 
-
+.title-container {
+  display: flex;
+  align-items: center;
+}
 
 
 .thread-box {
@@ -571,6 +621,14 @@ textarea {
   background-color: #ffffff;
   transition: all 0.2s ease;
   padding: 0px;
+}
+.thread-box2 {
+  padding: 10px;
+  max-width: 700px;
+  height: fit-content;
+  border: 1px solid #525ac4;
+  border-radius: 20px;
+  background-color: #ffffff;
 }
 
 .thread-box:hover {

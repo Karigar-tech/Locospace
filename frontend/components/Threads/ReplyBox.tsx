@@ -2,6 +2,9 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import '../../styles/main.css'; // Make sure to use a separate CSS file for replies
 import { User } from '@/types';
 import { Thread } from '@/types';
+import ThreadBox from './ThreadBox';
+import { Container, Row, Col } from 'react-bootstrap'; // Import Bootstrap components
+import { FaReplyd } from "react-icons/fa";
 
 interface Reply {
   _id: number;
@@ -70,8 +73,37 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
 
   return (
     <div className="threads-list">
-      <h2>Replies for {threadId.thread_title} </h2>
-      <h5>{threadId.thread_description}</h5>
+      <Container className="thread-box2 p-4 mb-2" >
+      <Row style ={{flexDirection: 'row', marginTop: '0.1rem' }} >
+        <Col style= {{flex: '0 0px'}}  >
+          {threadId.user_id.profilePicture && threadId.user_id.profilePicture.url ? (
+            <img
+              src={threadId.user_id.profilePicture.url}
+              alt="PFP"
+              className="profile-pic"
+            />
+          ) : (
+            <img
+              src="/osama.jpg" // Replace with the actual path to your placeholder image
+              alt="pfp"
+              className="profile-pic"
+            />
+          )}
+        </Col>
+        <Col className='thread-username'>
+          <strong>{threadId.user_id.username}</strong> <span className="text-muted">· Posted: {new Date(threadId.createdAt).toLocaleTimeString()}</span>
+        </Col>
+      </Row>
+      <Row className="mt-1">
+        <div className="title-container">
+            <FaReplyd size={28} className='reply-icon' />
+            <span className="thread-title">{threadId.thread_title}</span>
+        </div>
+        <p className="thread-description">{threadId.thread_description}</p>
+      </Row>
+
+    </Container>
+      <h5 className='mt-2'>Replies  </h5>
       {replies.length > 0 ? (
         replies.map(reply => (
           <div key={reply._id} className="reply-box">
@@ -108,7 +140,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
           placeholder="Write your reply here..."
           required
         />
-        <button type="submit">Add Reply</button>
+        <button className="reply-button">Add Reply</button>
       </form>
     </div>
   );

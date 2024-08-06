@@ -11,7 +11,8 @@ export interface User {
     filePath: string;
     url: string;
 };
- listingID: string []
+ listingID: string [];
+ savedListings: Listing[];
 }
 
 export interface Preferences {
@@ -38,6 +39,7 @@ export interface Listing {
   community: string;
   preferences: Preferences;
   user: User;
+  
 }
 
 export interface Community{

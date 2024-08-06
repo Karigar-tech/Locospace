@@ -23,7 +23,7 @@ const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, pi
         </Card.Title>
         <Row className = {style.commRow}>
           <Col className={style.commIconText}>
-            <FaUsers className={style.iconStyle} /> {members} Members
+            <FaUsers className={style.iconStyle} /> {members} {members === 1 ? "Member" : "Members"}
           </Col>
           <Col  className={style.commIconText}>
             <FaList className={style.iconStyle} /> {listings} {listings === 1 ? "listing" : "listings"}

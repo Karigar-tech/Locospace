@@ -79,6 +79,8 @@ const SellerForm: React.FC = () => {
         filePath: "",
         url: "",
       },
+      savedListings: [],
+      listingID: [],
     },
   });
   const [showModal, setShowModal] = useState(false);

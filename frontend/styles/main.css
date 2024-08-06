@@ -467,11 +467,54 @@ body {
   margin-bottom: 0;
 }
 
+*::-webkit-scrollbar {
+  width: 1px;
+  height: 100px;
+  /* color: #2d2646; */
+}
 
+*::-webkit-scrollbar-track {
+  /* background: #a0a5ff; */
+  border-radius: 10px;
+  height: 100px;
+}
 
+/* main.css */
+
+.reply-user-image-col {
+  padding: 0;
+  margin-right: 5px;
+}
+
+.reply-user-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reply-count-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--tertiary);
+}
+
+.reply-box-container{
+  max-height: fit-content;
+  
+  overflow-y: auto;
+  margin-bottom: 6px;
+  border-radius: 20px;
+}
 
 .threads-list {
-  max-height: 4;
+  max-height: fit-content;
   padding: 1rem;
   max-width: 100%;
   background-color: #fafafa;
@@ -522,8 +565,8 @@ body {
 }
 
 .profile-pic {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
@@ -533,6 +576,7 @@ body {
   font-size: small;
   color: #444444;
 }
+
 
 .username-posted {
   display: flex;
@@ -640,12 +684,11 @@ textarea {
 }
 .thread-box2 {
   padding: 10px;
-  max-width: 700px;
   height: fit-content;
   border: 1px solid #525ac4;
   border-radius: 20px;
   background-color: #ffffff;
-  overflow: hidden;
+  overflow-x: contain;
 }
 
 .thread-box:hover {
@@ -672,20 +715,22 @@ textarea {
   display: flex;
   align-self: top;
   padding: 0px;
-  margin-top: 0.5rem;
+  padding-left: 0rem;
+  margin-top: 0.6rem;
   font-weight: 300;
+  font-size: large;
 }
 .profile-pic {
-  width: 35px;
-  height: 35px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
   transition: all 0.3s ease; /* Optional: for smooth transition */
 }
 
 .profile-pic:hover {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   cursor: pointer;
 }
 

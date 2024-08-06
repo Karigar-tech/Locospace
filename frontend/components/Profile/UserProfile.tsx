@@ -159,7 +159,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
           show={showModal}
           onHide={() => setShowModal(false)}
           centered
-          className="custom-modal"
+          className="custom-modal "
         >
           <div className="modal-header">
             <BsPeopleFill className="profile-icon" />

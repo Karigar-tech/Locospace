@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -10,30 +9,42 @@ import {
   faBath,
   faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import "../styles/selectedlist.css";
+import styles from "../app/Listing/selectedlist.module.css";
 import { Listing } from "../types";
+import { useRouter } from 'next/navigation';
 
-const VerticalCardCarousel: React.FC = () => {
+interface VerticalCardCarouselProps {
+  listingId: string;
+}
+
+const VerticalCardCarousel: React.FC<VerticalCardCarouselProps> = ({ listingId }) => {
   const [data, setData] = useState<Listing[]>([]);
+  const router = useRouter(); 
 
   useEffect(() => {
-    const fetchListings = async () => {
+    const fetchNearbyListings = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/listings/alllistings"
-        );
+        const response = await fetch(`http://localhost:5000/api/listings/nearby?id=${listingId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const listings: Listing[] = await response.json();
+        console.log("nearby listings", listings);
         setData(listings);
       } catch (error) {
-        console.error("Error fetching listings:", error);
+        console.error("Error fetching nearby listings:", error);
       }
-    };
+    };    
 
-    fetchListings();
-  }, []);
+    if (listingId) {
+      fetchNearbyListings();
+    }
+  }, [listingId]);
 
   const settings = {
     dots: false,
@@ -57,17 +68,21 @@ const VerticalCardCarousel: React.FC = () => {
     }
   };
 
+  const handleClick = (id: string) => {
+    router.push(`/Listing?id=${id}`);
+  };
+
   return (
-    <div className="vertical-carousel-wrapper">
-      <h4 className="heading">Properties Nearby</h4>
-      <Slider {...settings} className="vertical-carousel">
+    <div className={styles.verticalCarouselWrapper}>
+      <h4 className={styles.VCheading}>Properties Nearby</h4>
+      <Slider {...settings} className={styles.verticalCarousel}>
         {data.map((item) => {
           const addressPart =
             item.location?.split(",")[0] || "Address not available";
 
           return (
-            <Card key={item._id} className="d-block card-custom">
-              <div className="image-wrapper">
+            <Card key={item._id} className={`d-block ${styles.VCcardCustom}`}>
+              <div className={styles.VCimageWrapper}>
                 <Card.Img
                   variant="top"
                   src={item.ListingPictures[0] || "placeholder.png"}
@@ -80,7 +95,7 @@ const VerticalCardCarousel: React.FC = () => {
                     <Col>
                       <span>{item.listing_type}</span>
                     </Col>
-                    <Col className="text-right">
+                    <Col>
                       <span>{formatPrice(item.price)}</span>
                     </Col>
                   </Row>
@@ -89,18 +104,18 @@ const VerticalCardCarousel: React.FC = () => {
                   <Col>
                     <FontAwesomeIcon icon={faBed} /> {item.bedroom}
                   </Col>
-                  <Col className="text-right">
+                  <Col>
                     <FontAwesomeIcon icon={faBath} /> {item.bath}
                   </Col>
                 </Row>
                 <hr />
                 <Row className="mb-2">
                   <Col>
-                    <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
+                    <FontAwesomeIcon icon={faMapMarkerAlt}/>
                     <span style={{ marginLeft: "0.5rem" }}>{addressPart}</span>
                   </Col>
                 </Row>
-                <Button variant="primary" href="#">
+                <Button variant="primary"  onClick={() => handleClick(item._id.toString())}>
                   View
                 </Button>
               </Card.Body>

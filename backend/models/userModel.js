@@ -43,6 +43,13 @@ const UserSchema = new mongoose.Schema({
     filePath: { type: String },
     url: { type: String }
   },
+  savedListings: 
+    [ {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Listing',}
+      
+    ]
+  
 });
 
 const User =   mongoose.model('User', UserSchema);

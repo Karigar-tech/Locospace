@@ -45,7 +45,7 @@ exports.getRepliesByThread = async (req, res) => {
 };
 
 exports.updateReply = async (req, res) => {
-    clg("Here")
+    console.log("Here")
     try {
         const { id } = req.params;
         const { content } = req.body;

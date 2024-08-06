@@ -1,18 +1,12 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import '../../styles/main.css'; // Make sure to use a separate CSS file for replies
-import { User, Thread } from '@/types';
+import { User, Thread, Reply } from '@/types';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap'; // Import Bootstrap components
 import { FaReplyd } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 
-interface Reply {
-  _id: string;
-  user_id: User;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 interface ReplyBoxProps {
   threadId: Thread;
@@ -153,6 +147,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
 
   return (
     <div className="threads-list">
+      <h4 className='mx-3'>//thread</h4>
       <Container className="thread-box2 p-4 mb-2">
         <Row style={{ flexDirection: 'row', marginTop: '0.1rem' }}>
           <Col style={{ flex: '0 0px' }}>
@@ -210,7 +205,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
                 </div>
               )}
             </div>
-            <p>{reply.content}</p>
+            <p className='mt-2'>{reply.content}</p>
           </div>
         ))
       ) : (

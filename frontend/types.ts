@@ -59,5 +59,11 @@ export interface Thread {
 }
 
 
-
+export interface Reply {
+  _id: string;
+  user_id: User;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
 

@@ -115,7 +115,7 @@ const Login: React.FC = () => {
             </span>
           </div>
           <div className={styles.forgotPassword}>
-            <Link href="/forgot-password">Forgot password?</Link>
+          <Link href="/forgot-password">Forgot password?</Link>
           </div>
           <button
             className="btn btn-primary"

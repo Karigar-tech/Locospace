@@ -1,15 +1,16 @@
-/* frontend/styles/login.css */
+/* frontend/styles/login.module.css */
 
 /* Background styles */
 .background {
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
   background: url('../images/DetailedLogo.png') no-repeat;
-  background-position: right; /* Move background image to the right */
+  background-position: right;
   margin-left: auto;
-  background-size: auto 150%;
+  background-size: auto 130%; /* Zoom out the image */
 }
 
 .logo {
@@ -20,28 +21,24 @@
 }
 
 .loginBox {
-  z-index: 0;
-  width: 90%;
-  max-width: 35.5rem;
-  height: auto;
-  padding: 40px;
+  width: 80% !important;
+  max-width: 25rem !important;
+  padding: 20px;
+  height: 50 rem !important;
   background: rgba(255, 255, 255, 0.85);
   text-align: center;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  margin: 5.5rem 0 auto; /* Horizontally center the box */
+  margin: 0;
 }
 
-/* Adjusting the top margin for smaller screens */
 @media (max-width: 768px) {
   .loginBox {
     width: 90%;
     padding: 20px;
-    margin-top: 150px; /* Adjust margin for smaller screens */
   }
 }
 
-/* Additional styles */
 .loginHeading {
   margin-bottom: 2rem;
   font-size: 2rem;
@@ -53,15 +50,21 @@
 }
 
 .inputBox input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  width: 80%;
+  max-width: 400px;
+  padding: 8px;
+  font-size: 14px;
   color: #333;
-  border: 1px solid #ccc;
+  border: 1px solid #37bcfa;
   border-radius: 5px;
   outline: none;
   background: #f9f9f9;
   box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.inputBox input:focus {
+  border-color: #0288d1;
 }
 
 .inputBox label {
@@ -69,16 +72,43 @@
   top: -20px;
   left: 10px;
   font-size: 14px;
-  color: #333;
+  color: #575c5e;
   pointer-events: none;
   transition: 0.3s;
 }
 
-.inputBox input:focus ~ label,
-.inputBox input:valid ~ label {
-  top: -30px;
-  font-size: 12px;
-  color: #03a9f4;
+.inputBox {
+  position: relative;
+}
+
+.passwordToggle {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #007bff;
+}
+
+.passwordToggle:hover {
+  color: #0056b3;
+}
+
+.homeButton {
+}
+
+.loadingIndicator {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  gap: 5px;
+}
+
+.spinner-border,
+.spinner-grow {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 button.loginButton {
@@ -98,10 +128,15 @@ button.loginButton:hover {
   background: #0288d1;
 }
 
+.error {
+  color: red;
+  margin: 1rem;
+}
+
 .homeButton {
   position: absolute;
   color: black;
-  font-family: 'Gotham';
+  font-family: 'GothamBook';
   top: 20px;
   left: 100px;
   padding: 10px;
@@ -110,25 +145,25 @@ button.loginButton:hover {
   background-color: #fff;
   border-radius: 5px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .accountPrompt {
   font-size: 14px;
-  color: #333;
+  color: #333333;
   margin-top: 1rem;
 }
 
 .createAccountLink {
-  color: #03a9f4;
-  text-decoration: none;
+  color: #007bff;
+  cursor: pointer;
 }
 
 .createAccountLink:hover {
   text-decoration: underline;
-  color: #0c5070;
+  color: #1b6385;
 }
 
-/* Responsive */
 @media (max-width: 576px) {
   .background {
     background-size: contain;
@@ -138,12 +173,6 @@ button.loginButton:hover {
   .loginBox {
     width: 90%;
     padding: 20px;
-    margin-top: 18rem; /* Adjust margin for smaller screens */
-  }
-
-  button {
-    width: 100%;
-    margin-top: 1rem;
   }
 
   .homeButton {

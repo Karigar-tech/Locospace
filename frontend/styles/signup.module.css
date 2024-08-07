@@ -1,0 +1,188 @@
+/* Background styles */
+.background {
+  display: flex;
+  flex-direction: column; /* Align children vertically */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh;
+  background: url('../images/DetailedLogo.png') no-repeat;
+  background-position: right; /* Move background image to the right */
+  background-size: auto 130%;
+  margin: 0; /* Remove default margin */
+  overflow: hidden;
+}
+
+.error {
+  color: red;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 80px;
+}
+
+.signUpBox {
+  width: 80%; /* Adjust width as needed */
+  max-width: 30rem; /* Match maximum width with login box */
+  padding: 20px; /* Reduced padding to match login box */
+  height: 34rem; /* Ensure minimum height */
+  background: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  margin-top: 10rem !important; /* Remove margin to center vertically */
+  margin-bottom: 10rem !important;
+}
+
+
+
+@media (max-width: 768px) {
+  .signUpBox {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .background {
+    background-size: contain;
+    background-position: center; /* Center background image */
+  }
+
+  .signUpBox {
+    width: 90%;
+    padding: 20px;
+    margin-top: 10rem; /* Adjust margin for smaller screens */
+  }
+}
+
+/* Additional styles */
+.signUpHeading {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column; /* Stack inputs vertically */
+  gap: 1rem; /* Space between input fields */
+}
+
+.inputBox {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.inputBox input {
+  width: 80%; /* Adjust width as needed */
+  max-width: 400px; /* Set a maximum width */
+  padding: 8px; /* Reduced padding */
+  font-size: 14px; /* Smaller font size */
+  color: #333;
+  border: 1px solid #37bcfa; /* Blue border color by default */
+  border-radius: 5px;
+  outline: none;
+  background: #f9f9f9;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.inputBox input:focus {
+  border-color: #0288d1; /* Slightly darker blue on focus */
+}
+
+/* Prevent label color change on input focus */
+.inputBox label {
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  font-size: 14px;
+  color: #575c5e; /* Static color */
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.inputBox {
+  position: relative;
+}
+
+.passwordToggle {
+  position: absolute;
+  top: 50%;
+  right: 45px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #007bff;
+}
+
+.passwordToggle:hover {
+  color: #0056b3;
+}
+
+
+
+.loadingIndicator {
+  position: absolute;
+  bottom: 30px; /* Adjust as needed */
+  right: 30px; /* Adjust as needed */
+  display: flex;
+  gap: 5px; /* Space between the indicators */
+}
+
+
+.spinner-border,
+.spinner-grow {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+
+button.signUpButton {
+  width: 100%;
+  height: 40px;
+  margin-top: 1rem;
+  background: #03a9f4;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button.signUpButton:hover {
+  background: #0288d1;
+}
+
+.homeButton {
+  position: absolute; /* Ensures it's positioned relative to its closest positioned ancestor */
+  top: 20px; /* Adjust vertical position */
+  left: 100px; /* Adjust horizontal position */
+  padding: 10px; /* Space inside the button */
+  font-family: 'GothamBook'; /* Match font family */
+  font-size: 25px; /* Font size */ 
+  background-color: #fff; /* Background color */
+  border-radius: 5px; /* Rounded corners */
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.accountPrompt {
+  font-size: 14px;
+  color: #333;
+  margin-top: 1rem;
+}
+
+.createAccountLink {
+  color: #03a9f4;
+  text-decoration: none;
+}
+
+.createAccountLink:hover {
+  text-decoration: underline;
+  color: #0c5070;
+}

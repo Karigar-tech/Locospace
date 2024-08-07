@@ -1,25 +1,27 @@
-// frontend/app/Login/page.tsx
+// frontend/app/login
 'use client'
-import React, { useContext, useState } from 'react';
-import '../../styles/login.css'; // Adjust the path based on your folder structure
-import Link from 'next/link'; // Import Link from Next.js for client-side navigation
-import useAuth from '../../authStore';
-import {useRouter} from 'next/navigation';
-import Image from 'next/image';
-import { useAuthContext } from '../../context/authContext';
 
-
+import React, { useState } from 'react';
+import styles from '../../styles/login.module.css';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setToken = useAuth(state => state.setToken);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [homeButtonLoading, setHomeButtonLoading] = useState(false);
+  const [createAccountLoading, setCreateAccountLoading] = useState(false);
   const router = useRouter();
-  const {authUser ,setAuthUser} = useAuthContext();
-  
-
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError('');
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
@@ -28,54 +30,127 @@ const Login: React.FC = () => {
         },
         body: JSON.stringify({ email, password }),
       });
+
       if (response.ok) {
-        const { token ,userId} = await response.json();
-        localStorage.setItem('token',token);
-        localStorage.setItem("userID", userId);
-        setToken(token);
-        setAuthUser(token);
-        router.push(authUser ? '/' : '/Login');
+        const { token } = await response.json();
+        localStorage.setItem('token', token);
+
+        // Introduce a delay before redirecting
+        setTimeout(() => {
+          router.push('/');
+        }, 1000); // 500 milliseconds delay (adjust as needed)
+
       } else {
-        console.error('Login failed:', response.statusText);
+        throw new Error('Login failed: ' + response.statusText);
       }
     } catch (error) {
-      console.error('Login error:');
+      console.error('Login error:', error);
+      setError('An error occurred during login. Please try again.');
+    } finally {
+      // Make sure to set loading to false after the delay
+      setTimeout(() => {
+        setLoading(false);
+      }, 500); // Same delay as above
     }
+};
+
+
+  const handleHomeButtonClick = () => {
+    setHomeButtonLoading(true);
+    setTimeout(() => {
+      setHomeButtonLoading(false);
+      router.push('/');
+    }, 2000);
+  };
+
+  const handleCreateAccountClick = () => {
+    setCreateAccountLoading(true);
+    setTimeout(() => {
+      router.push('/Signup');
+    }, 2000);
   };
 
   return (
-    <div className="background">
-      <Link href="/">
-        <div className="homeButton">Locospace</div>
-      </Link>
-      
-      <Link href="/">
-        <Image src="/logo.png" alt="Logo" className="logo" width={80} height={80} />
-      </Link>
-
-      <div className="loginBox">
-        <h2>Sign in</h2> 
-          <form onSubmit={(e) => {
+    <div className={styles.background}>
+      <div className={styles.homeButton} onClick={handleHomeButtonClick}>
+        Locospace
+      </div>
+      {homeButtonLoading && (
+        <div className={styles.loadingIndicator}>
+          <div className="spinner-border spinner-border-sm text-secondary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <div className="spinner-grow spinner-grow-sm text-secondary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+      <img src="Logo.png" alt="Logo" className={styles.logo} />
+      <div className={styles.loginBox}>
+        <h2 className={styles.loginHeading} style={{ color: '#007bff' }}>Sign in</h2>
+        {error && <div className={styles.error}>{error}</div>}
+        <form
+          onSubmit={(e) => {
             e.preventDefault();
             handleLogin();
-          }}>
-            <div className="inputBox">
-              <input type="text" required value={email} onChange={(e) => setEmail(e.target.value)} />
-              <label>Email</label>
+          }}
+        >
+          <div className={styles.inputBox}>
+            <input type="text" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <label>Email</label>
+          </div>
+          <div className={styles.inputBox}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label>Password</label>
+            <span
+              className={styles.passwordToggle}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </span>
+          </div>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            disabled={loading}
+            style={{ width: '100px' }}
+          >
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+              </>
+            ) : (
+              'Login'
+            )}
+          </button>
+          <div className={styles.accountPrompt}>
+            <span>Don't have an account? </span>
+            <div 
+              className={styles.createAccountLink} 
+              onClick={handleCreateAccountClick}
+              style={{ cursor: 'pointer' }}
+            >
+              {createAccountLoading ? (
+                <div className={styles.loadingIndicator}>
+                  <div className="spinner-border spinner-border-sm text-secondary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <div className="spinner-grow spinner-grow-sm text-secondary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                'Create new account'
+              )}
             </div>
-            <div className="inputBox">
-              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-              <label>Password</label>
-            </div>
-            <button className="loginButton">Login</button> 
-            <div className="accountPrompt">
-              <span>Don&apos;t have an account? </span>
-              <Link href="/Signup">
-                <div className="createAccountLink">Create new account</div>
-              </Link>
-            </div>
-          </form>
-        
+          </div>
+        </form>
       </div>
     </div>
   );

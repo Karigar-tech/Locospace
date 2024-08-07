@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-light position-relative" style={{ position: 'relative' }}>
+    <footer className="bg-light position-relative" style={{ position: 'relative'}}>
       <Container className="py-4">
         <Row className="justify-content-center text-center">
           <Col xs={12} md={6}>

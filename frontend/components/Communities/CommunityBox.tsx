@@ -1,33 +1,38 @@
 import React from 'react';
-import "../../styles/main.css";
+import style from './communitybox.module.css'; 
 import { Card, Button, Row, Col } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faList } from '@fortawesome/free-solid-svg-icons';
+import { FaUsers, FaList } from 'react-icons/fa'; 
 
 interface CommunityBoxProps {
-    name: string;
-    members: number;
-    listings: number;
-    picture: string;
-    onClick: () => void;
+  name: string;
+  members: number;
+  listings: number;
+  picture: string;
+  onClick: () => void;
 }
 
 const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, picture, onClick }) => {
   return (
-    <Card className="community-box" onClick={onClick}>
-      <div className="image-wrapper">
-        <Card.Img variant="top" src={picture}alt={`placeholder.png`} />
+    <Card className={style.communityBox} onClick={onClick}>
+      <div className={style.imageWrapper}>
+        <Card.Img variant="top" src={picture} alt="Community" />
       </div>
-      <Card.Body>
-        <Card.Title>
+      <Card.Body className = {style.commCardBody}>
+        <Card.Title className={style.textStyle}>
           {name}
         </Card.Title>
-        <Row className="mb-2">
-          <Col><FontAwesomeIcon icon={faUsers} /> {members} Members</Col>
-          <Col className="text-right"><FontAwesomeIcon icon={faList} /> {listings} Listings</Col>
+        <Row className = {style.commRow}>
+          <Col className={style.commIconText}>
+            <FaUsers className={style.iconStyle} /> {members} {members === 1 ? "Member" : "Members"}
+          </Col>
+          <Col  className={style.commIconText}>
+            <FaList className={style.iconStyle} /> {listings} {listings === 1 ? "listing" : "listings"}
+          </Col>
         </Row>
         <hr />
-        <Button className='explore-button' onClick={onClick}>Explore</Button>
+        <Button className={style.exploreButton} onClick={onClick}>
+          Explore
+        </Button>
       </Card.Body>
     </Card>
   );

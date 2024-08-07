@@ -1,90 +1,109 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../styles/main.css';
-import { IoMdAddCircle } from 'react-icons/io';
+import { IoAdd } from 'react-icons/io5';
 import ThreadBox from './ThreadBox';
-import { User } from '@/types';
-import { Community } from '@/types';
-
-
-interface Thread {
-  _id: string;
-  user_id: User;
-  community_id: Community;
-  thread_description: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-
+import { Thread } from '@/types';
+import AddThread from './AddThread';
+import ReplyBox from './ReplyBox';
 
 interface MainBoxProps {
   threads: Thread[];
+  commID: string;
 }
 
-const MainBox: React.FC<MainBoxProps> = ({ threads }) => {
-  const [newThreadTitle, setNewThreadTitle] = useState('');
+const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) => {
+  const [threads, setThreads] = useState<Thread[]>(initialThreads);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isThreadOpen, setIsThreadOpen] = useState(false);
+  const [selectedThreadId, setSelectedThreadId] = useState<Thread | null>(null);
 
-  
-
-  // useEffect(() => {
-  //   const fetchUsernames = async () => {
-  //     const names: { [key: string]: string } = {};
-  //     for (const thread of threads) {
-  //       const userId = thread;
-  //       const name= fetchUsername(userId);
-  //       console.log("ITS: ", name);
-        
-  //     }
-  //     setUsernameMap(name);
-  //   };
-
-  //   fetchUsernames();
-  // }, [threads]);
-
-  const handleAddThread = () => {
-    if (newThreadTitle.trim() !== '') {
-      // addThread(newThreadTitle, username);
-      setNewThreadTitle('');
+  const openThread = (thread_id: Thread) => {
+    if (thread_id !== null) {
+      setIsThreadOpen(true);
+      setSelectedThreadId(thread_id);
     }
+  };
+
+  const handleAddThread = async (title: string, description: string) => {
+    const threadData = {
+      title,
+      description,
+      community_id: commID,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/threads/createThread', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(threadData),
+      });
+
+      if (response.ok) {
+        const newThread = await response.json();
+        setThreads([...threads, newThread]);
+        setIsModalOpen(false); // Close the modal after adding the thread
+      } else {
+        console.error('Failed to add thread');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleBackButtonClick = () => {
+    setIsThreadOpen(false);
+    setSelectedThreadId(null);
   };
 
   return (
     <div className="threads-container">
-      <h3>General</h3>
-      <div className="threads-list">
-        {threads.length > 0 ? (
-          <div>
-            {threads.map((thread) => (
-              <div key={thread._id} className="thread-item">
-                <ThreadBox
-                  _id={thread._id}
-                  user_id={thread.user_id}
-                  community_id={thread.community_id}
-                  thread_description={thread.thread_description}
-                  createdAt={thread.createdAt}
-                  updatedAt={thread.updatedAt}
-                  
-                />
-                {/* <p>ITS: {thread.community_id}</p> */}
-              </div>
-            ))}
+      {isThreadOpen && selectedThreadId !== null ? (
+        <div className="reply-box-container">
+          <div className="header-container">
+            <button className="replybox-button" onClick={handleBackButtonClick} >
+              Back
+            </button>
+            <h3 className="box-title">Replies</h3>
           </div>
-        ) : (
-          <p>No threads found</p>
-        )}
-      </div>
-      <div className="thread-input-container">
-        <input
-          type="text"
-          className="thread-input"
-          placeholder="Add new thread"
-          value={newThreadTitle}
-          onChange={(e) => setNewThreadTitle(e.target.value)}
-        />
-        <button className="thread-add-button" onClick={handleAddThread}>
-          <IoMdAddCircle size={32} />
-        </button>
-      </div>
+          <ReplyBox threadId={selectedThreadId} />
+        </div>
+      ) : (
+        <>
+          <div className="header-container">
+            <h3 className="box-title">General</h3>
+            <button className="thread-add-button" onClick={() => setIsModalOpen(true)}>
+              <IoAdd size={35} />
+            </button>
+          </div>
+          <AddThread
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onAddThread={handleAddThread}
+          />
+          <div className="threads-list">
+            {threads.length > 0 ? (
+              threads.map(thread => (
+                <div key={thread._id} className="thread-item" onClick={() => openThread(thread)}>
+                  <ThreadBox
+                    _id={thread._id}
+                    user_id={thread.user_id}
+                    community_id={thread.community_id}
+                    thread_description={thread.thread_description}
+                    thread_title={thread.thread_title}
+                    createdAt={thread.createdAt}
+                    updatedAt={thread.updatedAt}
+                  />
+                </div>
+              ))
+            ) : (
+              <p>No threads found</p>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

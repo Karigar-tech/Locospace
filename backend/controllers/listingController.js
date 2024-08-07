@@ -1,5 +1,6 @@
 const Listing = require('../models/listingModel');
 const User = require('../models/userModel');
+const Community = require('../models/communityModel')
 const { bucket } = require('../firebaseAdmin');
 
 
@@ -32,7 +33,7 @@ exports.createListing = async (req, res) => {
       //check for 2 listings
       const existingListingsCount = await Listing.countDocuments({ user_id: userId });
       if (existingListingsCount >= 2) {
-          return res.status(403).json({ error: "You can only create up to 2 listings." });
+          return res.status(403).json({ message: "You can only create up to 2 listings." });
       }
 
       const listingData = {
@@ -47,10 +48,11 @@ exports.createListing = async (req, res) => {
           kitchen: req.body.kitchen,
           area: req.body.area,
           preferences: req.body.preferences,
+          community: req.body.community
       };
 
       if (req.files) {
-          // Upload images to Firebase Storage
+          //uploading images to Firebase Storage
           const uploadPromises = req.files.map(async (file) => {
               const blob = bucket.file(`listings/${Date.now()}_${file.originalname}`);
               const blobStream = blob.createWriteStream({
@@ -79,9 +81,14 @@ exports.createListing = async (req, res) => {
 
       const listing = new Listing(listingData);
       await listing.save();
-      res.status(201).json({ ...listing._doc, listing_id: listing._id });
+      res.status(201).json({
+        message: 'Listing created successfully',
+        listing_id: listing._id,
+        ...listing._doc,
+      });
   } catch (error) {
-      res.status(400).json({ error: error.message });
+        console.error('Error creating listing:', error);
+      res.status(500).json({ message: 'An error occurred while creating the listing.' });
   }
 };
 
@@ -90,6 +97,7 @@ exports.editListing = async (req, res) => {
       const updateData = {
           listing_type: req.body.listing_type,
           price: req.body.price,
+          numberOfStories: req.body.numberOfStories,
           Description: req.body.Description,
           location: req.body.location,
           bedroom: req.body.bedroom,
@@ -100,7 +108,7 @@ exports.editListing = async (req, res) => {
       };
 
       if (req.files) {
-          // Upload images to Firebase Storage
+         
           const uploadPromises = req.files.map(async (file) => {
               const blob = bucket.file(`listings/${Date.now()}_${file.originalname}`);
               const blobStream = blob.createWriteStream({
@@ -144,7 +152,7 @@ exports.deleteListing = async (req, res) => {
           return res.status(404).json({ error: 'Listing not found' });
       }
 
-      // Optionally delete images from Firebase Storage
+    
       if (listing.ListingPictures) {
           const deletePromises = listing.ListingPictures.map(async (url) => {
               const filePath = decodeURIComponent(url.split('/o/')[1].split('?')[0]);
@@ -184,24 +192,23 @@ exports.getListings = async (req, res) => {
 
 exports.getSpecificListing = async (req, res) => {
   try {
-      // Fetch the listing by ID
+     
       const listing = await Listing.findById(req.params.id).exec();
       if (!listing) {
           return res.status(404).json({ error: 'Listing not found' });
       }
 
-      // Fetch the user associated with the listing
+      
       const user = await User.findById(listing.user_id).exec();
       if (!user) {
           return res.status(404).json({ error: 'User not found' });
       }
 
-      // Construct the response with conditional profilePicture
       const response = {
-          ...listing.toObject(), // Include listing data
+          ...listing.toObject(), 
           user: {
-              ...user.toObject(), // Include user data
-              profilePicture: user.profilePicture || null // Set profilePicture to null if it doesn't exist
+              ...user.toObject(), 
+              profilePicture: user.profilePicture || null 
           }
       };
 
@@ -212,69 +219,135 @@ exports.getSpecificListing = async (req, res) => {
 };
 
 exports.getAllListings = async (req, res) => {
-    const { environment, facilities, ageGroup, search, community } = req.query;
-  
-    try {
-      let listings = [];
-  
+  const { environment, facilities, ageGroup, search, community } = req.query;
+  console.log('Listings search:', req.query);
+
+  try {
+      let query = {};
+
+   
       if (community) {
-        //if a community is selected, its listings
-        const communityRegex = new RegExp(community, 'i');
-        const matchingCommunities = await Community.find({ communityName: { $regex: communityRegex } });
-  
-        if (matchingCommunities.length > 0) {
-          const matchingCommunityIds = matchingCommunities.map(comm => comm._id.toString());
-  
-          listings = await Listing.find({ community: { $in: matchingCommunityIds } });
-        }
-      } else {
-        
-        listings = await Listing.find();
+         
+          if (!['DHA-1', 'DHA-2', 'Bahria Phase 1-6', 'Bahria Phase 7-9', 'Gulberg Greens', 'PWD'].includes(community)) {
+              return res.status(400).json({ message: 'Invalid community value' });
+          }
+          query.community = community;
       }
-  
-      
+
+      let listings = await Listing.find(query);
+
+
       if (search) {
-        const searchRegex = new RegExp(search, 'i');
-        listings = listings.filter(listing =>
-          listing.title.match(searchRegex) ||
-          listing.description.match(searchRegex) ||
-          listing.location.match(searchRegex) ||
-          (listing.preferences &&
-            (listing.preferences.environment && listing.preferences.environment.some(env => searchRegex.test(env))) ||
-            (listing.preferences.facilities && listing.preferences.facilities.some(facility => searchRegex.test(facility))) ||
-            (listing.preferences.ageGroup && listing.preferences.ageGroup.some(age => searchRegex.test(age))))
-        );
+          const searchRegex = new RegExp(search, 'i');
+          listings = listings.filter(listing =>
+              searchRegex.test(listing.title) ||
+              searchRegex.test(listing.Description) ||
+              searchRegex.test(listing.location) ||
+              (listing.preferences &&
+                  (listing.preferences.environment && listing.preferences.environment.some(env => searchRegex.test(env))) ||
+                  (listing.preferences.facilities && listing.preferences.facilities.some(facility => searchRegex.test(facility))) ||
+                  (listing.preferences.ageGroup && listing.preferences.ageGroup.some(age => searchRegex.test(age))))
+          );
       }
-  
+
+    
       if (environment) {
-        listings = listings.filter(listing =>
-          listing.preferences &&
-          listing.preferences.environment &&
-          listing.preferences.environment.some(env => environment.split(',').includes(env))
-        );
+          const envArray = environment.split(',');
+          listings = listings.filter(listing =>
+              listing.preferences &&
+              listing.preferences.environment &&
+              listing.preferences.environment.some(env => envArray.includes(env))
+          );
       }
-  
+
+    
       if (facilities) {
-        listings = listings.filter(listing =>
-          listing.preferences &&
-          listing.preferences.facilities &&
-          listing.preferences.facilities.some(facility => facilities.split(',').includes(facility))
-        );
+          const facilitiesArray = facilities.split(',');
+          listings = listings.filter(listing =>
+              listing.preferences &&
+              listing.preferences.facilities &&
+              listing.preferences.facilities.some(facility => facilitiesArray.includes(facility))
+          );
       }
-  
-  
+
       if (ageGroup) {
-        listings = listings.filter(listing =>
-          listing.preferences &&
-          listing.preferences.ageGroup &&
-          listing.preferences.ageGroup.some(age => ageGroup.split(',').includes(age))
-        );
+          const ageGroupArray = ageGroup.split(',');
+          listings = listings.filter(listing =>
+              listing.preferences &&
+              listing.preferences.ageGroup &&
+              listing.preferences.ageGroup.some(age => ageGroupArray.includes(age))
+          );
       }
-  
+
       res.status(200).json(listings);
-    } catch (error) {
+  } catch (error) {
       console.error('Error fetching listings:', error);
       res.status(500).json({ message: 'Error fetching listings', error });
+  }
+};
+
+exports.addSavedListing = async (req, res) => {
+    const { listingId } = req.body;
+    try {
+      const user = await User.findById(req.user._id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+  
+      if (!user.savedListings.includes(listingId)) {
+        user.savedListings.push(listingId);
+        await user.save();
+        res.status(200).json({ message: 'Listing saved' });
+      } else {
+        res.status(400).json({ message: 'Listing already saved' });
+      }
+    } catch (error) {
+      console.error('Error saving listing:', error);
+      res.status(500).json({ message: 'Server error' });
     }
   };
+  
+ 
+exports.removeSavedListing = async (req, res) => {
+    const { listingId } = req.body;
+    try {
+      const user = await User.findById(req.user._id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+  
+      user.savedListings = user.savedListings.filter(id => id.toString() !== listingId);
+      await user.save();
+      res.status(200).json({ message: 'Listing removed' });
+    } catch (error) {
+      console.error('Error removing listing:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  exports.getNearbyListings = async (req, res) =>{
+
+    try {
+        const { id } = req.query;
+    
+        if (!id) {
+          return res.status(400).json({ error: 'Listing ID is required' });
+        }
+    
+        const listing = await Listing.findById(id).exec();
+    
+        if (!listing) {
+          return res.status(404).json({ error: 'Listing not found' });
+        }
+    
+    
+        const community = listing.community;
+    
+        const listingsInCommunity = await Listing.find({ 
+            community,
+            _id: { $ne: id }  //excluding the specific lisitng 
+          }).exec();
+
+        res.json(listingsInCommunity);
+      } catch (error) {
+        console.error('Error retrieving listings by community:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+  }
   

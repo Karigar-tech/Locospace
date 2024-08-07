@@ -1,15 +1,24 @@
-'use client';
-
-import React, { Suspense,useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Listing, User } from '../../types';
+'use client'
+import React, { Suspense, useState, useEffect } from 'react';
+import { Listing, Thread } from '../../types';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
-import "../../styles/main.css";
-import '../../styles/profile.css';
+import style from "./listings.module.css";
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import SearchBar from '@/components/SearchBar';
+import FilterPopup from '@/components/Listings/filterPopup'
+import { Button } from 'react-bootstrap'
+import Notification from '@/components/Seller/MessageComp';
+// Icons
+import { FaBed, FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaChild, FaCheck } from 'react-icons/fa';
+import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
+import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
+import { CgGym } from "react-icons/cg";
+import { GiBurningRoundShot } from "react-icons/gi";
+import { GiPeaceDove } from "react-icons/gi";
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Thread } from '@/types';
@@ -18,11 +27,46 @@ import { useAuthContext } from '@/context/authContext';
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [threads, setThreads] = useState<Thread[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
+  const [commID, setCommID] = useState<string>('');
+  const [selectedEnvironments, setSelectedEnvironments] = useState<string[]>([]);
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  const [selectedAgeGroups, setSelectedAgeGroups] = useState<string[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [isJoined, setIsJoined] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null); 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+ 
+  const environmentIconMap: Record<string, React.ReactElement> = {
+    "Busy": <FaRunning />,
+    "Peaceful": <GiPeaceDove />,
+    "Green": <FaTree />,
+    "Commercial": <FaBuilding />,
+    "Supportive": <FaHandsHelping />,
+    "Safe": <FaShieldAlt />,
+    "Affordable": <FaMoneyBillWave />,
+    "Pet Friendly": <FaPaw />
+  };
+  
+  const facilitiesIconMap: Record<string, React.ReactElement> = {
+    "Gym": <CgGym />,
+    "Swimming Pool": <FaPersonSwimming />,
+    "Parking": <FaParking />,
+    "Security": <MdOutlineSecurity />,
+    "Playground": <GiBurningRoundShot />
+  };
+  
+  const ageGroupIconMap: Record<string, React.ReactElement> = {
+    "Kids": <FaChild />,
+    "Teens": <FaPerson />,
+    "Adults": <MdOutlineHiking />,
+    "Seniors": <MdElderly />
+  };
+
   const [threads, setThreads] = useState<Thread[]>([]);
   const {authUser ,setAuthUser} = useAuthContext();
 
@@ -35,20 +79,30 @@ const Page = () => {
  
   useEffect(() => {
     const searchTerm = searchParams.get('search');
+    const environment = searchParams.get('environment');
+    const facilities = searchParams.get('facilities');
+    const ageGroup = searchParams.get('ageGroup');
+
     if (searchTerm) {
       setSearch(searchTerm);
-      fetchListings(searchTerm);
     }
-  }, [searchParams]); 
 
-  // const addThread = (title: string, username: string) => {
-  //   setThreads(prevThreads => [...prevThreads, {th}]);
-  // };
 
-  const fetchListings = async (searchTerm: string) => {
+    fetchListings(searchTerm, community, environment, facilities, ageGroup);
+  }, [searchParams]);
+
+  const fetchListings = async (searchTerm: string | null, communityParam: string | null, environment: string | null, facilities: string | null, ageGroup: string | null) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/alllistings?search=${searchTerm}`, {
+      const query = new URLSearchParams({
+        search: searchTerm || '',
+        community: communityParam || '',
+        environment: environment || '',
+        facilities: facilities || '',
+        ageGroup: ageGroup || ''
+      }).toString();
+
+      const response = await fetch(`http://localhost:5000/api/listings/listingserach?${query}`,  {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -63,12 +117,39 @@ const Page = () => {
     }
   };
 
+  const UserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/api/profile/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        return userData;
+      
+      } else {
+        console.log("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
     const token = localStorage.getItem('token');
-    
+  
     if (storedCommunity && token) {
-      setCommunity(storedCommunity);
       const fetchCommunityDetails = async () => {
         try {
           const response = await fetch(`http://localhost:5000/api/community/${storedCommunity}`, {
@@ -77,12 +158,20 @@ const Page = () => {
             },
           });
           const data = await response.json();
-          console.log(data);
-          if (data.detailedListings) {
-            setListings(data.detailedListings);
+          setCommID(data.communityID);
+          setCommunity(storedCommunity);
+          setListings(data.detailedListings);
+
+          const userComm = await UserData();
+        
+          console.log('user com id', userComm.user.community )
+          console.log('commID', data.communityID)
+          if (userComm && userComm.user.community === data.communityID) {
+            setIsJoined(true);
+            localStorage.setItem('joinedCommunity', 'true');
           } else {
-            console.error('No listings found for this community');
-            setListings([]);
+            setIsJoined(false);
+            localStorage.removeItem('joinedCommunity');
           }
         } catch (error) {
           console.error('Error fetching community details:', error);
@@ -91,17 +180,16 @@ const Page = () => {
       fetchCommunityDetails();
     }
   }, []);
+  
 
   useEffect(() => {
-    console.log('here');
     const getThreads = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/threads/allThreads'); // Replace
+        const response = await fetch('http://localhost:5000/api/threads/allThreads');
         const data = await response.json();
-        console.log(response, "Hello", data);
         setThreads(data);
       } catch (error) {
-        console.log("Error fetching threads: ", error);
+        console.log('Error fetching threads:', error);
       }
     };
     getThreads();
@@ -113,63 +201,150 @@ const Page = () => {
 
   const handleSearch = (searchTerm: string) => {
     setSearch(searchTerm);
-    fetchListings(searchTerm);
+    fetchListings(searchTerm, community, null, null, null);
     router.push(`?search=${searchTerm}`);
   };
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+  };
+
+  const handleApplyFilters = (filters: {
+    community: string;
+    environments: string[];
+    facilities: string[];
+    ageGroups: string[];
+  }) => {
+    setSelectedEnvironments(filters.environments);
+    setSelectedFacilities(filters.facilities);
+    setSelectedAgeGroups(filters.ageGroups);
+    fetchListings(search, community, filters.environments.join(','), filters.facilities.join(','), filters.ageGroups.join(','));
+  };
+
+  const handleJoin = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch('http://localhost:5000/api/community/join-community', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ commID }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Error joining community');
+      }
+      
+      if (data.user.community === commID) {
+        setIsJoined(true);
+        localStorage.setItem('joinedCommunity', 'true');
+      } else {
+        setIsJoined(false);
+        localStorage.removeItem('joinedCommunity');
+      }
+  
+      setNotification(data.message);
+      setTimeout(() => setNotification(null), 3000);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      setNotification(errorMessage);
+      setTimeout(() => setNotification(null), 3000);
+    }
+  };
+  
 
   return (
     <div>
       <NavBar />
-      <div className="gradient-bar-container">
-        <div className="gradient-bar"></div>
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
+        />
+      )}
+      <div className={style.gradientBarContainer}>
+        <div className={style.gradientBar}></div>
         <ToggleButton view={view} setView={setView} />
       </div>
+      <div className = {style.JoinCommButton}>
+      <Button
+            className={style.JoinButtonComm}
+            onClick={handleJoin}
+            disabled={isJoined} 
+          >
+            {isJoined ? (
+              <>
+                <FaCheck style={{ color: 'white', marginRight: '8px' }} /> Community Joined
+              </>
+            ) : (
+              'Join Community'
+            )}
+          </Button>
+      </div>
+     
       {view === 'listings' && (
-        <div className="upper-container" style={{ width: '90%' }}>
-          {/* <div className="row">
-            
-              <SearchBar onSearch={handleSearch} />
-
-          </div> */}
-          <div className="row-listings">
+        <div className={style.upperContainer} style={{ width: '90%' }}>
+          <SearchBar onSearch={handleSearch} />
+          <div className={style.rowListings}>
             <div className="col">
-              <h4 className="ml-15 mt-36" style={{ fontFamily: 'Source Sans Pro' }}>
-                Listings for {community ? community : 'All'}
+              <h4 className="ml-15 mt-36">
+                Listings in {community ? community : 'Community'}
               </h4>
               <p style={{ color: 'grey', fontFamily: 'Source Sans Pro' }}>
-                {listings.length} properties
+              {listings?.length || 0} {listings?.length === 1 ? "property" : "properties"}
               </p>
             </div>
-          
+            
             <div className="col">
-              <Image src='/Slider.svg' width={40} height={40} alt="Slider" />
+            <Image 
+                src='/Slider.svg' 
+                width={40} 
+                height={40} 
+                alt="Slider" 
+                onClick={toggleFilters} 
+                style={{ cursor: 'pointer' }} 
+              />
             </div>
           </div>
         </div>
       )}
-      
+   
       {view === 'listings' ? (
-        <div className="listings-grid">
-          {listings.length > 0 ? (
-            listings.map((listing) => (
-              <ListingBox key={listing._id} item={listing} />
-            ))
-          ) : (
-            <p>No listings found</p>
-          )}
+        <div className={style.scrollableContainer}>
+          <div className={style.listingsGrid}>
+            {(listings?.length ?? 0) > 0 ? (
+              listings.map((listing) => (
+                <ListingBox key={listing._id} item={listing} />
+              ))
+            ) : (
+              <p>No listings found</p>
+            )}
+          </div>
         </div>
       ) : (
-        <MainBox threads= {threads} />
+        <MainBox threads={threads} commID={commID} /> 
       )}
+      <FilterPopup
+        showFilters={showFilters}
+        toggleFilters={toggleFilters}
+        community={community || ''}
+        environmentIconMap={environmentIconMap}
+        facilitiesIconMap={facilitiesIconMap}
+        ageGroupIconMap={ageGroupIconMap}
+        onApplyFilters={handleApplyFilters}
+      />
     </div>
   );
 };
 
 const ListingsPage = () => (
   <Suspense fallback={<div>Loading...</div>}>
-    <Page/>
+    <Page />
   </Suspense>
 );
-
 
 export default ListingsPage;

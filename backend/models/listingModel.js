@@ -43,6 +43,9 @@ const ListingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numberOfStories:{
+        type: Number
+    },
     preferences: {
         environment: {
             type: [String],
@@ -56,6 +59,11 @@ const ListingSchema = new mongoose.Schema({
             type: [String],
             enum: ['Kids', 'Teens', 'Adults', 'Seniors']
         }
+    },
+    community: {
+        type: String,
+        enum: ['DHA-1', 'DHA-2', 'Bahria Phase 1-6', 'Bahria Phase 7-9', 'Gulberg Greens', 'PWD'],
+        required: true 
     }
    
 });

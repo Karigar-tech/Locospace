@@ -1,5 +1,6 @@
 const Community = require('../models/communityModel')
 const Listing = require('../models/listingModel');
+const User = require('../models/userModel');
 
 const { bucket } = require('../firebaseAdmin');
 
@@ -69,7 +70,7 @@ exports.createCommunity = async (req, res) => {
    
       const communitiesWithDetailedListings = await Promise.all(
         communities.map(async community => {
-          const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
+          const detailedListings = await Listing.find({ community: community.communityName });
           return {
             ...community.toObject(),
             detailedListings
@@ -97,9 +98,10 @@ exports.createCommunity = async (req, res) => {
       }
   
     
-      const detailedListings = await Listing.find({ _id: { $in: community.communityListings } });
-  
+      const detailedListings = await Listing.find({ community: communityName });
+
       const responseData = {
+        communityID: community._id,
         communityName: community.communityName,
         communityPicture: community.communityPicture,
         communityMembers: community.communityMembers,
@@ -129,5 +131,64 @@ exports.createCommunity = async (req, res) => {
     }
   };
   
+
+  //join a community, can join only one. after 3 hours can join anotherr
+  exports.joinCommunity = async (req, res) => {
+    const userId = req.user.id; 
+    const { commID } = req.body;
+    
+    try {
+      console.log(commID)
+      const user = await User.findById(userId).exec();
+      const newCommunity = await Community.findById(commID).exec();
   
+      if (!newCommunity) {
+        return res.status(404).json({ error: 'Community not found' });
+      }
+
+      //if already part of that community
+      if (user.community && user.community.toString() === commID) {
+        return res.status(400).json({ message: 'You are already a member of this community' });
+      }
+  
+      if (user.community) {
+        //decrease member count in the previous comm
+        const oldCommunity = await Community.findById(user.community).exec();
+        if (oldCommunity) {
+          oldCommunity.communityMembers = Math.max(0, oldCommunity.communityMembers - 1);
+          await oldCommunity.save();
+        }
+        //three hour check
+        const lastJoinDate = user.lastCommunityJoinDate;
+        const now = new Date();
+        const threeHours = 3 * 60 * 60 * 1000;
+  
+        if (now - new Date(lastJoinDate) < threeHours) {
+         
+          const timeLeft = threeHours - (now - new Date(lastJoinDate));
+          const hoursLeft = Math.floor(timeLeft / (60 * 60 * 1000));
+          const minutesLeft = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+          const secondsLeft = Math.floor((timeLeft % (60 * 1000)) / 1000);
+      
+          const timeLeftMessage = `Please wait ${hoursLeft} hours, ${minutesLeft} minutes, and ${secondsLeft} seconds before leaving your currenr community and joining another.`;
+      
+          return res.status(400).json({ message: timeLeftMessage });
+        }
+      }
+  
+      //increase member count in the new comm
+      newCommunity.communityMembers = (newCommunity.communityMembers || 0) + 1;
+      await newCommunity.save();
+  
+      //update
+      user.community = commID;
+      user.lastCommunityJoinDate = new Date();
+      await user.save();
+  
+      res.status(200).json({ message: 'Successfully joined the community', user });
+    } catch (error) {
+      console.error('Error joining community:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
   

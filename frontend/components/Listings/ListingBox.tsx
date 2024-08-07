@@ -1,10 +1,9 @@
 import React from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { FaBed, FaBath, FaMapMarkerAlt } from 'react-icons/fa'; 
 import { Listing } from '../../types';
 import { useRouter } from 'next/navigation';
-import '../../styles/main.css';
+import styles from './listingbox.module.css'; // Import CSS module
 
 interface ListingBoxProps {
   item: Listing;
@@ -28,32 +27,52 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
     router.push(`/Listing?id=${item._id}`);
   };
 
+  const formatBedroomText = (bedroom: number) => bedroom === 1 ? 'Bedroom' : 'Bedrooms';
+  const formatBathText = (bath: number) => bath === 1 ? 'Bath' : 'Baths';
+
+
+  const getFormattedAddress = (address: string) => {
+    const parts = address.split(',').filter(part => part.trim() !== '');
+    if (parts.length > 0) {
+      return parts[0].trim();
+    }
+    return address;
+  };
+
   return (
-    <Card className="listing-box">
+    <Card className={styles.listingBox}>
       <Card.Img 
         variant="top" 
         src={item.ListingPictures[0] || 'placeholder.png'} 
         alt={`Image of ${item.listing_type}`} 
-        className="listing-image" 
+        className={styles.listingImage} 
       />
       <Card.Body>
-        <Card.Title className="d-flex justify-content-between mb-2">
-          <span>{item.listing_type}</span>
+        <Card.Title className={`${styles.listingTitle} d-flex justify-content-between mb-2`}>
+          <span>{item.listing_type === 'sell' ? 'For Sale' : 'For Rent'}</span>
           <span>{formatPrice(item.price)}</span>
         </Card.Title>
-        
-        <Col className="d-flex justify-content-between mb-2">
-          <Row><FontAwesomeIcon icon={faBed} /> {item.bedroom} Beds</Row>
-          <Row className="text-right"><FontAwesomeIcon icon={faBath} /> {item.bath} Baths</Row>
-        </Col>
-        <hr />
-        <Row className="mb-1">
-          <Col>
-            <FontAwesomeIcon icon={faMapMarkerAlt} className="icon" />
-            <span style={{ marginLeft: '0.25rem' }} className='listing-address'>{item.location}</span>
+
+        <Col className={`${styles.listingRow} mb-2`}>
+          <Col xs={6} className="d-flex align-items-center">
+            <FaBed className={styles.icon} />
+            <span className={styles.infoText}>{item.bedroom} {formatBedroomText(item.bedroom)}</span>
           </Col>
-        </Row>
-        <Button onClick={handleClick} variant="primary">View</Button>
+          <Col xs={6} className="d-flex align-items-center">
+            <FaBath className={styles.icon} />
+            <span className={styles.infoText}>{item.bath} {formatBathText(item.bath)}</span>
+          </Col>
+        </Col>
+        <hr></hr>
+        <Col className={`${styles.listingRow} mb-2`}>
+          <Col xs={6} className="d-flex align-items-center">
+            <FaMapMarkerAlt className={styles.navIcon} />
+            <span className={styles.infoText}>{getFormattedAddress(item.location)}</span>
+          </Col>
+          <Col xs={6} className="d-flex align-items-center justify-content-end">
+            <Button onClick={handleClick} variant="primary" className={styles.buttonListingView}>View</Button>
+          </Col>
+        </Col>
       </Card.Body>
     </Card>
   );

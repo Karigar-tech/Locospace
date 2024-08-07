@@ -38,6 +38,22 @@ exports.getMyProfile = async (req, res) => {
         return res.status(500).json({ error: 'Failed to get user' });
     }
 }
+exports.getUser = async (req, res) => {
+    console.log("MILJA")
+    const id = req.user.id;
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json('User not found!');
+        }
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('Error: Not able to get user', error);
+        return res.status(500).json({ error: 'Failed to get user' });
+    }
+}
+
+
 
 exports.editProfile = async (req, res) => {
     const id = req.user.id;

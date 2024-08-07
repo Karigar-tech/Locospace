@@ -1,16 +1,22 @@
 const Thread = require('../models/threadModel'); 
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 
 
 exports.createThread = async (req, res) => {
+    
+    const id= req.user.id
+    
     try {
-        const { user_id, community_id, thread_title, thread_description } = req.body; 
+        const { title, description, community_id } = req.body; 
+        
         const thread = new Thread({
-            user_id,
+            user_id: id,
             community_id,
-            thread_title,
-            thread_description,
+            thread_title: title,
+            thread_description: description,
         });
-
+        console.log("Thread added:", thread)
         await thread.save();
         res.status(201).json(thread);
     } catch (error) {
@@ -23,6 +29,23 @@ exports.getAllThreads = async (req, res) => {
     try {
         const threads = await Thread.find().populate('user_id').populate('community_id');
         console.log(threads);
+        res.status(200).json(threads);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getUserThreads = async (req, res) => {
+    const id= req.user.id;
+    console.log("USER ID:", id);
+    
+    try {
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid user ID' });
+        }
+        const threads = await Thread.find({ user_id: new ObjectId(id) }).populate('user_id', 'username profilePicture');;
+        console.log("They aree::",threads);
         res.status(200).json(threads);
     } catch (error) {
         res.status(500).json({ message: error.message });

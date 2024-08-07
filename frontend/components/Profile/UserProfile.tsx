@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import "../../styles/profile.css"; // Adjust path based on your folder structure
-import useAuthStore from "../../authStore";
 import {
   BsPencilSquare,
   BsPersonFill,
   BsPeopleFill,
   BsCamera,
 } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
+
 import { Listing, User } from "../../types";
 
 interface UserProfileProps {
@@ -156,21 +157,20 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
         </div>
 
         <Modal
+          contentClassName="custom-modal"
           show={showModal}
           onHide={() => setShowModal(false)}
           centered
-          className="custom-modal"
+          className="custom-modal "
         >
           <div className="modal-header">
             <BsPeopleFill className="profile-icon" />
             <Modal.Title>Edit Profile</Modal.Title>
-            <button className="close" onClick={() => setShowModal(false)}>
-              &times;
-            </button>
+            <IoClose className="close" size={24} onClick={() => setShowModal(false)} />
           </div>
           <Modal.Body className="modal-body">
-            <Row className="px-3">
-              <Col xs={6} className="mb-3 mr-4">
+            <Row>
+              <Col xs={12} md={4} className="text-center">
                 <div
                   style={{ width: "100%", height: "100%" }}
                   className="profile-picture"
@@ -183,7 +183,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                       <img
                         src={profilePictureBase64}
                         alt="Profile"
-                        className="profile-img"
+                        className="profile-img-modal"
                       />
                       <div className="profile-picture-overlay">
                         <BsCamera className="camera-icon" />
@@ -201,44 +201,44 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                   />
                 </div>
               </Col>
-              <Col xs={6} className="mb-3 mr-4">
-                <Form.Group controlId="formNameModal">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    style={{ borderRadius: "8px" }}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formEmailModal">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ border: "1px solid #ced4da", padding: "8px" }}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formContactModal">
-                  <Form.Label>Contact</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={contact}
-                    onChange={(e) => setContact(e.target.value)}
-                    style={{ borderRadius: "8px" }}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formPasswordModal">
-                  <Form.Label>New Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    placeholder="Add your new password here"
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={{ borderRadius: "8px" }}
-                  />
-                </Form.Group>
+              <Col xs={12} md={8}>
+                <Form>
+                  <Form.Group className="input-field">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="input-field">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="input-field">
+                    <Form.Label>Contact</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={contact}
+                      onChange={(e) => setContact(e.target.value)}
+                      style={{ borderRadius: "8px" }}
+                    />
+                  </Form.Group>
+                  <Form.Group className="input-field">
+                    <Form.Label>New Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      value={password}
+                      placeholder="Add your new password here"
+                      onChange={(e) => setPassword(e.target.value)}
+                      style={{ borderRadius: "8px" }}
+                    />
+                  </Form.Group>
+                </Form>
               </Col>
             </Row>
           </Modal.Body>

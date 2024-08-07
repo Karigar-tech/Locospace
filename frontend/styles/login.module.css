@@ -24,7 +24,7 @@
   width: 80% !important;
   max-width: 25rem !important;
   padding: 20px;
-  height: 50 rem !important;
+  height: 55 rem !important;
   background: rgba(255, 255, 255, 0.85);
   text-align: center;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
@@ -92,6 +92,21 @@
 
 .passwordToggle:hover {
   color: #0056b3;
+}
+
+.forgotPassword {
+  margin-bottom: 1rem ; /* Move it upward from the bottom of the parent container */
+  font-size: 0.8rem; /* Reduce the font size */
+}
+
+.forgotPassword a {
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline */
+}
+
+.forgotPassword a:hover {
+  text-decoration: underline; /* Add underline on hover */
+  
 }
 
 .homeButton {

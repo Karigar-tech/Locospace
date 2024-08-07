@@ -19,7 +19,7 @@ const Login: React.FC = () => {
   const [createAccountLoading, setCreateAccountLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = async () => { 
     setLoading(true);
     setError('');
     try {
@@ -113,6 +113,9 @@ const Login: React.FC = () => {
             >
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </span>
+          </div>
+          <div className={styles.forgotPassword}>
+            <Link href="/forgot-password">Forgot password?</Link>
           </div>
           <button
             className="btn btn-primary"

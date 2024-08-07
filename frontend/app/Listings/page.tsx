@@ -21,13 +21,11 @@ import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Thread } from '@/types';
 import { useAuthContext } from '@/context/authContext';
 
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [threads, setThreads] = useState<Thread[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);

@@ -7,13 +7,21 @@ import { Button } from "react-bootstrap";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Community } from "../../types";
 import { Suspense } from "react";
+import { useAuthContext } from '../../context/authContext';
+
 
 const CommunitiesPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const {authUser ,setAuthUser} = useAuthContext();
   const [communities, setCommunities] = useState<Community[]>([]);
   const [search, setSearch] = useState<string>("");
+
+  useEffect(() => {
+    if (!authUser) {
+      router.push('/Login'); // Redirect to login page if not authenticated
+    }
+  }, [authUser, router]);
 
   const fetchCommunities = async (searchTerm: string) => {
     try {
@@ -21,9 +29,8 @@ const CommunitiesPage = () => {
         ? `search=${encodeURIComponent(searchTerm)}`
         : "";
       console.log("Search Query String:", searchQueryString);
-
       const token = localStorage.getItem("token");
-
+      setAuthUser(token);
       const response = await fetch(
         `http://localhost:5000/api/community/?${searchQueryString}`,
         {
@@ -108,7 +115,7 @@ const CommunitiesPage = () => {
 const SuspenseWrapper = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CommunitiesPage />
+      <CommunitiesPage/>
     </Suspense>
   );
 };

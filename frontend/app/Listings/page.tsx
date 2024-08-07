@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Thread } from '@/types';
+import { useAuthContext } from '@/context/authContext';
 
 
 const Page = () => {
@@ -22,9 +23,15 @@ const Page = () => {
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
-  const [threads, setThreads] = useState<Thread[]>([
-    
-  ]);
+  const [threads, setThreads] = useState<Thread[]>([]);
+  const {authUser ,setAuthUser} = useAuthContext();
+
+  useEffect(() => {
+    setAuthUser(localStorage.getItem('token'));
+    if (!authUser) {
+      router.push('/Login'); // Redirect to login page if not authenticated
+    }
+  }, [authUser, router]);
  
   useEffect(() => {
     const searchTerm = searchParams.get('search');

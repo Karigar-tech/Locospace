@@ -17,10 +17,10 @@ const LandingPage: React.FC = () => {
 
   return (
     <div>
-      {token ? <NavBar /> : <CustomNavBar />}
-      <LandingPageComp />
-      <CardCarouselComp />
-      <Footer />
+        {token ? <NavBar /> : <CustomNavBar />}
+        <LandingPageComp />
+        <CardCarouselComp />
+        <Footer />
     </div>
   );
 };

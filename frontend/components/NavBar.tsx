@@ -13,9 +13,7 @@ const NavBar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     logout();
-    console.log("Logged out. Redirecting to home...");
     router.replace("/");
-    // window.location.href = '/';
   };
 
   return (

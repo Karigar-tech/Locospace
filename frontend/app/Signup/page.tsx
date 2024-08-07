@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import '../../styles/signup.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuthContext } from '@/context/authContext';
 
 
 const Signup: React.FC = () => {
@@ -14,10 +15,10 @@ const Signup: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
   const [contact, setContact] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { setAuthUser } = useAuthContext();
 
   const handleSignup = async () => {
     

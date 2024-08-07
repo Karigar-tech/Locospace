@@ -10,14 +10,12 @@ const ImageGallery: React.FC<{ images: string[] }> = ({ images }) => {
     const [carouselIndex, setCarouselIndex] = useState(0);
 
     const handleThumbnailClick = (index: number) => {
-        // Adjust index for the main image and thumbnails
         setCarouselIndex(index);
         setShowModal(true);
     };
 
     const handleClose = () => setShowModal(false);
 
-    // Adjust thumbnails to start from the second image
     const thumbnails = images.length > 1 ? images.slice(1, 7) : [];
 
     return (

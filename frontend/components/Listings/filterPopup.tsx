@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap'; // Assuming you're using react-bootstrap
+import { Button, Form } from 'react-bootstrap'; 
 
 interface FilterPopupProps {
   showFilters: boolean;

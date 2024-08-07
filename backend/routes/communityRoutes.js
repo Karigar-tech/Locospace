@@ -4,7 +4,6 @@ const multer = require('multer');
 const communtiyController = require('../controllers/communityController');
 const authenticateToken = require('../middlewares/tokenauthentication');
 
-// Set up multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -16,5 +15,7 @@ router.get('/:name', authenticateToken, communtiyController.getCommunityDetails)
 
 router.get('/commID/:community_id', authenticateToken, communtiyController.getName);
 //case senstivity check 
+
+router.post('/join-community', authenticateToken, communtiyController.joinCommunity);
 
 module.exports = router;

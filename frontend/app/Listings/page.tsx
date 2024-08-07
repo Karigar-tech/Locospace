@@ -10,8 +10,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import SearchBar from '@/components/SearchBar';
 import FilterPopup from '@/components/Listings/filterPopup'
+import { Button } from 'react-bootstrap'
+import Notification from '@/components/Seller/MessageComp';
 // Icons
-import { FaBed, FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaChild } from 'react-icons/fa';
+import { FaBed, FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaChild, FaCheck } from 'react-icons/fa';
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
 import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
@@ -28,9 +30,12 @@ const Page = () => {
   const [selectedEnvironments, setSelectedEnvironments] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
   const [selectedAgeGroups, setSelectedAgeGroups] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(false); // State to manage filter popup visibility
+  const [showFilters, setShowFilters] = useState(false);
+  const [isJoined, setIsJoined] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null); 
   const router = useRouter();
   const searchParams = useSearchParams();
+ 
   const environmentIconMap: Record<string, React.ReactElement> = {
     "Busy": <FaRunning />,
     "Peaceful": <GiPeaceDove />,
@@ -97,11 +102,38 @@ const Page = () => {
     }
   };
 
+  const UserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/api/profile/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        return userData;
+      
+      } else {
+        console.log("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     const storedCommunity = localStorage.getItem('selectedCommunity');
     const token = localStorage.getItem('token');
-
+  
     if (storedCommunity && token) {
       const fetchCommunityDetails = async () => {
         try {
@@ -114,6 +146,18 @@ const Page = () => {
           setCommID(data.communityID);
           setCommunity(storedCommunity);
           setListings(data.detailedListings);
+
+          const userComm = await UserData();
+        
+          console.log('user com id', userComm.user.community )
+          console.log('commID', data.communityID)
+          if (userComm && userComm.user.community === data.communityID) {
+            setIsJoined(true);
+            localStorage.setItem('joinedCommunity', 'true');
+          } else {
+            setIsJoined(false);
+            localStorage.removeItem('joinedCommunity');
+          }
         } catch (error) {
           console.error('Error fetching community details:', error);
         }
@@ -121,6 +165,7 @@ const Page = () => {
       fetchCommunityDetails();
     }
   }, []);
+  
 
   useEffect(() => {
     const getThreads = async () => {
@@ -161,15 +206,71 @@ const Page = () => {
     fetchListings(search, community, filters.environments.join(','), filters.facilities.join(','), filters.ageGroups.join(','));
   };
 
+  const handleJoin = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch('http://localhost:5000/api/community/join-community', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ commID }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Error joining community');
+      }
+      
+      if (data.user.community === commID) {
+        setIsJoined(true);
+        localStorage.setItem('joinedCommunity', 'true');
+      } else {
+        setIsJoined(false);
+        localStorage.removeItem('joinedCommunity');
+      }
+  
+      setNotification(data.message);
+      setTimeout(() => setNotification(null), 3000);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      setNotification(errorMessage);
+      setTimeout(() => setNotification(null), 3000);
+    }
+  };
+  
 
   return (
     <div>
       <NavBar />
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <div className={style.gradientBarContainer}>
         <div className={style.gradientBar}></div>
         <ToggleButton view={view} setView={setView} />
       </div>
-      
+      <div className = {style.JoinCommButton}>
+      <Button
+            className={style.JoinButtonComm}
+            onClick={handleJoin}
+            disabled={isJoined} 
+          >
+            {isJoined ? (
+              <>
+                <FaCheck style={{ color: 'white', marginRight: '8px' }} /> Community Joined
+              </>
+            ) : (
+              'Join Community'
+            )}
+          </Button>
+      </div>
+     
       {view === 'listings' && (
         <div className={style.upperContainer} style={{ width: '90%' }}>
           <SearchBar onSearch={handleSearch} />
@@ -196,6 +297,7 @@ const Page = () => {
           </div>
         </div>
       )}
+   
       {view === 'listings' ? (
         <div className={style.scrollableContainer}>
           <div className={style.listingsGrid}>

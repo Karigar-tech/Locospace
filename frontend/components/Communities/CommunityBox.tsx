@@ -1,7 +1,7 @@
 import React from 'react';
-import style from './communitybox.module.css'; // Import your CSS module
+import style from './communitybox.module.css'; 
 import { Card, Button, Row, Col } from 'react-bootstrap';
-import { FaUsers, FaList } from 'react-icons/fa'; // Import icons from react-icons
+import { FaUsers, FaList } from 'react-icons/fa'; 
 
 interface CommunityBoxProps {
   name: string;
@@ -21,9 +21,9 @@ const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, pi
         <Card.Title className={style.textStyle}>
           {name}
         </Card.Title>
-        <Row>
+        <Row className = {style.commRow}>
           <Col className={style.commIconText}>
-            <FaUsers className={style.iconStyle} /> {members} Members
+            <FaUsers className={style.iconStyle} /> {members} {members === 1 ? "Member" : "Members"}
           </Col>
           <Col  className={style.commIconText}>
             <FaList className={style.iconStyle} /> {listings} {listings === 1 ? "listing" : "listings"}

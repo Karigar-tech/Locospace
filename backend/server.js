@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const appRouter = require('./routes/index')
+const bodyParser = require('body-parser');
  
 dotenv.config();
 
@@ -11,6 +12,9 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 const mongoURI = process.env.MONGODB_URI;
 

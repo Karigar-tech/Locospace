@@ -5,12 +5,15 @@ import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap'; // I
 import { FaReplyd } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
-
-
+import Spinner from '../../utils/Spinner'; 
+import DocumentPreview from './DocPreview'
+import { FaImage, FaPaperclip, FaPaperPlane, FaSmile, FaTimes  } from 'react-icons/fa';
+import EmojiPicker from 'emoji-picker-react';
 
 interface ReplyBoxProps {
   threadId: Thread;
 }
+
 
 const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
@@ -18,6 +21,15 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [editingReply, setEditingReply] = useState<Reply | null>(null);
   const [replyContent, setReplyContent] = useState<string>('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [docFile, setDocFile] = useState<File | null>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [docPreview, setDocPreview] = useState<string | null>(null);
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [loadingDoc, setLoadingDoc] = useState(false);
+
+  
 
   useEffect(() => {
     // Fetch current user
@@ -62,23 +74,84 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
     setNewReply(event.target.value);
   };
 
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLoadingImage(true);
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageFile(file);
+        setLoadingImage(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDocChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLoadingDoc(true);
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setDocFile(file);
+      setLoadingDoc(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+  };
+
+  const handleRemoveDoc = () => {
+    setDocFile(null);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
+  const handleEmojiClick = (emojiData: { emoji: string }) => {
+    setNewReply(prevReply => prevReply + emojiData.emoji);
+    setShowEmojiPicker(false);
+  };
+
+
+
+
   const handleReplySubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     try {
+      const formData = new FormData();
+      formData.append('thread_id', threadId._id.toString());
+      formData.append('content', newReply);
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
+      if (docFile) {
+        formData.append('document', docFile);
+      }
+
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
+
       const response = await fetch('http://localhost:5000/api/replies/createReply', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+         
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ thread_id: threadId._id, content: newReply }),
+        body: formData,
       });
 
       if (response.ok) {
         const reply: Reply = await response.json();
         setReplies([...replies, reply]);
         setNewReply('');
+        setImageFile(null);
+        setDocFile(null);
+        setImagePreview(null);
+        setDocPreview(null);
       } else {
         console.error('Failed to add reply');
       }
@@ -206,21 +279,110 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
               )}
             </div>
             <p className='mt-2'>{reply.content}</p>
+            {reply.image && (
+                        <div>
+                            <img src={reply.image} alt="Reply Image" style={{ maxWidth: '100%', maxHeight: '80%', borderRadius: '10px' }} />
+                        </div>
+            )}
+      
+
+            {reply.document && (
+              <DocumentPreview
+                documentUrl={reply.document}
+              />
+            )
+
+            }
+          
           </div>
         ))
       ) : (
         <p>No replies found</p>
       )}
+   <form onSubmit={handleReplySubmit} className="reply-form">
+      <div className="preview-container">
+        {imageFile && (
+          <div className="preview-item">
+            {loadingImage ? (
+              <Spinner />
+            ) : (
+              <div className="preview-content">
+                <img src={URL.createObjectURL(imageFile)} alt="Image Preview" className="preview-image" />
+                <button className="remove-btn" onClick={handleRemoveImage}>
+                  <FaTimes size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
-      <form onSubmit={handleReplySubmit}>
+        {docFile && (
+          <div className="preview-item">
+            {loadingDoc ? (
+              <Spinner />
+            ) : (
+              <div className="preview-content">
+                <embed
+                  src={URL.createObjectURL(docFile)}
+                  type="application/pdf"
+                  className="preview-doc"
+                  title="Document Preview"
+                />
+                <button className="remove-btn" onClick={handleRemoveDoc}>
+                  <FaTimes size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="textarea-container">
+        <button type="button" className="icon-button" onClick={() => document.getElementById('image-upload')?.click()}>
+          <FaImage />
+        </button>
+        <input
+          type="file"
+          accept="image/*"
+          id="image-upload"
+          onChange={handleImageChange}
+          style={{ display: 'none' }}
+        />
+        <button type="button" className="icon-button" onClick={() => document.getElementById('doc-upload')?.click()}>
+          <FaPaperclip />
+        </button>
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx,.txt"
+          id="doc-upload"
+          onChange={handleDocChange}
+          style={{ display: 'none' }}
+        />
+
         <textarea
           value={newReply}
           onChange={handleReplyChange}
           placeholder="Write your reply here..."
           required
+          className="reply-textarea"
         />
-        <button className="reply-button">Add Reply</button>
-      </form>
+        <div className="emoji-picker-container">
+          <button className="smile-icon" onClick={toggleEmojiPicker}>
+            <FaSmile size={20} />
+          </button>
+          {showEmojiPicker && (
+            <div className="emoji-picker">
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
+        </div>
+        <button type="submit" className="icon-button">
+          <FaPaperPlane />
+        </button>
+      </div>
+    </form>
+
+
 
       {/* Edit Popup */}
       <Modal show={!!editingReply} onHide={() => setEditingReply(null)}>
@@ -248,6 +410,8 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
           </Form>
         </Modal.Body>
       </Modal>
+
+     
     </div>
   );
 };

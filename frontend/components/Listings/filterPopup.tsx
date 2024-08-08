@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap'; 
+import { Button, Form, Nav, Tab, Tabs } from 'react-bootstrap';
 
 interface FilterPopupProps {
   showFilters: boolean;
@@ -28,6 +28,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
   const [selectedEnvironments, setSelectedEnvironments] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
   const [selectedAgeGroups, setSelectedAgeGroups] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<string>('environments');
 
   const handleEnvironmentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -75,57 +76,67 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
             <button onClick={toggleFilters}>Close</button>
           </div>
           <div className="filter-content">
-            <div className="filter-section">
-              <h5>Environments</h5>
-              {Object.entries(environmentIconMap).map(([key, icon]) => (
-                <Form.Check
-                  key={key}
-                  type="checkbox"
-                  id={`environment-${key}`}
-                  value={key}
-                  label={
-                    <>
-                      {icon} {key}
-                    </>
-                  }
-                  onChange={handleEnvironmentChange}
-                />
-              ))}
-            </div>
-            <div className="filter-section">
-              <h5>Facilities</h5>
-              {Object.entries(facilitiesIconMap).map(([key, icon]) => (
-                <Form.Check
-                  key={key}
-                  type="checkbox"
-                  id={`facility-${key}`}
-                  value={key}
-                  label={
-                    <>
-                      {icon} {key}
-                    </>
-                  }
-                  onChange={handleFacilityChange}
-                />
-              ))}
-            </div>
-            <div className="filter-section">
-              <h5>Age Groups</h5>
-              {Object.entries(ageGroupIconMap).map(([key, icon]) => (
-                <Form.Check
-                  key={key}
-                  type="checkbox"
-                  id={`ageGroup-${key}`}
-                  value={key}
-                  label={
-                    <>
-                      {icon} {key}
-                    </>
-                  }
-                  onChange={handleAgeGroupChange}
-                />
-              ))}
-            </div>
+            <Tabs
+              activeKey={activeTab}
+              onSelect={(k) => setActiveTab(k || 'environments')}
+              id="filter-tabs"
+              className="mb-3"
+            >
+              <Tab eventKey="environments" title="Environments">
+                <div className="filter-section">
+                  {Object.entries(environmentIconMap).map(([key, icon]) => (
+                    <Form.Check
+                      key={key}
+                      type="checkbox"
+                      id={`environment-${key}`}
+                      value={key}
+                      label={
+                        <>
+                          {icon} {key}
+                        </>
+                      }
+                      onChange={handleEnvironmentChange}
+                    />
+                  ))}
+                </div>
+              </Tab>
+              <Tab eventKey="facilities" title="Facilities">
+                <div className="filter-section">
+                  {Object.entries(facilitiesIconMap).map(([key, icon]) => (
+                    <Form.Check
+                      key={key}
+                      type="checkbox"
+                      id={`facility-${key}`}
+                      value={key}
+                      label={
+                        <>
+                          {icon} {key}
+                        </>
+                      }
+                      onChange={handleFacilityChange}
+                    />
+                  ))}
+                </div>
+              </Tab>
+              <Tab eventKey="ageGroups" title="Age Groups">
+                <div className="filter-section">
+                  {Object.entries(ageGroupIconMap).map(([key, icon]) => (
+                    <Form.Check
+                      key={key}
+                      type="checkbox"
+                      id={`ageGroup-${key}`}
+                      value={key}
+                      label={
+                        <>
+                          {icon} {key}
+                        </>
+                      }
+                      onChange={handleAgeGroupChange}
+                    />
+                  ))}
+                </div>
+              </Tab>
+            </Tabs>
             <div className="filter-actions">
               <Button variant="secondary" onClick={toggleFilters}>
                 Cancel

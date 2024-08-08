@@ -523,6 +523,11 @@ body {
   border-radius: 20px;
 }
 
+
+*, *::before, *::after {
+    box-sizing: border-box !important;
+}
+
 .thread-item {
   margin-bottom: 5px;
   max-width: 710px;
@@ -799,6 +804,101 @@ textarea {
 .modal-close-button {
   background-color: #6c757d;
 }
+.reply-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.preview-item {
+  position: relative;
+}
+
+.preview-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  width: 100px; 
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.preview-doc {
+  width: 100px; 
+  height: 100px;
+  border-radius: 10px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.remove-btn svg {
+  color: grey;
+}
+
+.textarea-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.reply-textarea {
+  flex: 1;
+  margin-left: 10px;
+  resize: none;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: grey;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 0 5px;
+}
+
+.icon-button:hover {
+  color: #333;
+}
+
+
+.emoji-picker-container {
+  position: relative; 
+}
+
+
+.smile-icon {
+  position: relative; 
+  z-index: 10; 
+  border: none;
+  background: none; 
+  color: grey;
+}
+
+.emoji-picker {
+  position: absolute;
+  bottom: 100%;
+  right: 0; 
+  z-index: 9999;
+ 
+}
 
 
 
@@ -807,6 +907,10 @@ textarea {
   position: relative;
 }
 
+.DocModal{
+  width: 700px;
+
+}
 
 
 /* Optional: Additional responsiveness */

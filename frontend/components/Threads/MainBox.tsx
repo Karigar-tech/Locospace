@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import '../../styles/main.css';
 import { IoAdd } from 'react-icons/io5';
 import ThreadBox from './ThreadBox';
 import { Thread } from '@/types';
 import AddThread from './AddThread';
 import ReplyBox from './ReplyBox';
+import '../../styles/main.css';
 
 interface MainBoxProps {
   threads: Thread[];
@@ -86,8 +86,9 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
           <div className="threads-list">
             {threads.length > 0 ? (
               threads.map(thread => (
-                <div key={thread._id} className="thread-item" onClick={() => openThread(thread)}>
+                <div key={thread._id} className="thread-item" >
                   <ThreadBox
+                    onClick={()=> openThread(thread)}
                     _id={thread._id}
                     user_id={thread.user_id}
                     community_id={thread.community_id}

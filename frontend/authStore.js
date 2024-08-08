@@ -8,7 +8,7 @@ const useAuthStore = create((set) => ({
     return token;
   },
   logout: () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token' , 'userID');
     set({ token: null });
   },
 }));

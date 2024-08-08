@@ -194,7 +194,6 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
     if (editingReply) {
       console.log(editingReply._id)
       try {
-        console.log("Sending edit req")
         const response = await fetch(`http://localhost:5000/api/replies/updateReply/${editingReply._id}`, {
           method: 'PUT',
           headers: {

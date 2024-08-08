@@ -19,10 +19,13 @@ import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
+import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuthContext } from '@/context/authContext';
+
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [threads, setThreads] = useState<Thread[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
@@ -61,7 +64,15 @@ const Page = () => {
     "Adults": <MdOutlineHiking />,
     "Seniors": <MdElderly />
   };
+  const {authUser ,setAuthUser} = useAuthContext();
 
+  useEffect(() => {
+    setAuthUser(localStorage.getItem('token'));
+    if (!authUser) {
+      router.push('/Login'); // Redirect to login page if not authenticated
+    }
+  }, [authUser, router]);
+ 
   useEffect(() => {
     const searchTerm = searchParams.get('search');
     const environment = searchParams.get('environment');
@@ -143,14 +154,22 @@ const Page = () => {
             },
           });
           const data = await response.json();
-          setCommID(data.communityID);
           setCommunity(storedCommunity);
           setListings(data.detailedListings);
+          setCommID(data.communityID)
 
           const userComm = await UserData();
         
-          console.log('user com id', userComm.user.community )
-          console.log('commID', data.communityID)
+          const response2 = await fetch(`http://localhost:5000/api/threads/specificThreads/${data.communityID}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          const data2 = await response2.json();
+          console.log("Data ",data2)
+          setThreads(data2);
+          
+          
           if (userComm && userComm.user.community === data.communityID) {
             setIsJoined(true);
             localStorage.setItem('joinedCommunity', 'true');
@@ -166,19 +185,6 @@ const Page = () => {
     }
   }, []);
   
-
-  useEffect(() => {
-    const getThreads = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/threads/allThreads');
-        const data = await response.json();
-        setThreads(data);
-      } catch (error) {
-        console.log('Error fetching threads:', error);
-      }
-    };
-    getThreads();
-  }, []);
 
   const toggleView = () => {
     setView(view === 'listings' ? 'threads' : 'listings');

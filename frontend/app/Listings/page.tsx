@@ -26,7 +26,6 @@ import { useAuthContext } from '@/context/authContext';
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [threads, setThreads] = useState<Thread[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);

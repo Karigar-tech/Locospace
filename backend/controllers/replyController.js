@@ -1,6 +1,11 @@
 const Reply = require('../models/replyModel');
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
+const { bucket } = require('../firebaseAdmin');
+
+const generatePublicUrl = (file) => {
+    return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`;
+};
 
 exports.createReply = async (req, res) => {
     console.log("Here")
@@ -14,12 +19,47 @@ exports.createReply = async (req, res) => {
             return res.status(400).json({ error: 'Invalid thread ID' });
         }
         
-        const reply = new Reply({
+        const replyData = new Reply({
             thread_id: new ObjectId(thread_id),
             user_id: new ObjectId(user_id),
             content
         });
-        console.log("Reply added:", reply);
+
+        console.log("Reply added:", replyData);
+        console.log("hehe image", req.files.image)
+        //image uploadd
+        if(req.files && req.files.image){
+            const imageFile = req.files.image[0];
+            const blob = bucket.file(`replies/images/${Date.now()}_${imageFile.originalname}`);
+            const blobStream = blob.createWriteStream({ metadata: { contentType: imageFile.mimetype } });
+
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', reject);
+                blobStream.on('finish', () => {
+                    replyData.image = generatePublicUrl(blob);
+                    resolve();
+                });
+                blobStream.end(imageFile.buffer);
+            });
+        }
+
+        //doc upoad
+        if (req.files && req.files.document) {
+            const documentFile = req.files.document[0];
+            const blob = bucket.file(`replies/documents/${Date.now()}_${documentFile.originalname}`);
+            const blobStream = blob.createWriteStream({ metadata: { contentType: documentFile.mimetype } });
+
+            await new Promise((resolve, reject) => {
+                blobStream.on('error', reject);
+                blobStream.on('finish', () => {
+                    replyData.document = generatePublicUrl(blob);
+                    resolve();
+                });
+                blobStream.end(documentFile.buffer);
+            });
+        }
+        
+        const reply = new Reply(replyData);
         await reply.save();
         res.status(201).json(reply);
     } catch (error) {

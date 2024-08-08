@@ -1,6 +1,5 @@
 import React from 'react';
-import styles from './Notification.module.css'; // Import the CSS module
-
+import styles from './Notification.module.css'; 
 interface NotificationProps {
   message: string;
   onClose: () => void;

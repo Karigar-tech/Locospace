@@ -8,6 +8,8 @@ router.get("/currentChats", authenticateToken, chatController.getChatters);
 
 router.get("/search", authenticateToken, chatController.searchUser);
 
+router.post("/createChat/:id", authenticateToken, chatController.createMessage);
+
 router.get("/:id", authenticateToken, chatController.getMessages);
 
 router.post("/send/:id", authenticateToken, chatController.sendMessages);

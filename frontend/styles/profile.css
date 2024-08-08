@@ -234,7 +234,7 @@
 .profile-listings-content,
 .profile-threads-content {
   border: 1px solid #a3a3a3;
-  width: fit-content;
+  width: 900px;
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);

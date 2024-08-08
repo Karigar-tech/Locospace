@@ -1,41 +1,53 @@
+/* toggle.module.css */
 .toggleContainer {
-    position: relative;
-    width: 12rem; 
-    height: 3rem;
-    margin-left:35rem;
-  }
-  
-  .toggleButton {
-    position: absolute;
-    width: 12rem;
-    height: 3rem; 
-    border: none !important;
-    background-color: white;
-    color: #444444;
-    cursor: pointer;
-    border-radius: 4rem;
-    transition: background-color 0.6s, color 0.3s !important;
-    z-index: 1; 
-   
-  }
-  
-  .toggleButton.active {
-    background-color: #5890ff;
-    color: aliceblue !important;
-  }
-  
-  .toggleButton:hover {
-    background-color: #6c9dff;
-    color: aliceblue !important;
-    
-  }
-  
-  .toggleButton.listings {
-    left: 0;
-  }
-  
-  .toggleButton.threads {
-    left: 80%;
-   
-  }
-  
+  display: flex;
+  justify-content: center;
+  width: 20rem; 
+  height: 3rem;
+  position: relative; /* Ensure the absolute positioning of buttons works */
+}
+
+.toggleButton {
+  position: absolute;
+  width: 10rem; /* Adjusted for better alignment */
+  height: 3rem; 
+  border: none !important;
+  background-color: white;
+  color: #444444;
+  cursor: pointer;
+  border-radius: 4rem;
+  transition: background-color 0.6s, color 0.3s !important;
+  z-index: 1; 
+}
+
+.toggleButton.active {
+  background-color: #5890ff;
+  color: aliceblue !important;
+}
+
+.toggleButton:hover {
+  background-color: #6c9dff;
+  color: aliceblue !important;
+}
+
+.toggleButton.listings {
+  left: 0;
+}
+
+.toggleButton.threads {
+  left: 10rem; /* Adjusted for better alignment */
+}
+
+.gradientBarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the gradient bar and the toggle button */
+  width: 100%; /* Full width for alignment */
+}
+
+.gradientBar {
+  width: 20rem;
+  height: 0.5rem; /* Adjust height as needed */
+  background: linear-gradient(to right, #ff7e5f, #feb47b); /* Example gradient */
+  margin-bottom: 0.5rem; /* Spacing between gradient bar and toggle buttons */
+}

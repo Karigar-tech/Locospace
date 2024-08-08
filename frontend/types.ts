@@ -68,5 +68,7 @@ export interface Reply {
   content: string;
   createdAt: string;
   updatedAt: string;
+  image: string;
+  document: string;
 }
 

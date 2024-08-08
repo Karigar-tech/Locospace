@@ -23,7 +23,15 @@ const replySchema = new Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    image: {
+        type: String, 
+        default: null
+    },
+    document: {
+        type: String,  
+        default: null
+    },
 });
 
 module.exports = mongoose.model('Reply', replySchema);

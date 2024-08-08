@@ -4,6 +4,7 @@ import React from "react";
 const EachConversation = ({ conversation }: { conversation: any }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
+  const profilePicture = conversation?.profilePicture?.url || "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
 
   return (
     <div
@@ -13,7 +14,7 @@ const EachConversation = ({ conversation }: { conversation: any }) => {
     >
       <img
       className="rounded-circle"
-        src={conversation.profilePicture.url}
+        src={profilePicture}
         style={{ width: 50, height: 50 }}
         alt="Avatar"
       />

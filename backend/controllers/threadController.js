@@ -24,11 +24,58 @@ exports.createThread = async (req, res) => {
     }
 };
 
+exports.updateThread = async (req, res) => {
+    
+    const {id}= req.params
+    const user_id= req.user.id
+    const { thread_title, thread_description, community_id}= req.body;
+    console.log("Thread update: ", thread_title, " : ", thread_description, "id: ", id, "Comm_id: ",community_id)
+    
+    try {        
+        const updatedThread = await Thread.findByIdAndUpdate(
+            id,
+            {  
+                user_id: user_id,
+                community_id: community_id,
+                thread_title: thread_title,
+                thread_description: thread_description,
+                updatedAt: Date.now() },
+                { new: true }
+            );
+            console.log("Thread added:", updatedThread)
+
+        // await thread.save();
+        res.status(201).json(updatedThread);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 exports.getAllThreads = async (req, res) => {
     try {
         const threads = await Thread.find().populate('user_id').populate('community_id');
         console.log(threads);
+        res.status(200).json(threads);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getAllThreads = async (req, res) => {
+    try {
+        const threads = await Thread.find().populate('user_id').populate('community_id');
+        console.log(threads);
+        res.status(200).json(threads);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getSpecificThreads = async (req, res) => {
+    const { id } = req.params; // Correctly destructure comm_id
+    try {
+        const threads = await Thread.find({ community_id: id }).populate('user_id').populate('community_id');
         res.status(200).json(threads);
     } catch (error) {
         res.status(500).json({ message: error.message });

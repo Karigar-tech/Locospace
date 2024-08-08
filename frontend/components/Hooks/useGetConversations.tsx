@@ -13,8 +13,7 @@ const useGetConversations = () => {
                 const token = localStorage.getItem("token");
                 if (!token) {
                     throw new Error("Token not found in localStorage");
-                }
-                console.log("Token retrieved:", token); // Debug log
+                }// Debug log
 
                 const res = await fetch("http://localhost:5000/api/chat/currentChats", {
                     headers: {

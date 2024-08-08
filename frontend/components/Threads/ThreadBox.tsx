@@ -1,20 +1,21 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import '../../styles/main.css';
-import { User, Community, Reply } from '@/types';
+import { User, Community, Reply, Thread } from '@/types';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import { AiFillEdit } from "react-icons/ai";
+import '../../styles/main.css';
 
 interface BoxProps {
-  _id: number;
+  _id: number;  // Ensure this is a string
   user_id: User;
   community_id: Community;
   thread_title: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
+  onClick: (thread: Thread) => void;  // Pass the entire thread
 }
 
-const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt }) => {
+const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt, onClick }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [editingThread, setEditingThread] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(thread_title);
@@ -39,7 +40,8 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     fetchReplies();
   }, [_id]);
 
-  const handleEditClick = () => {
+  const handleEditClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent the click from propagating to the thread box container
     setEditingThread(true);
   };
 
@@ -64,6 +66,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
         },
         body: JSON.stringify({
           thread_title: editedTitle,
+          community_id: community_id._id,
           thread_description: editedDescription,
         }),
       });
@@ -71,7 +74,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
       if (response.ok) {
         setEditingThread(false);
       } else {
-        console.error('Failed to update thread');
+        console.error('Failed to update thread: ', response);
       }
     } catch (error) {
       console.error('Error updating thread:', error);
@@ -83,7 +86,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     .slice(0, 3);
 
   return (
-    <Container className="thread-box p-4 mb-2">
+    <Container className="thread-box p-4 mb-2" >
       <Row style={{ flexDirection: 'row', marginTop: '0.1rem' }}>
         <Col style={{ flex: '0 0px' }}>
           {user_id.profilePicture && user_id.profilePicture.url ? (
@@ -106,7 +109,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
       </Row>
       <Row className="mt-2">
         <Col>
-          <p className="thread-title">{thread_title}</p>
+          <p className="thread-title">{thread_title }</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
         <div className="reply-actions">

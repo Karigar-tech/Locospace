@@ -26,22 +26,34 @@ exports.createThread = async (req, res) => {
 
 exports.updateThread = async (req, res) => {
     
-    const id= req.params
-    const { title, description}= req.body;
-    console.log("Thread update: ", title, " : ", description)
+    const {id}= req.params
+    const user_id= req.user.id
+    const { thread_title, thread_description, community_id}= req.body;
+    console.log("Thread update: ", thread_title, " : ", thread_description, "id: ", id, "Comm_id: ",community_id)
     
     try {
-        const { title, description, community_id } = req.body; 
         
-        const thread = new Thread({
-            user_id: id,
-            community_id,
-            thread_title: title,
-            thread_description: description,
-        });
-        console.log("Thread added:", thread)
-        await thread.save();
-        res.status(201).json(thread);
+        // const thread = new Thread({
+        //     user_id: id,
+        //     community_id: community_id,
+        //     thread_title: thread_title,
+        //     thread_description: thread_description,
+        // });
+        
+        const updatedThread = await Thread.findByIdAndUpdate(
+            id,
+            {  
+                user_id: user_id,
+                community_id: community_id,
+                thread_title: thread_title,
+                thread_description: thread_description,
+                updatedAt: Date.now() },
+                { new: true }
+            );
+            console.log("Thread added:", updatedThread)
+
+        // await thread.save();
+        res.status(201).json(updatedThread);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

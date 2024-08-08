@@ -231,7 +231,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
               />
             ) : (
               <img
-                src="/osama.jpg" // Replace with the actual path to your placeholder image
+                src="/no-profile-picture-15257.svg" // Replace with the actual path to your placeholder image
                 alt="pfp"
                 className="profile-pic"
               />

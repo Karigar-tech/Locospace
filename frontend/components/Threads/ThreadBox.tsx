@@ -15,11 +15,34 @@ interface BoxProps {
   onClick: (thread: Thread) => void;  // Pass the entire thread
 }
 
+
+
 const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt, onClick }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [editingThread, setEditingThread] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(thread_title);
   const [editedDescription, setEditedDescription] = useState<string>(thread_description);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Fetch current user
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/profile/user', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const user: User = await response.json();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     const fetchReplies = async () => {
@@ -86,7 +109,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     .slice(0, 3);
 
   return (
-    <Container className="thread-box p-4 mb-2" >
+    <Container className="thread-box p-4 mb-2">
       <Row style={{ flexDirection: 'row', marginTop: '0.1rem' }}>
         <Col style={{ flex: '0 0px' }}>
           {user_id.profilePicture && user_id.profilePicture.url ? (
@@ -97,7 +120,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
             />
           ) : (
             <img
-              src="/osama.jpg" // Replace with the actual path to your placeholder image
+              src="/no-profile-picture-15257.svg" // Replace with the actual path to your placeholder image
               alt="pfp"
               className="profile-pic"
             />
@@ -108,13 +131,15 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
         </Col>
       </Row>
       <Row className="mt-2">
-        <Col>
-          <p className="thread-title">{thread_title }</p>
+        <Col className='thread-headings'>
+          <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
-        <div className="reply-actions">
-          <AiFillEdit size={24} className='delete-button' onClick={handleEditClick} />
-        </div>
+        {currentUser && currentUser._id === user_id._id && (
+          <Col className='open-thread-container'>
+            <AiFillEdit size={24} className='delete-button' onClick={handleEditClick} />
+          </Col>)
+        }
       </Row>
       <Row className="align-items-center justify-content-between mt-3">
         <Col className="d-flex">
@@ -139,7 +164,14 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
             {replies.length} replies
           </div>
         </Col>
+        <Col className="open-thread-container">
+          <Button variant="primary" className="replybox-button" onClick={() => onClick({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt })}>
+          Open Thread
+          </Button>
+        </Col>
       </Row>
+
+      
 
       {/* Edit Popup */}
       <Modal show={editingThread} onHide={() => setEditingThread(false)}>

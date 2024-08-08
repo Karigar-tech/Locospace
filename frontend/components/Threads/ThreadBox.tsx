@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/main.css';
 import { User, Community, Reply } from '@/types';
 import { Container, Row, Col } from 'react-bootstrap';
 

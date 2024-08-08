@@ -135,9 +135,11 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
-        <Col className='open-thread-container'>
-          <AiFillEdit size={24} className='delete-button' onClick={handleEditClick} />
-        </Col>
+        {currentUser && currentUser._id === user_id._id && (
+          <Col className='open-thread-container'>
+            <AiFillEdit size={24} className='delete-button' onClick={handleEditClick} />
+          </Col>)
+        }
       </Row>
       <Row className="align-items-center justify-content-between mt-3">
         <Col className="d-flex">

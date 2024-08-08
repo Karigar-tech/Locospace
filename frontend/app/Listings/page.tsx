@@ -64,8 +64,6 @@ const Page = () => {
     "Adults": <MdOutlineHiking />,
     "Seniors": <MdElderly />
   };
-
-  const [threads, setThreads] = useState<Thread[]>([]);
   const {authUser ,setAuthUser} = useAuthContext();
 
   useEffect(() => {

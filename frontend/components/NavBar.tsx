@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import useAuthStore from "../authStore";
 import { useRouter } from "next/navigation";
-import "../styles/main.css";
+import styles from '../styles/main.module.css';
 
 const NavBar: React.FC = () => {
   const router = useRouter();
@@ -17,12 +17,12 @@ const NavBar: React.FC = () => {
     router.replace("/");
     // window.location.href = '/';
   };
-
+ 
   return (
     <Navbar expand="lg" style={{ backgroundColor: "white" }}>
       <Container fluid>
-        <Link className="navbar-brand-custom" href="/" passHref>
-          <Navbar.Brand className="navbar-text">
+        <Link className={styles.navbarbrandcustom} href="/" passHref>
+          <Navbar.Brand className={styles.navbartext}>
             <img
               src="logo.png"
               width="60"
@@ -36,24 +36,26 @@ const NavBar: React.FC = () => {
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
           <Nav className="ms-auto navv">
-            <Link href="/Communities" passHref>
-              <Button variant="outline-primary" className="navbar-btn-custom">
+            <Link href="/Communities" >
+              <div>
+              <Button variant="outline-primary" className={styles.navbarbtncustom}>
                 Communities
-              </Button>
+                </Button>
+              </div>
             </Link>
             <Link href="/Profile" passHref>
-              <Button variant="outline-secondary" className="navbar-btn-custom">
+              <Button variant="outline-secondary" className={styles.navbarbtncustom}>
                 Profile
               </Button>
             </Link>
             <Link href="/Chatting" passHref>
-              <Button variant="outline-secondary" className="navbar-btn-custom">
+              <Button variant="outline-secondary" className={styles.navbarbtncustom}>
                 Chat
               </Button>
             </Link>
             <Button
               variant="primary"
-              className="btn-custom-signup"
+              className={styles.btncustomsignup}
               onClick={handleLogout}
             >
               Logout

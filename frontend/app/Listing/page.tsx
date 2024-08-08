@@ -2,6 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import ImageGallery from "../../components/ImageGallery";
+import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
 import styles from "./selectedlist.module.css";
 import { Listing, User } from "../../types";
@@ -33,9 +34,19 @@ import MapComponent from "../../components/MapComponentListing";
 import { geocodeAddress } from "../../utils/geocode";
 import NavBar from "../../components/NavBar";
 import { useSearchParams } from "next/navigation";
-import Notification from '../../components/Seller/MessageComp'
+import { useAuthContext } from "@/context/authContext";
 
 const ListingPage = () => {
+  const router = useRouter();
+  const { authUser, setAuthUser } = useAuthContext();
+
+  useEffect(() => {
+    setAuthUser(localStorage.getItem('token'));
+    if (!authUser) {
+      router.push("/Login"); // Redirect to login page if not authenticated
+    }
+  }, [authUser, router]);
+
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 

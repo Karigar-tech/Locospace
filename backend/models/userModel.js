@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,7 +14,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-  }, 
+  },
   password: {
     type: String,
     required: true,
@@ -49,15 +48,20 @@ const UserSchema = new mongoose.Schema({
     filePath: { type: String },
     url: { type: String }
   },
-  savedListings: 
-    [ {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Listing',}
-      
-    ]
-  
+  savedListings: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Listing',
+  }],
+  // Field to store the OTP sent to the user for authentication
+  otp: {
+    type: String,
+  },
+  // Field to store the expiry time of the OTP
+  otpExpiry: {
+    type: Date,
+  },
 });
 
-const User =   mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;

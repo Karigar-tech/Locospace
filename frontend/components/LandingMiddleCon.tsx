@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Button, Form, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
-import '../styles/main.css';
+import styles from '../styles/main.module.css'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
-
+  
 const communities = [
   "DHA-1",
   "DHA-2",
@@ -128,21 +128,21 @@ const LandingPageComp: React.FC = () => {
   
 
   return (
-    <Container fluid className="landing-container">
+    <Container fluid className={styles.landingcontainer}>
       <Row className="position-relative w-100">
-        <img src='LandingBackground.png' alt="Landing Background" className="background-image" />
-        <Col className="left-half">
-          <div className="text-overlay">
-            <div className="big-text">Find your Community<br />not just a Property!</div>
-            <div className="small-text">Welcome to Locospace, your ultimate destination for finding the perfect home. Whether you&apos;re looking to rent or buy, our extensive listings cover everything from cosy apartments to spacious family homes.</div>
-            <div className="search-container">
-              <div className="buttons-container">
-                <Button className='search_buttons' variant="primary"onClick = {handleBuyClick}>Buy</Button>
-                <Button className='search_buttons' variant="primary" onClick={handleSell}>Sell</Button>
-                <Button className='search_buttons' variant="primary" onClick = {handleRentClick}>Rent</Button>
+        <img src='LandingBackground.png' alt="Landing Background" className={styles.backgroundimage} />
+        <Col className={styles.lefthalf}>
+          <div className={styles.textoverlay}>
+            <div className={styles.bigtext}>Find your Community<br />not just a Property!</div>
+            <div className={styles.smalltext}>Welcome to Locospace, your ultimate destination for finding the perfect home. Whether you&apos;re looking to rent or buy, our extensive listings cover everything from cosy apartments to spacious family homes.</div>
+            <div className={styles.searchcontainer}>
+              <div className={styles.buttonscontainer}>
+                <Button className={styles.searchbuttons}variant="primary"onClick = {handleBuyClick}>Buy</Button>
+                <Button className={styles.searchbuttons} variant="primary" onClick={handleSell}>Sell</Button>
+                <Button className={styles.searchbuttons} variant="primary" onClick = {handleRentClick}>Rent</Button>
               </div>
               <Form>
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-5">
                   <InputGroup.Text><FontAwesomeIcon icon={faMapMarkerAlt} /></InputGroup.Text>
                   <Form.Control
                     type="text"
@@ -161,18 +161,18 @@ const LandingPageComp: React.FC = () => {
             </div>
           </div>
         </Col>
-        <Col className="right-half">
-          <Image src='/object.svg' alt="Landing Image" width={600} height={600} />
+        <Col className={styles.righthalf}>
+          <Image src='/object.svg' alt="Landing Image" width={500} height={500} />
           <Link href="/Communities" passHref>
-            <Button>Explore Communities</Button>
+            <Button className='mb-5'>Explore Communities</Button>
           </Link>
         </Col>
       </Row>
 
       {/* Filter Popup */}
       {showFilters && (
-        <div className="filter-popup">
-          <div className="filter-popup-header">
+        <div className={styles.filterpopup}>
+          <div className={styles.filterpopupheader}>
             <Button variant="link" onClick={toggleFilters}>Close</Button>
           </div>
           <Form>
@@ -190,8 +190,8 @@ const LandingPageComp: React.FC = () => {
               </select >
               <hr />
               <Form.Label>Preferences</Form.Label>
-              <div className="filter-popup-content">
-                <div className="filter-box-item">
+              <div className={styles.filterpopupcontent}>
+                <div className={styles.filterboxitem}>
                   <Form.Label>Environment</Form.Label>
                   {Object.entries(environmentIconMap).map(([label, icon]) => (
                     <Form.Check
@@ -203,7 +203,7 @@ const LandingPageComp: React.FC = () => {
                     />
                   ))}
                 </div>
-                <div className="filter-box-item">
+                <div className={styles.filterboxitem}>
                   <Form.Label>Facilities</Form.Label>
                   {Object.entries(facilitiesIconMap).map(([label, icon]) => (
                     <Form.Check
@@ -215,7 +215,7 @@ const LandingPageComp: React.FC = () => {
                     />
                   ))}
                 </div>
-                <div className="filter-box-item">
+                <div className={styles.filterboxitem}>
                   <Form.Label>Age Group</Form.Label>
                   {Object.entries(ageGroupIconMap).map(([label, icon]) => (
                     <Form.Check
@@ -230,7 +230,7 @@ const LandingPageComp: React.FC = () => {
               </div>
             </Form.Group>
           </Form>
-          <div className="filter-popup-footer">
+          <div className={styles.filterpopupfooter}>
             <Button variant="primary" onClick={handleApplyFilters}>Apply Filters</Button>
           </div>
         </div>

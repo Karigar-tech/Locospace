@@ -19,10 +19,13 @@ import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
+import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuthContext } from '@/context/authContext';
+
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [threads, setThreads] = useState<Thread[]>([]);
   const [community, setCommunity] = useState<string | null>(null);
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
@@ -62,6 +65,16 @@ const Page = () => {
     "Seniors": <MdElderly />
   };
 
+  const [threads, setThreads] = useState<Thread[]>([]);
+  const {authUser ,setAuthUser} = useAuthContext();
+
+  useEffect(() => {
+    setAuthUser(localStorage.getItem('token'));
+    if (!authUser) {
+      router.push('/Login'); // Redirect to login page if not authenticated
+    }
+  }, [authUser, router]);
+ 
   useEffect(() => {
     const searchTerm = searchParams.get('search');
     const environment = searchParams.get('environment');

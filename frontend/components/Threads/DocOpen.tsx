@@ -18,7 +18,7 @@ const DocumentModal: React.FC<DocumentModalProps> = ({ show, handleClose, docume
     if (show) {
       const loadDocument = async () => {
         
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         setLoading(false);
       };
 

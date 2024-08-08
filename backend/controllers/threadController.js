@@ -1,3 +1,4 @@
+const replyModel = require('../models/replyModel');
 const Thread = require('../models/threadModel'); 
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
@@ -21,6 +22,25 @@ exports.createThread = async (req, res) => {
         res.status(201).json(thread);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteThread = async (req, res) => {
+    const { id } = req.params;
+    const user_id= req.user.id
+    
+    try {
+        console.log("We here biatch: ", id)
+        const thread= await Thread.findById(id);
+        if(!thread){res.status(404).json({error: "Thread aint exisitng bruh"})};
+        if(thread.user_id.toString()!==user_id.toString()){return res.status(403).json({error: "Unauthorised to delete"})};
+        
+        const deletedThread = await Thread.findByIdAndDelete(id);
+        await replyModel.deleteMany({thread_id: id});
+        res.status(200).json({message: "Thread deleted"});
+
+    } catch (error) {
+        res.status(500).json({message : error.message});
     }
 };
 
@@ -52,15 +72,6 @@ exports.updateThread = async (req, res) => {
 };
 
 
-exports.getAllThreads = async (req, res) => {
-    try {
-        const threads = await Thread.find().populate('user_id').populate('community_id');
-        console.log(threads);
-        res.status(200).json(threads);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
 exports.getAllThreads = async (req, res) => {
     try {
@@ -84,8 +95,7 @@ exports.getSpecificThreads = async (req, res) => {
 
 exports.getUserThreads = async (req, res) => {
     const id= req.user.id;
-    console.log("USER ID:", id);
-    
+
     try {
 
         if (!ObjectId.isValid(id)) {

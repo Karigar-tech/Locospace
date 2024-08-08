@@ -453,7 +453,7 @@ body {
 
 .thread-headings{
   max-width: 600px;
-  min-width: 90%;
+  min-width: 80%;
 }
 .thread-title {
   display: flex;

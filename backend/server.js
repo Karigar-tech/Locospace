@@ -1,4 +1,3 @@
-
 const authRoutes = require('./routes/authRoutes'); // Import auth routes
 const { app, server } = require('./socket/socket'); // Import socket setup
 
@@ -43,5 +42,5 @@ app.use('/health', (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`); // Log server start message
+  console.log(`Server is running on http://localhost:${port}`); // Log server start message
 });

@@ -143,14 +143,22 @@ const Page = () => {
             },
           });
           const data = await response.json();
-          setCommID(data.communityID);
           setCommunity(storedCommunity);
           setListings(data.detailedListings);
+          setCommID(data.communityID)
 
           const userComm = await UserData();
         
-          console.log('user com id', userComm.user.community )
-          console.log('commID', data.communityID)
+          const response2 = await fetch(`http://localhost:5000/api/threads/specificThreads/${data.communityID}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          const data2 = await response2.json();
+          console.log("Data ",data2)
+          setThreads(data2);
+          
+          
           if (userComm && userComm.user.community === data.communityID) {
             setIsJoined(true);
             localStorage.setItem('joinedCommunity', 'true');
@@ -166,19 +174,6 @@ const Page = () => {
     }
   }, []);
   
-
-  useEffect(() => {
-    const getThreads = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/threads/allThreads');
-        const data = await response.json();
-        setThreads(data);
-      } catch (error) {
-        console.log('Error fetching threads:', error);
-      }
-    };
-    getThreads();
-  }, []);
 
   const toggleView = () => {
     setView(view === 'listings' ? 'threads' : 'listings');

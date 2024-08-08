@@ -1,0 +1,90 @@
+/* addthread.module.css */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: linear-gradient(#20096d,#2e0f9289); /* Dark blue background */
+    border-color: #95c8ff; /* Light blue border */
+    padding: 20px;
+    border-radius: 40px;
+    width: 300px;
+    max-width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative; /* For positioning the close button */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Pushes the Add Thread button to the bottom */
+    height: 400px; /* Adjust height as needed */
+}
+
+.heading {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.modalInput,
+.modalTextArea {
+    width: 97%;
+    padding: 0.55rem;
+    border-radius: 15px;
+    background-color: aliceblue; /* Light blue background for inputs */
+    border-color: #686868; /* Darker grey border */
+    border-width: 0.02rem;
+    margin-bottom: 10px;
+    padding-right: 0rem;
+}
+
+.modalTextArea {
+    height: 100px;
+}
+
+.modalSubmitButton,
+.modalCloseButton {
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    padding: 0.65rem;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    position: absolute; /* Ensure correct positioning */
+}
+
+.modalSubmitButton {
+    background-color: #007bff; /* Blue background for submit button */
+    bottom: 30px; /* Place at the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    transition: all 0.5s;
+}
+.modalSubmitButton :hover {
+    background-color: #2e3c4b; /* Blue background for submit button */
+    bottom: 30px; /* Place at the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+}
+
+.modalCloseButton {
+    background-color: #20096d; /* Grey background for close button */
+    top: 10px; /* Place in the top right corner */
+    right: 10px; /* Adjust positioning */
+    transition: all 0.4s;
+    height: 25px;
+    width: 25px;
+    
+}
+.modalCloseButton:hover {
+    background-color: #0d1f2e; /* Grey background for close button */
+    border-radius: 100%;
+    }

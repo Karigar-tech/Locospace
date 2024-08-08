@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../styles/main.css';
+import style from './addthread.module.css';
 
 interface AddThreadProps {
   isOpen: boolean;
@@ -23,27 +23,27 @@ const AddThread: React.FC<AddThreadProps> = ({ isOpen, onClose, onAddThread }) =
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3>Create New Thread</h3>
+    <div className={style.modalOverlay} onClick={onClose}>
+      <div className={style.modalContent} onClick={(e) => e.stopPropagation()}>
+        <button className={style.modalCloseButton} onClick={onClose}>
+          &times;
+        </button>
+        <h3 className={style.heading}>New Thread</h3>
         <input
           type="text"
-          className="modal-input"
-          placeholder="Thread title"
+          className={style.modalInput}
+          placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <textarea
-          className="modal-textarea"
+          className={style.modalTextArea}
           placeholder="Thread description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button className="modal-submit-button" onClick={handleSubmit}>
+        <button className={style.modalSubmitButton} onClick={handleSubmit}>
           Add Thread
-        </button>
-        <button className="modal-close-button" onClick={onClose}>
-          Close
         </button>
       </div>
     </div>

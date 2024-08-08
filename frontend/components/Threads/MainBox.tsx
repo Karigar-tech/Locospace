@@ -86,7 +86,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
           <div className="threads-list">
             {threads.length > 0 ? (
               threads.map(thread => (
-                <div key={thread._id} className="thread-item" onClick={() => openThread(thread)}>
+                <div key={thread._id} className="thread-item">
                   <ThreadBox
                     _id={thread._id}
                     user_id={thread.user_id}

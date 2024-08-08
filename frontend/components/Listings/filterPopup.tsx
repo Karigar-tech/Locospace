@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Nav, Tab, Tabs } from 'react-bootstrap';
+import styles from './filterPop.module.css'
 
 interface FilterPopupProps {
   showFilters: boolean;

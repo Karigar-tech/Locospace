@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -34,7 +35,8 @@ const UserSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    // required: ,
+    // Optional field, uncomment if required
+    // required: false,
   },
   location: {
     lat: {
@@ -46,20 +48,33 @@ const UserSchema = new mongoose.Schema({
   },
   profilePicture: {
     filePath: { type: String },
-    url: { type: String }
+    url: { type: String },
   },
   savedListings: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Listing',
   }],
-  // Field to store the OTP sent to the user for authentication
   otp: {
     type: String,
   },
-  // Field to store the expiry time of the OTP
   otpExpiry: {
     type: Date,
   },
+  // New fields for password reset
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
+});
+
+// Middleware to hash the password before saving the user
+UserSchema.pre('save', async function(next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
 });
 
 const User = mongoose.model('User', UserSchema);

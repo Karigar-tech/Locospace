@@ -58,10 +58,13 @@ const CardCarouselComp: React.FC = () => {
   // Function to format price
   const formatPrice = (price: number) => {
     // Example conversion logic
+    if(price > 100000 && price < 10000000){
+      return `Rs ${(price/100000).toFixed(1)}  lakh`
+    }
     if (price >= 10000000) { // If price is 10 million or more
-      return `${(price / 10000000).toFixed(2)} crore`; // Convert to crore
+      return `Rs ${(price / 10000000).toFixed(2)} crore`; // Convert to crore
     } else {
-      return `Rs. ${price.toLocaleString()}`; // Default format with commas for thousands
+      return `Rs ${price.toLocaleString()}`; // Default format with commas for thousands
     }
   };
 
@@ -87,8 +90,8 @@ const CardCarouselComp: React.FC = () => {
             <Card.Body className={styles.cardbody}>
               <Card.Title>
                 <Row className="mb-4">
-                  <Col><span>{item.listing_type === 'sell' ? 'For Sale' : 'For Rent'}</span></Col>
-                  <Col className={styles.textright}><span>{formatPrice(item.price)}</span></Col>
+                  <Col md={4}><span>{item.listing_type === 'sell' ? 'For Sale' : 'For Rent'}</span></Col>
+                  <Col className={styles.textright} md={6}><span>{formatPrice(item.price)}</span></Col>
                 </Row>
               </Card.Title>
               <Row className="mb-3 mt-2">
@@ -97,12 +100,12 @@ const CardCarouselComp: React.FC = () => {
               </Row>
               <hr />
               <Row className="mb-2">
-                <Col md={5}>
+                <Col md={6}>
                   <FontAwesomeIcon icon={faMapMarkerAlt} className={styles.icon} />
-                  <span style={{ marginLeft: '0.25rem' }}>{item.location.split(',')[0]}</span>, {item.area}
+                  <span >{item.location.split(',')[0]}</span>, {item.area}
                 </Col>
-                <Col md={4} className={styles.textright}>
-                  <Button variant="primary" href="#" style={{ width: '5rem' }}>View</Button>
+                <Col md={3} className={styles.textright}>
+                  <Button variant="primary" href="#" style={{ width: '3rem' }}>View</Button>
                 </Col>
               </Row>
             </Card.Body>

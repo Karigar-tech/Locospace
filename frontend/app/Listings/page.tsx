@@ -38,6 +38,7 @@ const Page = () => {
   const [notification, setNotification] = useState<string | null>(null); 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [threads, setThreads] = useState<Thread[]>([]);
  
   const environmentIconMap: Record<string, React.ReactElement> = {
     "Busy": <FaRunning />,

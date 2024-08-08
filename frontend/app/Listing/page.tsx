@@ -8,7 +8,7 @@ import styles from "./selectedlist.module.css";
 import { Listing, User } from "../../types";
 import { BsHeartFill, BsHeart, BsShare } from "react-icons/bs";
 import Image from "next/image";
-
+import Notification from "../../components/Seller/MessageComp";
 //Icons
 import { FaParking, FaChild } from "react-icons/fa";
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
@@ -35,13 +35,14 @@ import { geocodeAddress } from "../../utils/geocode";
 import NavBar from "../../components/NavBar";
 import { useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/context/authContext";
-
+import useCreateConversation from "@/components/Hooks/useCreateConversation";
 const ListingPage = () => {
+  
   const router = useRouter();
   const { authUser, setAuthUser } = useAuthContext();
 
   useEffect(() => {
-    setAuthUser(localStorage.getItem('token'));
+    setAuthUser(localStorage.getItem("token"));
     if (!authUser) {
       router.push("/Login"); // Redirect to login page if not authenticated
     }
@@ -51,7 +52,10 @@ const ListingPage = () => {
   const id = searchParams.get("id");
 
   const [listing, setListing] = useState<Listing | null>(null);
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [coordinates, setCoordinates] = useState<{
@@ -59,11 +63,10 @@ const ListingPage = () => {
     longitude: number;
   } | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const {createConversation} = useCreateConversation(user?._id.toString() || "");
   const [url, setUrl] = useState("");
   const [isSaved, setIsSaved] = useState(false);
-  const token = localStorage.getItem("token")
-  
-
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -72,7 +75,6 @@ const ListingPage = () => {
   }, []);
 
   const text = "Check out this listing!";
-
 
   const handleShare = () => {
     if (navigator.share) {
@@ -105,73 +107,79 @@ const ListingPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
+
         const data = await response.json();
-        console.log("API Response Data:", data);
-  
         const savedListings: string[] = data.user.savedListings || [];
-        console.log("Saved Listings:", savedListings);
-  
         const idString = id ? id.toString() : null;
         console.log("Current ID:", id);
         console.log("Current ID as String:", idString);
-  
+
         const isSaved = savedListings.some((listingId: string) => {
           console.log("Comparing:", listingId.toString(), "with", idString);
           return listingId.toString() === idString;
         });
-  
+
         console.log("Is Saved:", isSaved);
         setIsSaved(isSaved);
-  
       } catch (error) {
         console.error("Error checking saved status:", error);
         setIsSaved(false);
       }
     };
-  
+
     if (id) {
       checkIfSaved();
     }
   }, [id, token]);
-  
 
- const handleSave = async () => {
-  try {
-    const endpoint = isSaved
-      ? "http://localhost:5000/api/listings/unsavedListings"
-      : "http://localhost:5000/api/listings/savedListings";
+  const handleSave = async () => {
+    try {
+      const endpoint = isSaved
+        ? "http://localhost:5000/api/listings/unsavedListings"
+        : "http://localhost:5000/api/listings/savedListings";
 
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, 
-      },
-      body: JSON.stringify({ listingId: id }),
-    });
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ listingId: id }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setIsSaved(!isSaved);
-      showNotification(data.message, 'success');
-      console.log(isSaved ? "Listing unsaved" : "Listing saved");
-    } else {
-      console.error(isSaved ? "Failed to unsave listing" : "Failed to save listing");
-      showNotification(data.message, 'error');
+      if (response.ok) {
+        setIsSaved(!isSaved);
+        showNotification(data.message, "success");
+        console.log(isSaved ? "Listing unsaved" : "Listing saved");
+      } else {
+        console.error(
+          isSaved ? "Failed to unsave listing" : "Failed to save listing"
+        );
+        showNotification(data.message, "error");
+      }
+    } catch (error) {
+      console.error(
+        isSaved ? "Error unsaving listing:" : "Error saving listing:",
+        error
+      );
+      showNotification("Error.", "error");
     }
-  } catch (error) {
-    console.error(isSaved ? "Error unsaving listing:" : "Error saving listing:", error);
-    showNotification('Error.', 'error');
-  }
-};
+  };
+  const [message, setMessage] = useState("");
 
-  
+  const sendChatMessage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(message);
+    await createConversation(message);
+    setMessage("");
+  } 
+
   useEffect(() => {
     const fetchListing = async () => {
       if (!id) return;
@@ -183,7 +191,6 @@ const ListingPage = () => {
           throw new Error("Network response was not ok");
         }
         const data: Listing = await response.json();
-        console.log("Fetched listing data:", data);
         setListing(data);
         setUser(data.user);
         const coords = await geocodeAddress(data.location);
@@ -214,6 +221,7 @@ const ListingPage = () => {
 
   const images = listing.ListingPictures;
   const address = listing.location;
+  
 
   const handleCopy = (text: string) => {
     navigator.clipboard
@@ -226,11 +234,10 @@ const ListingPage = () => {
       });
   };
 
-  const showNotification = (message: string, type: 'success' | 'error') => {
+  const showNotification = (message: string, type: "success" | "error") => {
     setNotification({ message, type });
-    setTimeout(() => setNotification(null), 2000); 
+    setTimeout(() => setNotification(null), 2000);
   };
-
 
   const environmentIconMap: Record<string, React.ReactElement> = {
     Busy: <FaRunning />,
@@ -258,214 +265,240 @@ const ListingPage = () => {
     Seniors: <MdElderly />,
   };
 
+
   return (
     <div className={styles.SListingRow}>
       <NavBar />
-      
-    <div className = {styles.SLContainer}>
-      {notification && (
+
+      <div className={styles.SLContainer}>
+        {notification && (
           <Notification
             message={notification.message}
             onClose={() => setNotification(null)}
           />
         )}
-      <div className="col-md-7 d-flex flex-column gap-3">
-        <div>
-          <ImageGallery images={images} />
-        </div>
-        <div className={`${styles.firstbox} rectangle mb-3`}>
+        <div className="col-md-7 d-flex flex-column gap-3">
           <div>
-            <div className = {`row ${styles.justifyContentEnd} align-items-start`}>
-              <div className="col-6">
-                {listing.listing_type === "Sell" ? (
-                  <h1 style={{ color: "#290661" }}>For Sale</h1>
-                ) : listing.listing_type === "Rent" ? (
-                  <h1 style={{ color: "#290661" }}>For Rent</h1>
-                ) : (
-                  ""
-                )}
-                <h4 style={{ color: "#290661" }}>PKR {listing.price}</h4>
-              </div>
-              <div className={`col-6 d-flex ${styles.justifyContentEnd} align-items-start`}>
-                <Button variant="outline-secondary" className={styles.SLbtnListing} onClick={handleSave}>
-                  {isSaved ? <BsHeartFill /> : <BsHeart />}
-                  {isSaved ? "Unsave" : "Save"}
-                </Button>
-                <Button
-                  variant="outline-secondary"
-                  className={styles.SLbtnListing}
-                  // onClick={handleShare}
-                >
-                  <BsShare />
-                  Share
-                </Button>
-              </div>
-            </div>
-            <div className="row mb-3">
-              <div className={styles.col12}>
-                <span>
-                  Bedroom <br />
-                  <span className={styles.bedroomInfo}>
-                    <FaBed className={styles.bedIcon} />
-                    {listing.bedroom}
-                  </span>
-                </span>
-                <span>
-                  Bathroom
-                  <span className={styles.bathroomInfo}>
-                    <FaBath className={styles.bathroomIcon}/>
-                    {listing.bath}
-                  </span>
-                </span>
-                <span>
-                  Area Space <br />
-                  <span className={styles.areaInfo}>
-                    <FaRulerCombined className={styles.areaIcon}/>
-                    {listing.area}
-                  </span>
-                </span>
-              </div>
-            </div>
+            <ImageGallery images={images} />
           </div>
-        </div>
-        <div className={`rectangle ${styles.rec2}`}>
-          <h3>Environment</h3>
-          <div className={`${styles.col12} ${styles.prefernece}`}>
-            {listing.preferences.environment.map((preference, index) => (
-              <Button
-                variant="outline-primary"
-                key={index}
-                className={`${styles.tags} m-1`}
-              >
-                {environmentIconMap[preference]} {preference}
-              </Button>
-            ))}
-          </div>
-        </div>
-        <div className={`rectangle ${styles.rec2}`}>
-          <h3>Facilities</h3>
-          <div className={`${styles.col12} ${styles.prefernece}`}>
-            {listing.preferences.facilities.map((preference, index) => (
-              <Button
-                variant="outline-primary"
-                key={index}
-                className={`${styles.tags} m-1`}
-              >
-                {facilitiesIconMap[preference]} {preference}
-              </Button>
-            ))}
-          </div>
-        </div>
-        <div className={`rectangle ${styles.rec2}`}>
-          <h3>Age Group</h3>
-          <div className={`${styles.col12} ${styles.prefernece}`}>
-            {listing.preferences.ageGroup.map((preference, index) => (
-              <Button
-                variant="outline-primary"
-                key={index}
-                className={`${styles.tags} m-1`}
-              >
-                {ageGroupIconMap[preference]} {preference}
-              </Button>
-            ))}
-          </div>
-        </div>
-        <div className={`rectangle ${styles.rec2}`}>
-          <h3>Description</h3>
-          {listing.Description}
-        </div>
-        <div className={`rectangle ${styles.rec2}`}>
-          <h3>Location</h3>
-          <div className={styles.SLlocationContent}>{listing.location}</div>
-          {coordinates && (
-            <MapComponent
-              latitude={coordinates.latitude}
-              longitude={coordinates.longitude}
-            />
-          )}
-        </div>
-      </div>
-      <div className="col-md-4 d-flex flex-column gap-3">
-      <div className={`${styles.SLSide} rectangle p-3 mb-3`}>
-          <Button className={styles.SellerProfileTag}>Seller Profile</Button>
-          <div className={`${styles.SLUpper} d-flex align-items-center mb-3`}>
-            <div className={`${styles.SLcircleImageContainer} me-3`}>
-              {user?.profilePicture ? (
-                <Image
-                  src={user.profilePicture.url || "/no-profile-picture-15257.svg"}
-                  alt="Profile Image"
-                  width={100}
-                  height={100}
-                  className={styles.SLcircleImage}
-                />
-              ) : (
-                <Image
-                  src="/no-profile-picture-15257.svg"
-                  alt="Default Profile Image"
-                  width={100}
-                  height={100}
-                  className={styles.SLcircleImage}
-                />
-              )}
-            </div>
+          <div className={`${styles.firstbox} rectangle mb-3`}>
             <div>
-              <h5>{user?.name}</h5>
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <div className="mb-4">
-              <label htmlFor="contact-number" className={styles.SLformLabel}>
-                Contact Number
-              </label>
-              <div className={`"d-flex align-items-center position-relative ${styles.SLroundedInputContainer}`}>
-                <input
-                  type="text"
-                  id="contact-number"
-                  className={`${styles.SLformControl} ${styles.SLroundedInput}`}
-                  placeholder={user?.contact}
-                  readOnly
-                  onFocus={(e) => e.target.blur()}
-                />
-                <FaCopy
-                  onClick={() => handleCopy(user?.contact || "")}
-                  className={`${styles.SLcopyIcon} ms-2`}
-                />
+              <div
+                className={`row ${styles.justifyContentEnd} align-items-start`}
+              >
+                <div className="col-6">
+                  {listing.listing_type === "Sell" ? (
+                    <h1 style={{ color: "#290661" }}>For Sale</h1>
+                  ) : listing.listing_type === "Rent" ? (
+                    <h1 style={{ color: "#290661" }}>For Rent</h1>
+                  ) : (
+                    ""
+                  )}
+                  <h4 style={{ color: "#290661" }}>PKR {listing.price}</h4>
+                </div>
+                <div
+                  className={`col-6 d-flex ${styles.justifyContentEnd} align-items-start`}
+                >
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.SLbtnListing}
+                    onClick={handleSave}
+                  >
+                    {isSaved ? <BsHeartFill /> : <BsHeart />}
+                    {isSaved ? "Unsave" : "Save"}
+                  </Button>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.SLbtnListing}
+                    // onClick={handleShare}
+                  >
+                    <BsShare />
+                    Share
+                  </Button>
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className={styles.col12}>
+                  <span>
+                    Bedroom <br />
+                    <span className={styles.bedroomInfo}>
+                      <FaBed className={styles.bedIcon} />
+                      {listing.bedroom}
+                    </span>
+                  </span>
+                  <span>
+                    Bathroom
+                    <span className={styles.bathroomInfo}>
+                      <FaBath className={styles.bathroomIcon} />
+                      {listing.bath}
+                    </span>
+                  </span>
+                  <span>
+                    Area Space <br />
+                    <span className={styles.areaInfo}>
+                      <FaRulerCombined className={styles.areaIcon} />
+                      {listing.area}
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="mb-4">
-              <label htmlFor="email-address" className={styles.SLformLabel}>
-                Email Address
-              </label>
-              <div className={`"d-flex align-items-center position-relative ${styles.SLroundedInputContainer}`}>
-                <input
-                  type="email"
-                  id="email-address"
-                  className={`${styles.SLformControl} ${styles.SLroundedInput}`}
-                  placeholder={user?.email}
-                  readOnly
-                  onFocus={(e) => e.target.blur()}
-                />
-                <FaCopy
-                  onClick={() => handleCopy(user?.email || "")}
-                  className={`${styles.SLcopyIcon} ms-2`}
-                />
-              </div>
+          </div>
+          <div className={`rectangle ${styles.rec2}`}>
+            <h3>Environment</h3>
+            <div className={`${styles.col12} ${styles.prefernece}`}>
+              {listing.preferences.environment.map((preference, index) => (
+                <Button
+                  variant="outline-primary"
+                  key={index}
+                  className={`${styles.tags} m-1`}
+                >
+                  {environmentIconMap[preference]} {preference}
+                </Button>
+              ))}
             </div>
           </div>
-
-          <div className={styles.SLtextCenter}>
-            <button className={`${styles.SLchatBtn} btn btn-primary`}>Live Chat</button>
+          <div className={`rectangle ${styles.rec2}`}>
+            <h3>Facilities</h3>
+            <div className={`${styles.col12} ${styles.prefernece}`}>
+              {listing.preferences.facilities.map((preference, index) => (
+                <Button
+                  variant="outline-primary"
+                  key={index}
+                  className={`${styles.tags} m-1`}
+                >
+                  {facilitiesIconMap[preference]} {preference}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div className={`rectangle ${styles.rec2}`}>
+            <h3>Age Group</h3>
+            <div className={`${styles.col12} ${styles.prefernece}`}>
+              {listing.preferences.ageGroup.map((preference, index) => (
+                <Button
+                  variant="outline-primary"
+                  key={index}
+                  className={`${styles.tags} m-1`}
+                >
+                  {ageGroupIconMap[preference]} {preference}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div className={`rectangle ${styles.rec2}`}>
+            <h3>Description</h3>
+            {listing.Description}
+          </div>
+          <div className={`rectangle ${styles.rec2}`}>
+            <h3>Location</h3>
+            <div className={styles.SLlocationContent}>{listing.location}</div>
+            {coordinates && (
+              <MapComponent
+                latitude={coordinates.latitude}
+                longitude={coordinates.longitude}
+              />
+            )}
           </div>
         </div>
-        <div className={`rectangle ${styles.SLside2} p-3 mb-3`}>
-        <VerticalCardCarousel listingId={listing._id.toString()} />
+        <div className="col-md-4 d-flex flex-column gap-3">
+          <div className={`${styles.SLSide} rectangle p-3 mb-3`}>
+            <Button className={styles.SellerProfileTag}>Seller Profile</Button>
+            <div className={`${styles.SLUpper} d-flex align-items-center mb-3`}>
+              <div className={`${styles.SLcircleImageContainer} me-3`}>
+                {user?.profilePicture ? (
+                  <Image
+                    src={
+                      user.profilePicture.url || "/no-profile-picture-15257.svg"
+                    }
+                    alt="Profile Image"
+                    width={100}
+                    height={100}
+                    className={styles.SLcircleImage}
+                  />
+                ) : (
+                  <Image
+                    src="/no-profile-picture-15257.svg"
+                    alt="Default Profile Image"
+                    width={100}
+                    height={100}
+                    className={styles.SLcircleImage}
+                  />
+                )}
+              </div>
+              <div>
+                <h5>{user?.name}</h5>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div className="mb-4">
+                <label htmlFor="contact-number" className={styles.SLformLabel}>
+                  Contact Number
+                </label>
+                <div
+                  className={`"d-flex align-items-center position-relative ${styles.SLroundedInputContainer}`}
+                >
+                  <input
+                    type="text"
+                    id="contact-number"
+                    className={`${styles.SLformControl} ${styles.SLroundedInput}`}
+                    placeholder={user?.contact}
+                    readOnly
+                    onFocus={(e) => e.target.blur()}
+                  />
+                  <FaCopy
+                    onClick={() => handleCopy(user?.contact || "")}
+                    className={`${styles.SLcopyIcon} ms-2`}
+                  />
+                </div>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email-address" className={styles.SLformLabel}>
+                  Email Address
+                </label>
+                <div
+                  className={`"d-flex align-items-center position-relative ${styles.SLroundedInputContainer}`}
+                >
+                  <input
+                    type="email"
+                    id="email-address"
+                    className={`${styles.SLformControl} ${styles.SLroundedInput}`}
+                    placeholder={user?.email}
+                    readOnly
+                    onFocus={(e) => e.target.blur()}
+                  />
+                  <FaCopy
+                    onClick={() => handleCopy(user?.email || "")}
+                    className={`${styles.SLcopyIcon} ms-2`}
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <form onSubmit={sendChatMessage}>
+              <input type="text"
+              placeholder="Enter your message here"
+              onChange={(e) => {
+                console.log(e.target.value, message)
+                setMessage(e.target.value)
+
+              }}
+              value={message}
+              style={{borderRadius: "10px"}}
+              />
+              <button type="submit" className={`${styles.SLchatBtn} btn btn-primary`}>
+                Live Chat
+              </button>
+            </form>
+              
+            
+          </div>
+          <div className={`rectangle ${styles.SLside2} p-3 mb-3`}>
+            <VerticalCardCarousel listingId={listing._id.toString()} />
+          </div>
         </div>
       </div>
-      
-    </div>
-
-   
     </div>
   );
 };

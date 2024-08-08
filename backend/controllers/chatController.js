@@ -12,6 +12,41 @@ exports.sendMessages = async (req, res) => {
     let chats = await Chat.findOne({
       participants: { $all: [senderID, receiverID] },
     });
+    const newMessages = new Message({
+      senderId : senderID,
+      receiverId : receiverID,
+      message,
+    });
+
+    if (newMessages) {
+      chats.messages.push(newMessages._id);
+    }
+
+    await Promise.all([newMessages.save(), chats.save()]);
+
+    const receiverSocketId = getReceiverSocketId(receiverID);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessages);
+    }
+    
+    res.status(201).send(newMessages);
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: error,
+    });
+    console.log(error);
+  }
+};
+
+exports.createMessage =  async (req, res) => { 
+try {
+    const { id: receiverID } = req.params;
+    const senderID = req.user._id;
+    const { message } = req.body;
+    let chats = await Chat.findOne({
+      participants: { $all: [senderID, receiverID] },
+    });
     if (!chats) {
       await Chat.create({
         participants: [senderID, receiverID],
@@ -42,8 +77,8 @@ exports.sendMessages = async (req, res) => {
     });
     console.log(error);
   }
-};
 
+}
 exports.getMessages = async (req, res) => {
   try {
     const { id: receiverID } = req.params;

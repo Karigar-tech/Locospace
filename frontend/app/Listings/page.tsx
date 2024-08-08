@@ -21,7 +21,6 @@ import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
 import { faMapMarkerAlt, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Thread } from '@/types';
 import { useAuthContext } from '@/context/authContext';
 
 
@@ -66,8 +65,6 @@ const Page = () => {
     "Adults": <MdOutlineHiking />,
     "Seniors": <MdElderly />
   };
-
-  const [threads, setThreads] = useState<Thread[]>([]);
   const {authUser ,setAuthUser} = useAuthContext();
 
   useEffect(() => {

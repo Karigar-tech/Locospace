@@ -1,13 +1,12 @@
 import React from "react";
 import { IoIosSend } from "react-icons/io";
 import useSendMessage from "../Hooks/useSendMessage";
-import useGetConversations from "../Hooks/useGetConversations";
+import {useRouter}  from "next/navigation";
 
-const MessageInput = () => {
+const MessageInput: React.FC = () => {
+  const router = useRouter();
   const [message, setMessage] = React.useState("");
-  const { loading, sendMessage } = useSendMessage();
-  const { conversations } = useGetConversations();
-
+  const { loading, sendMessage } = useSendMessage();  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message) return;

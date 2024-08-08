@@ -2,7 +2,9 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { User, Community, Reply, Thread } from '@/types';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import { AiFillEdit } from "react-icons/ai";
+import { MdDeleteForever } from "react-icons/md";
 import '../../styles/main.css';
+import { threadId } from 'worker_threads';
 
 interface BoxProps {
   _id: number;  // Ensure this is a string
@@ -43,6 +45,22 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
 
     fetchCurrentUser();
   }, []);
+
+  const handleDeleteThread = async (threadId: number) => {
+    console.log("ID: ", threadId)
+    try {
+        const response = await fetch(`http://localhost:5000/api/threads/deleteThread/${threadId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      console.log("Response", response)
+      
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchReplies = async () => {
@@ -138,6 +156,8 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
         {currentUser && currentUser._id === user_id._id && (
           <Col className='open-thread-container'>
             <AiFillEdit size={24} className='delete-button' onClick={handleEditClick} />
+            <MdDeleteForever size={24} className='delete-button' onClick={()=> handleDeleteThread(_id)}/>
+              
           </Col>)
         }
       </Row>

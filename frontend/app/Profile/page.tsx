@@ -19,9 +19,17 @@ const MyProfile: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {authUser ,setAuthUser} = useAuthContext();
-
+  const [isThreadOpen, setIsThreadOpen] = useState(false);
+  const [selectedThreadId, setSelectedThreadId] = useState<Thread | null>(null);
+  
   const handleProfileUpdate = (profile: { user: any; listings: Listing[] }) => {
     setListings(profile.listings);
+  };
+  const openThread = (thread_id: Thread) => {
+    if (thread_id !== null) {
+      setIsThreadOpen(true);
+      setSelectedThreadId(thread_id);
+    }
   };
 
   useEffect(() => {
@@ -81,6 +89,7 @@ const MyProfile: React.FC = () => {
             ) : threads.length > 0 ? (
               threads.map((thread) => (
                 <ThreadBox
+                  onClick={()=> openThread(thread)}
                   key={thread._id}
                   _id={thread._id}
                   user_id={thread.user_id}

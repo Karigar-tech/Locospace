@@ -451,6 +451,9 @@ body {
   transform: scale(1.06);
 }
 
+.thread-headings{
+  max-width: 600px;
+}
 .thread-title {
   display: flex;
   font-size: 1.7rem;
@@ -643,12 +646,18 @@ body {
   padding-right: 1rem;
   border-radius: 20px;
   border: 0px #007bff;
+  transform: scaleX(1.05);
 }
 
 .reply-icon{
   font-size: 1.5rem;
   padding-right: 0.5rem;
   color: #20096d;
+}
+
+.open-thread-container{
+  display: flex;
+  justify-content: flex-end;
 }
 
 .delete-button{

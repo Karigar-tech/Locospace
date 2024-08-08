@@ -31,15 +31,7 @@ exports.updateThread = async (req, res) => {
     const { thread_title, thread_description, community_id}= req.body;
     console.log("Thread update: ", thread_title, " : ", thread_description, "id: ", id, "Comm_id: ",community_id)
     
-    try {
-        
-        // const thread = new Thread({
-        //     user_id: id,
-        //     community_id: community_id,
-        //     thread_title: thread_title,
-        //     thread_description: thread_description,
-        // });
-        
+    try {        
         const updatedThread = await Thread.findByIdAndUpdate(
             id,
             {  

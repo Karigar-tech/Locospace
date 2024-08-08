@@ -8,6 +8,8 @@ router.post('/createThread', authenticateToken, threadController.createThread);
 
 router.put('/updateThread/:id', authenticateToken, threadController.updateThread);
 
+router.delete('/deleteThread/:id', authenticateToken, threadController.deleteThread);
+
 router.get('/allThreads', threadController.getAllThreads);
 
 router.get('/specificThreads/:id', authenticateToken,threadController.getSpecificThreads);

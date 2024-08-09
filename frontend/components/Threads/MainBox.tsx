@@ -24,21 +24,20 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
     }
   };
 
-  const handleAddThread = async (title: string, description: string) => {
-    const threadData = {
-      title,
-      description,
-      community_id: commID,
-    };
-
+  const handleAddThread = async (formData: FormData) => {
+    
+    formData.append('community_id', commID);
+    console.log("Final FormData Contents:");
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
     try {
       const response = await fetch('http://localhost:5000/api/threads/createThread', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(threadData),
+        body: formData,
       });
 
       if (response.ok) {
@@ -46,7 +45,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
         setThreads([...threads, newThread]);
         setIsModalOpen(false); // Close the modal after adding the thread
       } else {
-        console.error('Failed to add thread');
+        console.error('Failed to add thread', response);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -88,6 +87,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
               threads.map(thread => (
                 <div key={thread._id} className="thread-item" >
                   <ThreadBox
+                    image={thread.image}
                     onClick={()=> openThread(thread)}
                     _id={thread._id}
                     user_id={thread.user_id}

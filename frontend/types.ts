@@ -59,6 +59,7 @@ export interface Thread {
   thread_description: string;
   createdAt: string;
   updatedAt: string;
+  image: string;
 }
 
 

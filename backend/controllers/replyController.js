@@ -8,10 +8,8 @@ const generatePublicUrl = (file) => {
 };
 
 exports.createReply = async (req, res) => {
-    console.log("Here")
     const user_id = req.user.id;
     try {
-        console.log("Here2: ", req.body)
         const { thread_id, content } = req.body;
         
         if (!ObjectId.isValid(thread_id)) {

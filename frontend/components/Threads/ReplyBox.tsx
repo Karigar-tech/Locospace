@@ -254,6 +254,13 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
           </div>
           <p className="thread-description">{threadId.thread_description}</p>
         </Row>
+        <Row>
+          {threadId.image && (
+            <div className="thread-image-container">
+              <img src={threadId.image} alt="Thread Image" style={{ maxWidth: '100%', maxHeight: '80%', borderRadius: '10px' }} />
+            </div>
+          )}
+        </Row>
       </Container>
       <h5 className='mt-2'>Replies</h5>
       {replies.length > 0 ? (
@@ -346,7 +353,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
         <button type="button" className="icon-button" onClick={() => document.getElementById('image-upload')?.click()}>
           <FaImage />
         </button>
-        <input
+        <input 
           type="file"
           accept="image/*"
           id="image-upload"

@@ -1,26 +1,73 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import style from './addthread.module.css';
+import Spinner from '../../utils/Spinner'; 
+import DocumentPreview from './DocPreview'
+import { FaImage, FaPaperclip, FaPaperPlane, FaSmile, FaTimes  } from 'react-icons/fa';
+import EmojiPicker from 'emoji-picker-react';
 
 interface AddThreadProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddThread: (title: string, description: string) => void;
+  onAddThread: (formData: FormData) => void;
 }
 
 const AddThread: React.FC<AddThreadProps> = ({ isOpen, onClose, onAddThread }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
+  const [loadingImage, setLoadingImage]= useState(false);
+  const [loadingDoc, setLoadingDoc]= useState(false);
+  const [DocFile, setDocFile]= useState<File | null >(null);
+  const [ImageFile, setImageFile]= useState<File | null >(null);
+  
   const handleSubmit = () => {
-    if (title.trim() && description.trim()) {
-      onAddThread(title, description);
-      setTitle('');
-      setDescription('');
-      onClose();
+    const formData= new FormData()
+    formData.append('thread_title', title);
+    formData.append('thread_description', description);
+    
+    if(ImageFile){
+      formData.append('image', ImageFile);
     }
+
+    console.log("FormData Contents:");
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+    
+    onAddThread(formData);
+    setTitle('');
+    setDescription('');
+    setImageFile(null);
+    onClose();
   };
 
   if (!isOpen) return null;
+  const handleImage= (event: ChangeEvent<HTMLInputElement>)=>{
+    setLoadingImage(true);
+    const file = event.target.files ? event.target.files[0] : null;
+    if(file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageFile(file);
+        setLoadingImage(false);
+      }
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleRemoveImage = () =>{
+    setImageFile(null);
+  }
+
+  const handleDoc= (event: ChangeEvent<HTMLInputElement>) => {
+    setLoadingDoc(true);
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setDocFile(file);
+      setLoadingDoc(false);
+    }
+  };
+
+
 
   return (
     <div className={style.modalOverlay} onClick={onClose}>
@@ -42,6 +89,38 @@ const AddThread: React.FC<AddThreadProps> = ({ isOpen, onClose, onAddThread }) =
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+        <div className="preview-container">
+        {ImageFile && (
+          <div className="preview-item">
+            {loadingImage ? (
+              <Spinner />
+            ) : (
+              <div className="preview-content">
+                <img src={URL.createObjectURL(ImageFile)} alt="Image Preview" className="preview-image" />
+                <button className="remove-btn" onClick={handleRemoveImage}>
+                  <FaTimes size={14} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        </div>
+        <div>
+          <button className={style.icon} onClick={()=>document.getElementById('image-upload')?.click()}>
+            <FaImage/>
+              <input 
+              type="file" 
+              accept= "image/*" 
+              id= "image-upload"
+              onChange={handleImage}
+              style={{display: 'none'}}
+            />
+          </button>
+          
+          <button className={style.icon}>
+            <FaPaperclip/>
+          </button>
+        </div>
         <button className={style.modalSubmitButton} onClick={handleSubmit}>
           Add Thread
         </button>

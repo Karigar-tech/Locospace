@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
 import styles from "./selectedlist.module.css";
 import { Listing, User } from "../../types";
-import { BsHeartFill, BsHeart, BsShare } from "react-icons/bs";
+import { BsHeartFill, BsHeart } from "react-icons/bs";
 import Image from "next/image";
 import Notification from "../../components/Seller/MessageComp";
 //Icons
@@ -76,27 +76,7 @@ const ListingPage = () => {
 
   const text = "Check out this listing!";
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "My Page",
-          text: text,
-          url: url,
-        })
-        .then(() => {
-          console.log("Thanks for sharing!");
-        })
-        .catch((err) => {
-          console.error("Error sharing:", err);
-        });
-    } else {
-      window.open(`mailto:?subject=Check out this page&body=${text} ${url}`);
-      window.open(`https://api.whatsapp.com/send?text=${text} ${url}`);
-      window.open(`https://twitter.com/intent/tweet?text=${text} ${url}`);
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
-    }
-  };
+  
   useEffect(() => {
     const checkIfSaved = async () => {
       try {
@@ -307,14 +287,7 @@ const ListingPage = () => {
                     {isSaved ? <BsHeartFill /> : <BsHeart />}
                     {isSaved ? "Unsave" : "Save"}
                   </Button>
-                  <Button
-                    variant="outline-secondary"
-                    className={styles.SLbtnListing}
-                    // onClick={handleShare}
-                  >
-                    <BsShare />
-                    Share
-                  </Button>
+                  
                 </div>
               </div>
               <div className="row mb-3">

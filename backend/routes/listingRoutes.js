@@ -32,6 +32,8 @@ router.post('/savedListings', authenticateToken, listingController.addSavedListi
 
 router.post('/unsavedListings', authenticateToken, listingController.removeSavedListing);
 
+router.delete('/delete/:id', authenticateToken, listingController.deleteListing);
+
 
 
 module.exports = router;

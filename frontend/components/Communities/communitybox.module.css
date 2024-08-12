@@ -3,7 +3,7 @@
     margin: 1rem;
     border: solid 1px #9c9c9c;
     border-radius: 20px;
-    width: 70%;
+    width: 80%;
     height: 80%;
     background-color: rgb(255, 254, 253);
     display: flex;
@@ -31,7 +31,7 @@
   }
 
   .exploreButton {
-    width: 5rem;
+    width: fit-content;
     background: #3D8BFD;
     color: white; 
     border: none; 
@@ -39,9 +39,6 @@
     padding: 0.5rem 2rem; 
     font-size: 1rem; 
     cursor: pointer;  
-    margin-bottom: 5px;
-    margin-left: 160px; 
-
      
   }
 

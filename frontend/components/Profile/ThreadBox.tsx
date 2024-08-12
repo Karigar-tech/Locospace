@@ -5,6 +5,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 import DocumentPreview from './DocPreview'
 import '../../styles/main.css';
+import style from '../../styles/profile.module.css';
 
 interface BoxProps {
   _id: number; // Ensure this is a number or string based on your data
@@ -129,7 +130,12 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     .slice(0, 3);
 
   return (
-    <Container className="thread-box p-4 mb-2">
+    <Container className={style.threadBox}>
+        <Row>
+            <div className={style.community}>
+                {community_id.communityName}
+            </div>
+        </Row>
       <Row style={{ flexDirection: 'row', marginTop: '0.1rem' }}>
         <Col style={{ flex: '0 0px' }}>
           {user_id.profilePicture && user_id.profilePicture.url ? (
@@ -150,7 +156,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           <strong>{user_id.username}</strong> <span className="text-muted">· Posted: {new Date(createdAt).toLocaleTimeString()}</span>
         </Col>
       </Row>
-      <Row className="mt-2">
+      <Row className="mt-1">
         <Col className='thread-headings'>
           <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
@@ -185,7 +191,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
                 />
               ) : (
                 <img
-                  src="/osama.jpg" // Replace with the actual path to your placeholder image
+                  src="/no-profile-picture-15257.svg" // Replace with the actual path to your placeholder image
                   alt="pfp"
                   className="reply-user-image"
                 />

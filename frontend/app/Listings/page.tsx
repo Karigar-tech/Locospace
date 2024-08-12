@@ -345,7 +345,14 @@ const Page = () => {
           </div>
         </div>
       ) : (
+        <div>
+          <div className='col'> 
+            <h4 className="ml-15 mt-36">
+              Threads in {community ? community : 'Community'}
+            </h4>
+          </div>
         <MainBox threads={threads} commID={commID} /> 
+        </div>
       )}
       <FilterPopup
         showFilters={showFilters}

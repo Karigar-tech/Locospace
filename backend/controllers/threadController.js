@@ -131,7 +131,7 @@ exports.getUserThreads = async (req, res) => {
         if (!ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid user ID' });
         }
-        const threads = await Thread.find({ user_id: new ObjectId(id) }).populate('user_id', 'username profilePicture');;
+        const threads = await Thread.find({ user_id: new ObjectId(id) }).populate('user_id', 'username profilePicture').populate('community_id');
         console.log("They aree::",threads);
         res.status(200).json(threads);
     } catch (error) {

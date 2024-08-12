@@ -1,15 +1,14 @@
 "use client";
-
-import React, { useState , useEffect } from "react";
-import { useRouter} from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import NavBar from "../../components/NavBar";
 import UserProfile from "../../components/Profile/UserProfile";
 import Footer from "../../components/LandingFooter";
 import CardGridComp from "../../components/Profile/ListingCard";
-import "../../styles/profile.css";
+import styles from "../../styles/profile.module.css";
 import { Listing } from "@/types";
 import { Thread } from "@/types";
-import ThreadBox from "../../components/Threads/ThreadBox";
+import ThreadBox from "../../components/Profile/ThreadBox";
 import { useAuthContext } from "@/context/authContext";
 import Notification from "../../components/Seller/MessageComp";
 
@@ -19,7 +18,7 @@ const MyProfile: React.FC = () => {
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const {authUser ,setAuthUser} = useAuthContext();
+  const { authUser, setAuthUser } = useAuthContext();
   const [isThreadOpen, setIsThreadOpen] = useState(false);
   const [selectedThreadId, setSelectedThreadId] = useState<Thread | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
@@ -28,6 +27,7 @@ const MyProfile: React.FC = () => {
   const handleProfileUpdate = (profile: { user: any; listings: Listing[] }) => {
     setListings(profile.listings);
   };
+
   const openThread = (thread_id: Thread) => {
     if (thread_id !== null) {
       setIsThreadOpen(true);
@@ -55,7 +55,7 @@ const MyProfile: React.FC = () => {
     } catch (error) {
       console.error('An error occurred while deleting the listing:', error);
     }
-    };
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -69,6 +69,7 @@ const MyProfile: React.FC = () => {
           },
         });
         const data = await response.json();
+        console.log(data)
         setThreads(data);
       } catch (error) {
         console.log('Error fetching threads:', error);
@@ -110,7 +111,6 @@ const MyProfile: React.FC = () => {
   return (
     <div>
       <NavBar />
-      <div className="head"></div>
       <UserProfile onProfileUpdate={handleProfileUpdate} />
       {notification && (
         <Notification
@@ -118,37 +118,37 @@ const MyProfile: React.FC = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="profile-toggle-container">
+      <div className={styles.profileToggleContainer}>
         <button
-          className={`profile-toggle-button ${selectedTab === "listings" ? "active" : ""}`}
+          className={`${styles.profileToggleButton} ${selectedTab === "listings" ? styles.active : ""}`}
           onClick={() => setSelectedTab("listings")}
         >
           Listings
         </button>
         <button
-          className={`profile-toggle-button ${selectedTab === "threads" ? "active" : ""}`}
+          className={`${styles.profileToggleButton} ${selectedTab === "threads" ? styles.active : ""}`}
           onClick={() => setSelectedTab("threads")}
         >
           Threads
         </button>
         <button
-          className={`profile-toggle-button ${selectedTab === "saved" ? "active" : ""}`}
+          className={`${styles.profileToggleButton} ${selectedTab === "saved" ? styles.active : ""}`}
           onClick={() => setSelectedTab("saved")}
         >
           Saved
         </button>
       </div>
-      <div className="profile-content-container">
+      <div className={styles.profileContentContainer}>
         {selectedTab === "listings" ? (
-            <CardGridComp data={listings} onDeleteListing={handleListingDelete} />
-          ) : selectedTab === "threads" ? (
-          <div className="profile-threads-content">
+          <CardGridComp data={listings} onDeleteListing={handleListingDelete} />
+        ) : selectedTab === "threads" ? (
+          <div className={styles.profileThreadsContent}>
             {isLoading ? (
-              <p>Loading...</p>
+              <p className={styles.profileLoadingText}>Loading...</p>
             ) : threads.length > 0 ? (
               threads.map((thread) => (
                 <ThreadBox
-                  onClick={()=> openThread(thread)}
+                  onClick={() => openThread(thread)}
                   key={thread._id}
                   _id={thread._id}
                   user_id={thread.user_id}
@@ -160,15 +160,13 @@ const MyProfile: React.FC = () => {
                 />
               ))
             ) : (
-              <p>No threads available</p>
-
+              <p className={styles.noThreadsMessage}>No threads available</p>
             )}
           </div>
-          ) : (
-            <CardGridComp data={savedItems} onDeleteListing={handleListingDelete} showActions={false}/>
-          )}
+        ) : (
+          <CardGridComp data={savedItems} onDeleteListing={handleListingDelete} showActions={false} />
+        )}
       </div>
-     
     </div>
   );
 };

@@ -7,19 +7,19 @@ import { Button } from "react-bootstrap";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Community } from "../../types";
 import { Suspense } from "react";
-import { useAuthContext } from '../../context/authContext';
-
+import { useAuthContext } from "../../context/authContext";
+import { FaSearch } from "react-icons/fa";
 
 const CommunitiesPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const {authUser ,setAuthUser} = useAuthContext();
+  const { authUser, setAuthUser } = useAuthContext();
   const [communities, setCommunities] = useState<Community[]>([]);
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     if (!authUser) {
-      router.push('/Login'); // Redirect to login page if not authenticated
+      router.push("/Login"); // Redirect to login page if not authenticated
     }
   }, [authUser, router]);
 
@@ -28,7 +28,6 @@ const CommunitiesPage = () => {
       const searchQueryString = searchTerm
         ? `search=${encodeURIComponent(searchTerm)}`
         : "";
-      console.log("Search Query String:", searchQueryString);
       const token = localStorage.getItem("token");
       setAuthUser(token);
       const response = await fetch(
@@ -83,7 +82,6 @@ const CommunitiesPage = () => {
       <div className={styles.gradientBarContainer}>
         <div className={styles.gradientBar}></div>
         <div className={styles.searchBarContainer}>
-          <Button onClick={() => fetchCommunities(search)}>Search</Button>
           <input
             type="text"
             className={styles.communitySearch}
@@ -91,6 +89,18 @@ const CommunitiesPage = () => {
             value={search}
             onChange={handleSearchChange}
           />
+          <Button
+            style={{
+              position: "relative",
+              cursor: "pointer",
+              borderRadius: "0.5rem",
+              height: "fit-content",
+              marginLeft: "0.5rem",
+            }}
+            onClick={() => fetchCommunities(search)}
+          >
+            <FaSearch />
+          </Button>
         </div>
       </div>
       <div className={styles.upperContainer} style={{ width: "90%" }}>
@@ -100,19 +110,19 @@ const CommunitiesPage = () => {
           </div>
         </div>
       </div>
-    <div className={styles.commContainer}>
-    <div className={styles.communityList}>
-        {communities.map((community) => (
-          <CommunityBox
-            key={community._id}
-            name={community.communityName}
-            picture={community.communityPicture}
-            members={community.communityMembers}
-            listings={community.detailedListings.length}
-            onClick={() => handleCommunityClick(community.communityName)}
-          />
-        ))}
-      </div>
+      <div className={styles.commContainer}>
+        <div className={styles.communityList}>
+          {communities.map((community) => (
+            <CommunityBox
+              key={community._id}
+              name={community.communityName}
+              picture={community.communityPicture}
+              members={community.communityMembers}
+              listings={community.detailedListings.length}
+              onClick={() => handleCommunityClick(community.communityName)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -121,7 +131,7 @@ const CommunitiesPage = () => {
 const SuspenseWrapper = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CommunitiesPage/>
+      <CommunitiesPage />
     </Suspense>
   );
 };

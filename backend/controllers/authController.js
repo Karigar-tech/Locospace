@@ -25,6 +25,7 @@ exports.login = async (req, res) => {
         // If password is valid, generate JWT token
         const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
+
         // Return token and user ID in response
         res.json({ token, userId: user._id });
     } catch (error) {

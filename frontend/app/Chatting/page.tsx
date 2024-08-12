@@ -4,6 +4,7 @@ import MessageContainer from '../../components/Chat/MessageContainer';
 import SideChats from '../../components/Chat/SideChats';
 import { useAuthContext } from '../../context/authContext';
 import { useRouter } from 'next/navigation';
+import NavBar from '@/components/NavBar';
 
 const page = () => {
   const router = useRouter();
@@ -15,9 +16,14 @@ const page = () => {
     }
   }, [authUser, router]);
   return (
-    <div className='d-flex justify-content-center overflow-hidden' style={{height:"auto"}}>
+    <div>
+      <>
+      <NavBar/>
+      </>
+    <div className='d-flex' style={{height:"auto"}}>
         <SideChats/>
         <MessageContainer/>
+    </div>
     </div>
   )
 }

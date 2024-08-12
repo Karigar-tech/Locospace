@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 import styles from "./seachBar.module.css";
+import { FaSearch } from "react-icons/fa";
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;
@@ -33,7 +34,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           className={styles.formControl}
         />
         <Button variant="primary" type="submit" className={styles.btn}>
-          Search
+          <FaSearch/>
         </Button>
       </InputGroup>
     </Form>

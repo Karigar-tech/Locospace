@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useAuthContext } from '@/context/authContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -18,6 +19,7 @@ const Login: React.FC = () => {
   const [homeButtonLoading, setHomeButtonLoading] = useState(false);
   const [createAccountLoading, setCreateAccountLoading] = useState(false);
   const router = useRouter();
+  const { authUser, setAuthUser } = useAuthContext();
 
   const handleLogin = async () => { 
     setLoading(true);
@@ -32,9 +34,10 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        const { token } = await response.json();
+        const { token, userId } = await response.json();
         localStorage.setItem('token', token);
-
+        localStorage.setItem('userID', userId );
+        setAuthUser(token);
         // Introduce a delay before redirecting
         setTimeout(() => {
           router.push('/');

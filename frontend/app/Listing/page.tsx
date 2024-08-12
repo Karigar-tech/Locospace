@@ -12,7 +12,7 @@ import Notification from "../../components/Seller/MessageComp";
 //Icons
 import { FaParking, FaChild } from "react-icons/fa";
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
-import { FaPersonSwimming, FaPerson } from "react-icons/fa6";
+import { FaPersonSwimming, FaPerson, FaMessage } from "react-icons/fa6";
 import { CgGym } from "react-icons/cg";
 import { GiBurningRoundShot } from "react-icons/gi";
 import { GiPeaceDove } from "react-icons/gi";
@@ -29,6 +29,8 @@ import {
   FaPaw,
   FaCopy,
 } from "react-icons/fa";
+import { SiGooglemessages } from "react-icons/si";
+
 import VerticalCardCarousel from "../../components/VerticalCarousel";
 import MapComponent from "../../components/MapComponentListing";
 import { geocodeAddress } from "../../utils/geocode";
@@ -36,8 +38,8 @@ import NavBar from "../../components/NavBar";
 import { useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/context/authContext";
 import useCreateConversation from "@/components/Hooks/useCreateConversation";
+import { IoIosSend } from "react-icons/io";
 const ListingPage = () => {
-  
   const router = useRouter();
   const { authUser, setAuthUser } = useAuthContext();
 
@@ -63,7 +65,9 @@ const ListingPage = () => {
     longitude: number;
   } | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const {createConversation} = useCreateConversation(user?._id.toString() || "");
+  const { createConversation } = useCreateConversation(
+    user?._id.toString() || ""
+  );
   const [url, setUrl] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const token = localStorage.getItem("token");
@@ -76,7 +80,6 @@ const ListingPage = () => {
 
   const text = "Check out this listing!";
 
-  
   useEffect(() => {
     const checkIfSaved = async () => {
       try {
@@ -158,7 +161,7 @@ const ListingPage = () => {
     console.log(message);
     await createConversation(message);
     setMessage("");
-  } 
+  };
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -201,7 +204,6 @@ const ListingPage = () => {
 
   const images = listing.ListingPictures;
   const address = listing.location;
-  
 
   const handleCopy = (text: string) => {
     navigator.clipboard
@@ -245,7 +247,6 @@ const ListingPage = () => {
     Seniors: <MdElderly />,
   };
 
-
   return (
     <div className={styles.SListingRow}>
       <NavBar />
@@ -287,7 +288,6 @@ const ListingPage = () => {
                     {isSaved ? <BsHeartFill /> : <BsHeart />}
                     {isSaved ? "Unsave" : "Save"}
                   </Button>
-                  
                 </div>
               </div>
               <div className="row mb-3">
@@ -376,7 +376,16 @@ const ListingPage = () => {
         </div>
         <div className="col-md-4 d-flex flex-column gap-3">
           <div className={`${styles.SLSide} rectangle p-3 mb-3`}>
-            <Button className={styles.SellerProfileTag}>Seller Profile</Button>
+            <p
+              style={{
+                fontSize: "1.5em",
+                fontWeight: "bold",
+                fontFamily: "Gotham",
+              }}
+            >
+              Seller Profile
+            </p>
+
             <div className={`${styles.SLUpper} d-flex align-items-center mb-3`}>
               <div className={`${styles.SLcircleImageContainer} me-3`}>
                 {user?.profilePicture ? (
@@ -404,7 +413,7 @@ const ListingPage = () => {
               </div>
             </div>
 
-            <div className="mb-3">
+            <div className="">
               <div className="mb-4">
                 <label htmlFor="contact-number" className={styles.SLformLabel}>
                   Contact Number
@@ -448,24 +457,36 @@ const ListingPage = () => {
                 </div>
               </div>
             </div>
-            
+          
             <form onSubmit={sendChatMessage}>
-              <input type="text"
-              placeholder="Enter your message here"
-              onChange={(e) => {
-                console.log(e.target.value, message)
-                setMessage(e.target.value)
-
-              }}
-              value={message}
-              style={{borderRadius: "10px"}}
+              <hr />
+              <label className={styles.SLformLabel}>
+                <span style={{marginRight:"10px"}}><SiGooglemessages/></span>Send Seller a Message
+              </label>
+              <input
+                type="text"
+                placeholder="Type your message here..."
+                onChange={(e) => {
+                  console.log(e.target.value, message);
+                  setMessage(e.target.value);
+                }}
+                value={message}
+                style={{
+                  marginTop:"10px",
+                  borderRadius: "10px",
+                  border: "1px solid #0d6efd",
+                  padding: "0.5rem 1rem",
+                  fontSize: "1rem",
+                  width: "18rem",
+                }}
               />
-              <button type="submit" className={`${styles.SLchatBtn} btn btn-primary`}>
-                Live Chat
+              <button
+                type="submit"
+                className={`${styles.SLchatBtn} btn btn-primary`}
+              >
+                <IoIosSend />
               </button>
             </form>
-              
-            
           </div>
           <div className={`rectangle ${styles.SLside2} p-3 mb-3`}>
             <VerticalCardCarousel listingId={listing._id.toString()} />

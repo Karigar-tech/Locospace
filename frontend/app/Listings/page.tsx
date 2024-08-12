@@ -252,8 +252,6 @@ const Page = () => {
 
     const fetchListings = async () => {
     const keyword = searchParams.get('keyword');
-    console.log(keyword)
-    
     try {
       const response = await fetch(`http://localhost:5000/api/listings/type?keyword=${keyword}`, {
         method: 'GET',

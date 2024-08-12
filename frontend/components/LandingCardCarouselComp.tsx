@@ -4,7 +4,8 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import {FaRulerCombined}from "react-icons/fa";
+import { faBed, faBath, faMapMarkerAlt, faRuler } from '@fortawesome/free-solid-svg-icons';
 import { Listing } from '../types';
 import {useRouter} from 'next/navigation'
 import styles from '../styles/main.module.css';
@@ -52,16 +53,7 @@ const CardCarouselComp: React.FC = () => {
         console.error('Error fetching listings:', error);
       });
 
-    // fetch('http://localhost:5000/api/community')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     setCommunities(data);
-    //     console.log(communities)
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching communities:', error);
-    //   });
+
   }, []);
 
   // Function to format price
@@ -106,18 +98,19 @@ const CardCarouselComp: React.FC = () => {
                   <Col className={styles.textright} md={6}><span>{formatPrice(item.price)}</span></Col>
                 </Row>
               </Card.Title>
-              <Row className="mb-3 mt-2">
-                <Col><FontAwesomeIcon icon={faBed} /> {item.bedroom}</Col>
-                <Col className={styles.textright}><FontAwesomeIcon icon={faBath} /> {item.bath}</Col>
+              <Row className="mb-3 mt-2"> 
+                <Col md={2}><FontAwesomeIcon icon={faBed} /> {item.bedroom}</Col>
+                <Col md={2}><FontAwesomeIcon icon={faBath} /> {item.bath}</Col>
+                <Col md={4}><FaRulerCombined/> {item.area} </Col>
               </Row>
-              <hr />
+              <hr/>
               <Row className="mb-2">
                 <Col md={6}>
                   <FontAwesomeIcon icon={faMapMarkerAlt} className={styles.icon} />
-                  <span >{item.location.split(',')[0]}</span>, {item.area}
+                  <span >{item.location.split(',')[0]}</span>
                 </Col>
-                <Col md={3} className={styles.textright}>
-                  <Button onClick={() => handleClick(item._id)}variant="primary" style={{ width: '3rem' }}>View</Button>
+                <Col md={3}>
+                  <Button onClick={() => handleClick(item._id)}variant="primary" style={{ width: '3rem' , marginLeft:"2rem" }}>View</Button>
                 </Col>
               </Row>
             </Card.Body>

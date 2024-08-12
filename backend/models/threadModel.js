@@ -19,6 +19,14 @@ const ThreadSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String, 
+        default: null
+    },
+    document: {
+        type: String,  
+        default: null
+    },
 },
 {
     timestamps: true,

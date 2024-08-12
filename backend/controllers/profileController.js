@@ -140,3 +140,35 @@ exports.getUsername = async (req, res) => {
   }
 };
 
+exports.getSavesfromuser = async (req, res) =>{
+    console.log("Entering getSavesfromuser controller");
+    const id = req.user.id;
+    try {
+
+        console.log("savedd", id)
+
+        const user = await User.findById(id).select('savedListings');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not founddd' });
+        }
+
+        const savedListingsIds = user.savedListings;
+
+        if (!savedListingsIds.length) {
+            return res.status(404).json({ message: 'No saved listings found for this user' });
+        }
+
+        const listings = await Listing.find({ _id: { $in: savedListingsIds } });
+
+        if (!listings.length) {
+            return res.status(404).json({ message: 'No details found for the saved listings' });
+        }
+
+        res.status(200).json(listings);
+    } catch (error) {
+        console.error('Error fetching saved listings:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+  

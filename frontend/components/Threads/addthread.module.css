@@ -88,3 +88,16 @@
     background-color: #0d1f2e; /* Grey background for close button */
     border-radius: 100%;
     }
+
+.icon{
+    background: none;
+    border: none;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0 5px;
+  }
+  
+  .icon:hover {
+    color: #adadad;
+  }

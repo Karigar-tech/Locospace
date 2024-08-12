@@ -6,6 +6,7 @@ import { Card, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBath, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Listing } from '../types';
+import {useRouter} from 'next/navigation'
 import styles from '../styles/main.module.css';
 
 const responsive = {
@@ -28,16 +29,24 @@ const responsive = {
 };
 
 const CardCarouselComp: React.FC = () => {
+  const router = useRouter();
   const [data, setData] = useState<Listing[]>([]);
   // const [communities, setCommunities] = useState<Listing[]>([]);
 
   // console.log("this :" , typeof communities);
+
+  
+
+  const handleClick = (id: number) => {
+    router.push(`/Listing?id=${id}`);
+  };  
 
   useEffect(() => {
     fetch('http://localhost:5000/api/listings/alllistings')
       .then(response => response.json())
       .then(data => {
         setData(data);
+        console.log('landing',data)
       })
       .catch(error => {
         console.error('Error fetching listings:', error);
@@ -67,6 +76,9 @@ const CardCarouselComp: React.FC = () => {
       return `Rs ${price.toLocaleString()}`; // Default format with commas for thousands
     }
   };
+
+
+
 
   return (
     <div className={`${styles.carouselwrapper} mb-5`}>
@@ -105,7 +117,7 @@ const CardCarouselComp: React.FC = () => {
                   <span >{item.location.split(',')[0]}</span>, {item.area}
                 </Col>
                 <Col md={3} className={styles.textright}>
-                  <Button variant="primary" href="#" style={{ width: '3rem' }}>View</Button>
+                  <Button onClick={() => handleClick(item._id)}variant="primary" style={{ width: '3rem' }}>View</Button>
                 </Col>
               </Row>
             </Card.Body>

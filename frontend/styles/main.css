@@ -453,6 +453,7 @@ body {
 
 .thread-headings{
   max-width: 600px;
+  min-width: 80%;
 }
 .thread-title {
   display: flex;
@@ -537,6 +538,9 @@ body {
   z-index: 1;
   /* height: fit-content; */
   
+}
+.thread-image-container{
+  width: inherit;
 }
 
 /* Replies */
@@ -689,7 +693,7 @@ textarea {
 
 .thread-box {
   padding: 15px;
-  width: fill;
+  width: inherit;
   height: fit-content;
   border: 1px solid #ddd;
   border-radius: 30px;
@@ -708,7 +712,7 @@ textarea {
 
 .thread-box:hover {
   padding: 1px;
-  transform: scale(1.01);
+  transform: scale(1.02);
   border: 1px solid #d4d3d3;
   border-radius: 25px;
   background-color: #f7f7f7;
@@ -887,6 +891,7 @@ textarea {
 .icon-button:hover {
   color: #333;
 }
+
 
 
 .emoji-picker-container {

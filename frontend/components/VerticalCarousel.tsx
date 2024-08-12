@@ -50,7 +50,7 @@ const VerticalCardCarousel: React.FC<VerticalCardCarouselProps> = ({ listingId }
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 1,
     slidesToScroll: 2,
     vertical: true,
     verticalSwiping: true,
@@ -93,7 +93,7 @@ const VerticalCardCarousel: React.FC<VerticalCardCarouselProps> = ({ listingId }
                 <Card.Title>
                   <Row className="mb-2">
                     <Col>
-                      <span>{item.listing_type}</span>
+                    <span> For {item.listing_type === 'sell' ? 'Sale' : 'Rent'}</span>
                     </Col>
                     <Col>
                       <span>{formatPrice(item.price)}</span>

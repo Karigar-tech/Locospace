@@ -25,9 +25,8 @@ router.post('/savedListings', authenticateToken, listingController.addSavedListi
 
 router.post('/unsavedListings', authenticateToken, listingController.removeSavedListing);
 
-router.post('/', authenticateToken, upload.array('ListingPictures', 5), listingController.createListing);
+router.delete('/delete/:id', authenticateToken, listingController.deleteListing);
 
-router.put('/:id', authenticateToken, upload.array('ListingPictures', 5), listingController.editListing);
 
 
 router.delete('/:id', authenticateToken, listingController.deleteListing);

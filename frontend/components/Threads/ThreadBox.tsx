@@ -2,22 +2,23 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { User, Community, Reply, Thread } from '@/types';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import { AiFillEdit } from "react-icons/ai";
+import { MdDeleteForever } from "react-icons/md";
 import '../../styles/main.css';
 
 interface BoxProps {
-  _id: number;  // Ensure this is a string
+  _id: number; // Ensure this is a number or string based on your data
   user_id: User;
   community_id: Community;
   thread_title: string;
   thread_description: string;
   createdAt: string;
   updatedAt: string;
-  onClick: (thread: Thread) => void;  // Pass the entire thread
+  image?: string; // URL or base64 image data
+  document?: string;
+  onClick: (thread: Thread) => void; // Pass the entire thread
 }
 
-
-
-const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt, onClick }) => {
+const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt, image, document, onClick }) => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [editingThread, setEditingThread] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(thread_title);
@@ -43,6 +44,24 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
 
     fetchCurrentUser();
   }, []);
+
+  const handleDeleteThread = async (threadId: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/threads/deleteThread/${threadId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (response.ok) {
+        // Handle successful deletion (e.g., refresh or notify user)
+      } else {
+        console.error('Failed to delete thread:', response);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchReplies = async () => {
@@ -97,7 +116,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
       if (response.ok) {
         setEditingThread(false);
       } else {
-        console.error('Failed to update thread: ', response);
+        console.error('Failed to update thread:', response);
       }
     } catch (error) {
       console.error('Error updating thread:', error);
@@ -135,9 +154,12 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
         </Col>
-        <Col className='open-thread-container'>
-          <AiFillEdit size={24} className='delete-button' onClick={handleEditClick} />
-        </Col>
+        {currentUser && currentUser._id === user_id._id && (
+          <Col className='open-thread-container'>
+            <AiFillEdit size={24} className='edit-button' onClick={handleEditClick} />
+            <MdDeleteForever size={24} className='delete-button' onClick={() => handleDeleteThread(_id)} />
+          </Col>
+        )}
       </Row>
       <Row className="align-items-center justify-content-between mt-3">
         <Col className="d-flex">
@@ -158,18 +180,21 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
               )}
             </div>
           ))}
+          {image && (
+            <div className="thread-image-container">
+              <img src={image} alt="Thread Image" style={{ maxWidth: '100%', maxHeight: '80%', borderRadius: '10px' }} />
+            </div>
+          )}
           <div className="reply-count-col">
             {replies.length} replies
           </div>
         </Col>
         <Col className="open-thread-container">
-          <Button variant="primary" className="replybox-button" onClick={() => onClick({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt })}>
-          Open Thread
+          <Button variant="primary" className="replybox-button" onClick={() => onClick({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt, image, document })}>
+            Open Thread
           </Button>
         </Col>
       </Row>
-
-      
 
       {/* Edit Popup */}
       <Modal show={editingThread} onHide={() => setEditingThread(false)}>

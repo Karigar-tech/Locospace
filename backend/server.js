@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 dotenv.config();
 
 
+
 app.use(cors());
 app.use(express.json());
 
@@ -41,5 +42,5 @@ app.use('/health', (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`); // Log server start message
+  console.log(`Server is running on http://localhost:${port}`); // Log server start message
 });

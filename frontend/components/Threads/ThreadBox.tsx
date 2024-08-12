@@ -1,8 +1,9 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { User, Community, Reply, Thread } from '@/types';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
-import { AiFillEdit } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
+import { AiFillEdit } from "react-icons/ai";
+import DocumentPreview from './DocPreview'
 import '../../styles/main.css';
 
 interface BoxProps {
@@ -161,6 +162,17 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           </Col>
         )}
       </Row>
+      <Row>
+        {image && (
+            <div className='thread-image-container'>
+              <img src={image} alt="Thread Image" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '15px' }} />
+              {document && (
+              <DocumentPreview
+                documentUrl={document}
+              />)}
+            </div>
+          )}
+      </Row>
       <Row className="align-items-center justify-content-between mt-3">
         <Col className="d-flex">
           {uniqueUsers.map(user => (
@@ -180,11 +192,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
               )}
             </div>
           ))}
-          {image && (
-            <div className="thread-image-container">
-              <img src={image} alt="Thread Image" style={{ maxWidth: '100%', maxHeight: '80%', borderRadius: '10px' }} />
-            </div>
-          )}
+          
           <div className="reply-count-col">
             {replies.length} replies
           </div>

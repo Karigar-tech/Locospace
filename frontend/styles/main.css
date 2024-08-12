@@ -540,7 +540,12 @@ body {
   
 }
 .thread-image-container{
+  width: 100%;
+
+}
+.thread-image{
   width: inherit;
+
 }
 
 /* Replies */

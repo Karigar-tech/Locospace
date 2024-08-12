@@ -83,7 +83,6 @@ const CommunitiesPage = () => {
       <div className={styles.gradientBarContainer}>
         <div className={styles.gradientBar}></div>
         <div className={styles.searchBarContainer}>
-          <Button onClick={() => fetchCommunities(search)}>Search</Button>
           <input
             type="text"
             className={styles.communitySearch}
@@ -91,6 +90,7 @@ const CommunitiesPage = () => {
             value={search}
             onChange={handleSearchChange}
           />
+          <Button onClick={() => fetchCommunities(search)}>Search</Button>
         </div>
       </div>
       <div className={styles.upperContainer} style={{ width: "90%" }}>

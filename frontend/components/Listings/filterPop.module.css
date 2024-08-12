@@ -1,0 +1,33 @@
+
+.closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem; 
+    color: #000; 
+    transition: color 0.3s ease;
+}
+  
+.filterHeader{
+    display: flex;
+    flex-direction: row;
+    align-items: first baseline;
+    justify-content: space-between;
+}
+
+.filterContent{
+    margin: 10px;
+}
+
+.filterSection{
+    margin:30px;
+}
+
+.popupformCheck{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.applyFiltersPopup{
+    border-radius: 20px;
+}

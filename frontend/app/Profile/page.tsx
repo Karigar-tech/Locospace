@@ -11,9 +11,10 @@ import { Listing } from "@/types";
 import { Thread } from "@/types";
 import ThreadBox from "../../components/Threads/ThreadBox";
 import { useAuthContext } from "@/context/authContext";
+import Notification from "../../components/Seller/MessageComp";
 
 const MyProfile: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState<"listings" | "threads">("listings");
+  const [selectedTab, setSelectedTab] = useState<"listings" | "threads" | "saved">("listings");
   const [listings, setListings] = useState<Listing[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,9 @@ const MyProfile: React.FC = () => {
   const {authUser ,setAuthUser} = useAuthContext();
   const [isThreadOpen, setIsThreadOpen] = useState(false);
   const [selectedThreadId, setSelectedThreadId] = useState<Thread | null>(null);
-  
+  const [notification, setNotification] = useState<string | null>(null);
+  const [savedItems, setSavedItems] = useState<Listing[]>([]);
+
   const handleProfileUpdate = (profile: { user: any; listings: Listing[] }) => {
     setListings(profile.listings);
   };
@@ -31,6 +34,28 @@ const MyProfile: React.FC = () => {
       setSelectedThreadId(thread_id);
     }
   };
+
+  const handleListingDelete = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setListings((prevListings) => prevListings.filter((listing) => listing._id !== id));
+        setNotification(result.message);
+      } else {
+        console.error(result.error);
+        setNotification(result.error);
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting the listing:', error);
+    }
+    };
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,6 +79,28 @@ const MyProfile: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
+    const getSavedItems = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/profile/saved', {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await response.json();
+        console.log("saveddd letsgo:", data)
+        setSavedItems(data);
+      } catch (error) {
+        console.log('Error fetching saved items:', error);
+      }
+      setIsLoading(false);
+    };
+    getSavedItems();
+  }, []);
+
+  useEffect(() => {
     setAuthUser(localStorage.getItem('token'));
     if (!authUser) {
       router.push('/Login'); // Redirect to login page if not authenticated
@@ -65,6 +112,12 @@ const MyProfile: React.FC = () => {
       <NavBar />
       <div className="head"></div>
       <UserProfile onProfileUpdate={handleProfileUpdate} />
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <div className="profile-toggle-container">
         <button
           className={`profile-toggle-button ${selectedTab === "listings" ? "active" : ""}`}
@@ -78,11 +131,17 @@ const MyProfile: React.FC = () => {
         >
           Threads
         </button>
+        <button
+          className={`profile-toggle-button ${selectedTab === "saved" ? "active" : ""}`}
+          onClick={() => setSelectedTab("saved")}
+        >
+          Saved
+        </button>
       </div>
       <div className="profile-content-container">
         {selectedTab === "listings" ? (
-            <CardGridComp data={listings} />
-        ) : (
+            <CardGridComp data={listings} onDeleteListing={handleListingDelete} />
+          ) : selectedTab === "threads" ? (
           <div className="profile-threads-content">
             {isLoading ? (
               <p>Loading...</p>
@@ -102,11 +161,14 @@ const MyProfile: React.FC = () => {
               ))
             ) : (
               <p>No threads available</p>
+
             )}
           </div>
-        )}
+          ) : (
+            <CardGridComp data={savedItems} onDeleteListing={handleListingDelete} showActions={false}/>
+          )}
       </div>
-      <Footer />
+     
     </div>
   );
 };

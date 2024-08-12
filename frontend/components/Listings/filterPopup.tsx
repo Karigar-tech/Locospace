@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Nav, Tab, Tabs } from 'react-bootstrap';
+import { FaTimes } from 'react-icons/fa';
 import styles from './filterPop.module.css'
 
 interface FilterPopupProps {
@@ -72,11 +73,13 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
     <>
       {showFilters && (
         <div className="filter-popup">
-          <div className="filter-header">
+          <div className={styles.filterHeader}>
             <h4>Filter</h4>
-            <button onClick={toggleFilters}>Close</button>
+            <button className={styles.closeButton} onClick={toggleFilters}>
+              <FaTimes />
+            </button>
           </div>
-          <div className="filter-content">
+          <div className={styles.filterContent}>
             <Tabs
               activeKey={activeTab}
               onSelect={(k) => setActiveTab(k || 'environments')}
@@ -84,9 +87,10 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
               className="mb-3"
             >
               <Tab eventKey="environments" title="Environments">
-                <div className="filter-section">
+                <div className={styles.filterSection}>
                   {Object.entries(environmentIconMap).map(([key, icon]) => (
                     <Form.Check
+                     className = {styles.popupformCheck}
                       key={key}
                       type="checkbox"
                       id={`environment-${key}`}
@@ -102,9 +106,10 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
                 </div>
               </Tab>
               <Tab eventKey="facilities" title="Facilities">
-                <div className="filter-section">
+              <div className={styles.filterSection}>
                   {Object.entries(facilitiesIconMap).map(([key, icon]) => (
                     <Form.Check
+                    className = {styles.popupformCheck}
                       key={key}
                       type="checkbox"
                       id={`facility-${key}`}
@@ -120,9 +125,10 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
                 </div>
               </Tab>
               <Tab eventKey="ageGroups" title="Age Groups">
-                <div className="filter-section">
+              <div className={styles.filterSection}>
                   {Object.entries(ageGroupIconMap).map(([key, icon]) => (
                     <Form.Check
+                    className = {styles.popupformCheck}
                       key={key}
                       type="checkbox"
                       id={`ageGroup-${key}`}
@@ -139,10 +145,8 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
               </Tab>
             </Tabs>
             <div className="filter-actions">
-              <Button variant="secondary" onClick={toggleFilters}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleApplyFilters}>
+             
+              <Button variant="primary" onClick={handleApplyFilters} className={styles.applyFiltersPopup}>
                 Apply Filters
               </Button>
             </div>

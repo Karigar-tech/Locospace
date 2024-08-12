@@ -11,6 +11,7 @@ import { IoClose } from "react-icons/io5";
 
 import { Listing, User } from "../../types";
 
+
 interface UserProfileProps {
   onProfileUpdate: (profile: { user: User; listings: Listing[] }) => void;
 }
@@ -51,7 +52,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
         setAddress(Data.user.address);
         setContact(Data.user.contact);
         setProfilePictureBase64(Data.user.profilePicture);
-        console.log(Data);
+        console.log("profileee" ,Data);
         setListings(Data.listings);
         onProfileUpdate({ user: Data.user, listings: Data.listings });
       } else {

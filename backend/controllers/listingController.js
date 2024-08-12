@@ -152,9 +152,20 @@ exports.deleteListing = async (req, res) => {
           return res.status(404).json({ error: 'Listing not found' });
       }
 
+        //removing listing from all communities
+        await Community.updateMany(
+            { communityListings: listing._id },
+            { $pull: { communityListings: listing._id } }
+        );
+
+        //reemoving listing from user
+        await User.updateMany(
+            { savedListings: listing._id },
+            { $pull: { savedListings: listing._id } }
+        );
     
-      if (listing.ListingPictures) {
-          const deletePromises = listing.ListingPictures.map(async (url) => {
+        if (listing.ListingPictures) {
+            const deletePromises = listing.ListingPictures.map(async (url) => {
               const filePath = decodeURIComponent(url.split('/o/')[1].split('?')[0]);
               const file = bucket.file(filePath);
               return file.delete();
@@ -341,7 +352,7 @@ exports.removeSavedListing = async (req, res) => {
     
         const listingsInCommunity = await Listing.find({ 
             community,
-            _id: { $ne: id }  //excluding the specific lisitng 
+            _id: { $ne: id } 
           }).exec();
 
         res.json(listingsInCommunity);

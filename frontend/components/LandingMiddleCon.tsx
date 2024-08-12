@@ -116,21 +116,36 @@ const LandingPageComp: React.FC = () => {
     router.push(`/Communities?${queryParams.toString()}`);
   };
 
-  const handleBuyClick = () => {
+  const handleBuyClick = async () => {
     localStorage.removeItem('selectedCommunity');
-    router.push('/Listings?keyword=buy');
+    try {
+      const response = await fetch(`http://localhost:5000/api/listings/type?keyword=buy`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        router.push('/Listings?keyword=buy');
+      } else {
+        console.error("Error fetching buy listings:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching buy listings:", error);
+    }    
   };
   
-  const handleRentClick = () => {
+  const handleRentClick = async () => {
     localStorage.removeItem('selectedCommunity');
-    router.push('/Listings?keyword=rent');
+        router.push('/Listings?keyword=rent');
   };
   
 
   return (
     <Container fluid className={styles.landingcontainer}>
       <Row className="position-relative w-100">
-        <img src='LandingBackground.png' alt="Landing Background" className={styles.backgroundimage} />
+        <img src='LandingBackgroundnew.png' alt="Landing Background" className={`${styles.backgroundimage}`} />
         <Col className={styles.lefthalf}>
           <div className={styles.textoverlay}>
             <div className={styles.bigtext}>Find your Community<br />not just a Property!</div>

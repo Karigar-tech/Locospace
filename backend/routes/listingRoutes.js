@@ -9,29 +9,26 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
-router.post('/', authenticateToken, upload.array('ListingPictures', 5), listingController.createListing);
 
-
-router.put('/:id', authenticateToken, upload.array('ListingPictures', 5), listingController.editListing);
-
-
-router.delete('/:id', authenticateToken, listingController.deleteListing);
 
 router.get('/specific/:id', listingController.getSpecificListing)
-
 
 router.get('/alllistings', listingController.getListings); 
 
 router.get('/nearby',listingController.getNearbyListings)
 
-router.get('/', listingController.getListingsByType);
+router.get('/type', listingController.getListingsByType);
 
-router.get('/listingserach', listingController.getAllListings);
+router.get('/listingsearch', listingController.getAllListings);
 
 router.post('/savedListings', authenticateToken, listingController.addSavedListing);
 
 router.post('/unsavedListings', authenticateToken, listingController.removeSavedListing);
 
+router.delete('/delete/:id', authenticateToken, listingController.deleteListing);
 
+
+
+router.delete('/:id', authenticateToken, listingController.deleteListing);
 
 module.exports = router;

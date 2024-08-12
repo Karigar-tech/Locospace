@@ -27,7 +27,7 @@ const ForgotPassword: React.FC = () => {
       }
 
       // Make API call to reset password
-      const response = await fetch('http://localhost:5000/api/auth/reset-password', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

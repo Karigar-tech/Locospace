@@ -35,7 +35,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
     // Fetch current user
     const fetchCurrentUser = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profile/user', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/user`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -54,7 +54,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
   useEffect(() => {
     const fetchReplies = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/replies/thread/${threadId._id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/replies/thread/${threadId._id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -140,7 +140,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
         console.log(key, value);
       });
 
-      const response = await fetch('http://localhost:5000/api/replies/createReply', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/replies/createReply`, {
         method: 'POST',
         headers: {
          
@@ -168,7 +168,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
 
   const handleDeleteReply = async (replyId: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/replies/deleteReply/${replyId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/replies/deleteReply/${replyId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -200,7 +200,7 @@ const ReplyBox: React.FC<ReplyBoxProps> = ({ threadId }) => {
     if (editingReply) {
       console.log(editingReply._id)
       try {
-        const response = await fetch(`http://localhost:5000/api/replies/updateReply/${editingReply._id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/replies/updateReply/${editingReply._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

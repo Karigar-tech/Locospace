@@ -32,7 +32,7 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
       console.log(`${key}:`, value);
     });
     try {
-      const response = await fetch('http://localhost:5000/api/threads/createThread', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/threads/createThread`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,

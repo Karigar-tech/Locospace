@@ -144,7 +144,7 @@ const LandingPageComp: React.FC = () => {
     localStorage.removeItem("selectedCommunity");
     try {
       const response = await fetch(
-        `http://localhost:5000/api/listings/type?keyword=buy`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/type?keyword=buy`,
         {
           method: "GET",
           headers: {

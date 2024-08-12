@@ -36,7 +36,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     // Fetch current user
     const fetchCurrentUser = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profile/user', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/user`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -54,7 +54,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
 
   const handleDeleteThread = async (threadId: number) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/threads/deleteThread/${threadId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/threads/deleteThread/${threadId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -73,7 +73,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
   useEffect(() => {
     const fetchReplies = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/replies/thread/${_id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/replies/thread/${_id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -107,7 +107,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     event.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:5000/api/threads/updateThread/${_id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/threads/updateThread/${_id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

@@ -35,7 +35,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/profile/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5000/api/profile/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

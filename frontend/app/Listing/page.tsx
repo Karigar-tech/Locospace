@@ -83,7 +83,7 @@ const ListingPage = () => {
   useEffect(() => {
     const checkIfSaved = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/profile/", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -122,8 +122,8 @@ const ListingPage = () => {
   const handleSave = async () => {
     try {
       const endpoint = isSaved
-        ? "http://localhost:5000/api/listings/unsavedListings"
-        : "http://localhost:5000/api/listings/savedListings";
+        ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/unsavedListings`
+        : `${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/savedListings`;
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -168,7 +168,7 @@ const ListingPage = () => {
       if (!id) return;
       try {
         const response = await fetch(
-          `http://localhost:5000/api/listings/specific/${id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/specific/${id}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");

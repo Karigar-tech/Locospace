@@ -37,7 +37,7 @@ const MyProfile: React.FC = () => {
 
   const handleListingDelete = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -61,7 +61,7 @@ const MyProfile: React.FC = () => {
     setIsLoading(true);
     const getThreads = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/threads/userThreads', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/threads/userThreads`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const MyProfile: React.FC = () => {
     setIsLoading(true);
     const getSavedItems = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profile/saved', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/saved`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',

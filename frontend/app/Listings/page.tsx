@@ -80,7 +80,7 @@ const Page = () => {
       const token = localStorage.getItem("token");
       setAuthUser(token);
       const response = await fetch(
-        `http://localhost:5000/api/community/?${searchQueryString}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/?${searchQueryString}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ const Page = () => {
         ageGroup: ageGroup || ''
       }).toString();
 
-      const response = await fetch(`http://localhost:5000/api/listings/listingsearch?${query}`,  {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/listingsearch?${query}`,  {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -161,7 +161,7 @@ const Page = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/profile/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -188,7 +188,7 @@ const Page = () => {
     if (storedCommunity && token) {
       const fetchCommunityDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/api/community/${storedCommunity}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/community/${storedCommunity}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
@@ -200,7 +200,7 @@ const Page = () => {
 
           const userComm = await UserData();
         
-          const response2 = await fetch(`http://localhost:5000/api/threads/specificThreads/${data.communityID}`, {
+          const response2 = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/threads/specificThreads/${data.communityID}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
@@ -255,7 +255,7 @@ const Page = () => {
   const handleJoin = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('http://localhost:5000/api/community/join-community', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/community/join-community`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -292,7 +292,7 @@ const Page = () => {
     const fetchListings = async () => {
     const keyword = searchParams.get('keyword');
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/type?keyword=${keyword}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/type?keyword=${keyword}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

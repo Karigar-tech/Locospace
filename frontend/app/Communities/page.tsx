@@ -31,7 +31,7 @@ const CommunitiesPage = () => {
       const token = localStorage.getItem("token");
       setAuthUser(token);
       const response = await fetch(
-        `http://localhost:5000/api/community/?${searchQueryString}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/?${searchQueryString}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

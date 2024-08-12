@@ -66,6 +66,9 @@ const AddThread: React.FC<AddThreadProps> = ({ isOpen, onClose, onAddThread }) =
       setLoadingDoc(false);
     }
   };
+  const handleRemoveDoc = () =>{
+    setDocFile(null);
+  }
 
 
 
@@ -117,8 +120,15 @@ const AddThread: React.FC<AddThreadProps> = ({ isOpen, onClose, onAddThread }) =
             />
           </button>
           
-          <button className={style.icon}>
+          <button className={style.icon} onClick={()=>document.getElementById('doc-upload')?.click()}>
             <FaPaperclip/>
+            <input 
+              type="file" 
+              accept= ".pdf,.doc,.docx,.txt" 
+              id= "doc-upload"
+              onChange={handleDoc}
+              style={{display: 'none'}}
+            />
           </button>
         </div>
         <button className={style.modalSubmitButton} onClick={handleSubmit}>

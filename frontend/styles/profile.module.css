@@ -1,36 +1,38 @@
-.profile-container {
+
+
+.profileContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   border: 1px solid #a3a3a3;
   border-radius: 15px;
-  padding: 20px;
+  padding: 2rem;
   width: 70%;
   margin: auto;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.profile-header {
+.profileHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.profile-header h2 {
+.profileHeader h2 {
   margin-left: 10%;
   font-family: 'Gotham';
   font-weight: bold;
 }
 
-.header-line {
+.headerLine {
   flex-grow: 1;
   height: 2px;
   background-color: #a3a3a3;
   margin-left: 10px;
 }
 
-.profile-picture {
+.profilePicture {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -38,7 +40,7 @@
   position: relative;
 }
 
-.profile-img {
+.profileImg {
   width: 200px;
   height: 200px;
   object-fit: cover;
@@ -47,7 +49,7 @@
   transition: all 0.4s;
 }
 
-.profile-img-modal {
+.profileImgModal {
   width: 140px;
   height: 140px;
   object-fit: cover;
@@ -56,17 +58,21 @@
   transition: all 0.4s;
 }
 
-.profile-img:hover {
-  transform: scale(1.02);
+.profileImg:hover {
+  opacity: 90%;
 }
 
-.profile-picture-wrapper {
+.profilePictureWrapper {
   position: relative;
   width: fit-content;
   height: fit-content;
 }
 
-.profile-picture-overlay {
+.info{
+  padding: auto;
+  margin-left: 2rem;
+}
+.profilePictureOverlay {
   position: absolute;
   top: 0;
   border-radius: 50%;
@@ -82,11 +88,11 @@
   cursor: pointer;
 }
 
-.profile-picture-wrapper:hover .profile-picture-overlay {
+.profilePictureWrapper:hover .profilePictureOverlay {
   opacity: 1;
 }
 
-.profile-details {
+.profileDetails {
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -94,7 +100,7 @@
   padding-left: 20px;
 }
 
-.detail-box {
+.detailBox {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -102,12 +108,12 @@
   font-family: 'Gotham';
 }
 
-.detail-box label {
+.detailBox label {
   font-weight: bold;
   margin-right: 10px;
 }
 
-.edit-icon {
+.editIcon {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -117,69 +123,73 @@
   transition: all 0.2s;
 }
 
-.edit-icon:hover {
+.editIcon:hover {
   transform: scale(1.02);
   color: #003d7e;
 }
 
-.modal-header {
+.modalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0px;
 }
 
-.profile-icon {
+.profileIcon {
   margin-right: 10px;
 }
 
-.camera-icon {
+.cameraIcon {
   font-size: 2rem;
   color: #ffffff;
 }
 
-.profile-placeholder-icon {
+.profilePlaceholderIcon {
   font-size: 6rem;
   color: #a3a3a3;
 }
 
-.save-button {
+.saveButton {
   background-color: #007bff;
   border-color: #007bff;
   border-radius: 15px;
   font-family: 'Gotham';
 }
 
-.custom-modal {
-  padding: 1rem;
+.customModal {
+  padding: 2rem;
+  display: flex !important;
+  /* width: fit-content !important; */
+  align-items: center !important;
+
 }
 
-.custom-modal .modal-header {
+.customModal .modalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.custom-modal .profile-icon {
+.customModal .profileIcon {
   font-size: 24px;
   margin-right: 10px;
 }
 
-.custom-modal .close {
+.customModal .close {
   cursor: pointer;
 }
 
-.modal-body .profile-picture-wrapper {
+.modalBody .profilePictureWrapper {
   position: relative;
 }
 
-.modal-body .profile-img-modal {
+.modalBody .profileImgModal {
   width: 100px;
   height: 100px;
   border-radius: 50%;
 }
 
-.modal-body .profile-picture-overlay {
+.modalBody .profilePictureOverlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -194,20 +204,21 @@
   transition: opacity 0.3s ease;
 }
 
-.modal-body .profile-picture-wrapper:hover .profile-picture-overlay {
+.modalBody .profilePictureWrapper:hover .profilePictureOverlay {
   opacity: 1;
 }
 
-.camera-icon {
+.cameraIcon {
   font-size: 24px;
   color: #fff;
 }
 
-.input-field {
+.inputField {
   margin-bottom: 15px;
+  width: fit-content;
 }
 
-.save-button {
+.saveButton {
   width: 100%;
 }
 
@@ -224,16 +235,15 @@
   height: 500px;
 }
 
-/* New CSS for confined boxes */
-.profile-content-container {
+.profileContentContainer {
   display: flex;
   width: 100%;
   justify-content: center;
   margin-bottom: 40px;
 }
 
-.profile-listings-content,
-.profile-threads-content {
+.profileListingsContent,
+.profileThreadsContent {
   border: 1px solid #a3a3a3;
   width: 900px;
   border-radius: 15px;
@@ -242,13 +252,13 @@
   background-color: #fff;
 }
 
-.profile-toggle-container {
+.profileToggleContainer {
   display: flex;
   justify-content: center;
   margin: 20px 0;
 }
 
-.profile-toggle-button {
+.profileToggleButton {
   padding: 10px 20px;
   margin: 0 10px;
   border: none;
@@ -256,14 +266,21 @@
   background-color: #f0f0f0;
   cursor: pointer;
   font-family: 'Gotham';
+  transition: all 0.4s;
+}
+.profileToggleButton:hover{
+  background-color: #97c9ff;
+  /* color: white; */
+  cursor: pointer;
 }
 
-.profile-toggle-button.active {
+.profileToggleButton.active {
   background-color: #007bff;
+  transform: scale(1.01);
   color: #fff;
 }
 
-.card-grid-wrapper{
+.cardGridWrapper {
   border: 1px solid #a3a3a3;
   width: 900px;
   height: 300px;
@@ -274,28 +291,27 @@
   overflow-y: auto;
 }
 
-.card-custom-prof{
+.cardCustomProf {
   flex-direction: row;
 }
-.image-wrapper-prof{
+
+.imageWrapperProf {
   width: 300px;
 }
 
-.prof-view-button{
-    color: #ffffff;
-    background-color: #00088f;
-    padding: 0.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    border-radius: 20px;
-    border: #007bff;
-    transition: all 0.4s;
-    margin-left: 5px;
+.profViewButton {
+  color: #ffffff;
+  background-color: #00088f;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 20px;
+  border: #007bff;
+  transition: all 0.4s;
+  margin-left: 5px;
 }
 
-
-
-.prof-create-button{
+.profCreateButton {
   color: #ffffff;
   background-color: #00088f;
   padding: 0.5rem;
@@ -307,16 +323,27 @@
   margin-top: 20px;
 }
 
-
-
-
-.card-body-wrapper-prof{
+.cardBodyWrapperProf {
   width: 500px;
   margin-right: 20px;
 }
 
-.text-right-prof{
+.textRightProf {
   display: flex;
   align-items: flex-end;
-  
+}
+
+.threadBox{
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+}
+
+.community{
+  font-size: 1rem;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+  margin-left: 0.2rem;
 }

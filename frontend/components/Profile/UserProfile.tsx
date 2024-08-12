@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-import "../../styles/profile.css"; // Adjust path based on your folder structure
+import styles from "../../styles/profile.module.css"; // Import CSS Module
 import {
   BsPencilSquare,
   BsPersonFill,
@@ -10,7 +10,6 @@ import {
 import { IoClose } from "react-icons/io5";
 
 import { Listing, User } from "../../types";
-
 
 interface UserProfileProps {
   onProfileUpdate: (profile: { user: User; listings: Listing[] }) => void;
@@ -52,7 +51,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
         setAddress(Data.user.address);
         setContact(Data.user.contact);
         setProfilePictureBase64(Data.user.profilePicture);
-        console.log("profileee" ,Data);
         setListings(Data.listings);
         onProfileUpdate({ user: Data.user, listings: Data.listings });
       } else {
@@ -118,80 +116,80 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
 
   return (
     <div>
-      <div className="profile-header">
+      <div className={styles.profileHeader}>
         <h2>User Profile</h2>
-        <hr className="header-line" />
+        <hr className={styles.headerLine} />
       </div>
-      <div className="profile-container">
-        <div className="profile-picture">
+      <div className={styles.profileContainer}>
+        <div className={styles.profilePicture}>
           {profilePictureBase64 ? (
             <img
               src={profilePictureBase64}
               alt="Profile"
-              className="profile-img"
+              className={styles.profileImg}
             />
           ) : (
-            <BsPersonFill className="profile-placeholder-icon" />
+            <BsPersonFill className={styles.profilePlaceholderIcon} />
           )}
           <BsPencilSquare
-            className="edit-icon"
+            className={styles.editIcon}
             onClick={() => setShowModal(true)}
           />
         </div>
-        <div className="profile-details">
-          <div className="detail-box">
+        <div className={styles.profileDetails}>
+          <div className={styles.detailBox}>
             <label>Name:</label>
             <p>{name}</p>
           </div>
-          <div className="detail-box">
+          <div className={styles.detailBox}>
             <label>Username:</label>
             <p>{username}</p>
           </div>
-          <div className="detail-box">
+          <div className={styles.detailBox}>
             <label>Contact:</label>
             <p>{contact}</p>
           </div>
-          <div className="detail-box">
+          <div className={styles.detailBox}>
             <label>Email:</label>
             <p>{email}</p>
           </div>
         </div>
 
         <Modal
-          contentClassName="custom-modal"
+          contentClassName={styles.customModal}
           show={showModal}
           onHide={() => setShowModal(false)}
           centered
-          className="custom-modal "
+          className={styles.customModal}
         >
-          <div className="modal-header">
-            <BsPeopleFill className="profile-icon" />
+          <div className={styles.modalHeader}>
+            <BsPeopleFill className={styles.profileIcon} />
             <Modal.Title>Edit Profile</Modal.Title>
-            <IoClose className="close" size={24} onClick={() => setShowModal(false)} />
+            <IoClose className={styles.close} size={24} onClick={() => setShowModal(false)} />
           </div>
-          <Modal.Body className="modal-body">
+          <Modal.Body className={styles.modalBody}>
             <Row>
               <Col xs={12} md={4} className="text-center">
                 <div
                   style={{ width: "100%", height: "100%" }}
-                  className="profile-picture"
+                  className={styles.profilePicture}
                   onClick={() =>
                     document.getElementById("profilePictureInputModal")?.click()
                   }
                 >
                   {profilePictureBase64 ? (
-                    <div className="profile-picture-wrapper">
+                    <div className={styles.profilePictureWrapper}>
                       <img
                         src={profilePictureBase64}
                         alt="Profile"
-                        className="profile-img-modal"
+                        className={styles.profileImgModal}
                       />
-                      <div className="profile-picture-overlay">
-                        <BsCamera className="camera-icon" />
+                      <div className={styles.profilePictureOverlay}>
+                        <BsCamera className={styles.cameraIcon} />
                       </div>
                     </div>
                   ) : (
-                    <BsPersonFill className="profile-placeholder-icon" />
+                    <BsPersonFill className={styles.profilePlaceholderIcon} />
                   )}
                   <input
                     id="profilePictureInputModal"
@@ -202,9 +200,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                   />
                 </div>
               </Col>
-              <Col xs={12} md={8}>
-                <Form>
-                  <Form.Group className="input-field">
+              <Col xs={12} md={8} >
+                <Form className={styles.info}>
+                  <Form.Group className={styles.inputField}>
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                       type="text"
@@ -212,7 +210,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </Form.Group>
-                  <Form.Group className="input-field">
+                  <Form.Group className={styles.inputField}>
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                       type="email"
@@ -220,7 +218,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </Form.Group>
-                  <Form.Group className="input-field">
+                  <Form.Group className={styles.inputField}>
                     <Form.Label>Contact</Form.Label>
                     <Form.Control
                       type="text"
@@ -229,7 +227,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                       style={{ borderRadius: "8px" }}
                     />
                   </Form.Group>
-                  <Form.Group className="input-field">
+                  <Form.Group className={styles.inputField}>
                     <Form.Label>New Password</Form.Label>
                     <Form.Control
                       type="password"
@@ -245,7 +243,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
           </Modal.Body>
           <Modal.Footer>
             <Button
-              className="save-button"
+              className={styles.saveButton}
               variant="primary"
               onClick={handleEdit}
             >

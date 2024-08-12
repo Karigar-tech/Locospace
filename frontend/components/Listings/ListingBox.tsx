@@ -27,12 +27,11 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
   };
 
   const handleClick = () => {
-    router.push(`/Listing?id=${item._id}`);
+    router.push(`/Listing?id=${item?._id}`);
   };
 
   const formatBedroomText = (bedroom: number) => bedroom === 1 ? 'Bedroom' : 'Bedrooms';
   const formatBathText = (bath: number) => bath === 1 ? 'Bath' : 'Baths';
-
 
   const getFormattedAddress = (address: string) => {
     const parts = address.split(',').filter(part => part.trim() !== '');
@@ -42,11 +41,15 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
     return address;
   };
 
+  if (!item) {
+    return <div>No listing available</div>;
+  }
+
   return (
     <Card className={styles.listingBox}>
       <Card.Img 
         variant="top" 
-        src={item.ListingPictures[0] || 'placeholder.png'} 
+        src={(item.ListingPictures?.[0]) || 'placeholder.png'} 
         alt={`Image of ${item.listing_type}`} 
         className={styles.listingImage} 
       />

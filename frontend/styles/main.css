@@ -457,7 +457,7 @@ body {
 }
 .thread-title {
   display: flex;
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #313131; /* Ensure text color is visible */
   margin-bottom: 0;
@@ -540,7 +540,12 @@ body {
   
 }
 .thread-image-container{
+  width: 100%;
+
+}
+.thread-image{
   width: inherit;
+
 }
 
 /* Replies */
@@ -692,7 +697,7 @@ textarea {
 
 
 .thread-box {
-  padding: 15px;
+  padding: 5px;
   width: inherit;
   height: fit-content;
   border: 1px solid #ddd;

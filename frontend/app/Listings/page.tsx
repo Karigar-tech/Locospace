@@ -1,6 +1,7 @@
 'use client'
 import React, { Suspense, useState, useEffect, use } from 'react';
-import { Listing, Thread } from '../../types';
+import { Listing, Thread, Community } from '../../types';
+// import { useRouter } from 'next/router';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
 import style from "./listings.module.css";
@@ -36,10 +37,12 @@ const Page = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [notification, setNotification] = useState<string | null>(null); 
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const [communities, setCommunities] = useState<Community[]>([]);
   const [threads, setThreads] = useState<Thread[]>([]);
- 
+  const router = useRouter();
+  // const { threadId } = router.query;
+
   const environmentIconMap: Record<string, React.ReactElement> = {
     "Busy": <FaRunning />,
     "Peaceful": <GiPeaceDove />,
@@ -66,6 +69,42 @@ const Page = () => {
     "Seniors": <MdElderly />
   };
   const {authUser ,setAuthUser} = useAuthContext();
+  
+
+  const fetchCommunities = async (searchTerm: string) => {
+    try {
+      const searchQueryString = searchTerm
+        ? `search=${encodeURIComponent(searchTerm)}`
+        : "";
+      console.log("Search Query String:", searchQueryString);
+      const token = localStorage.getItem("token");
+      setAuthUser(token);
+      const response = await fetch(
+        `http://localhost:5000/api/community/?${searchQueryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: Community[] = await response.json();
+      console.log("Fetched communities:", data);
+
+      if (Array.isArray(data)) {
+        setCommunities(data);
+      } else {
+        console.error("Expected an array but got:", data);
+        setCommunities([]);
+      }
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    }
+  };
 
   useEffect(() => {
     setAuthUser(localStorage.getItem('token'));
@@ -343,7 +382,14 @@ const Page = () => {
           </div>
         </div>
       ) : (
+        <div>
+          <div className='col'> 
+            <h4 className="ml-15 mt-36">
+              Threads in {community ? community : 'Community'}
+            </h4>
+          </div>
         <MainBox threads={threads} commID={commID} /> 
+        </div>
       )}
       <FilterPopup
         showFilters={showFilters}

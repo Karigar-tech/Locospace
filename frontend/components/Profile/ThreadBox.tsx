@@ -1,10 +1,12 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import {useRouter } from 'next/navigation';
 import { User, Community, Reply, Thread } from '@/types';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import { MdDeleteForever } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 import DocumentPreview from './DocPreview'
 import '../../styles/main.css';
+import style from '../../styles/profile.module.css';
 
 interface BoxProps {
   _id: number; // Ensure this is a number or string based on your data
@@ -25,7 +27,11 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
   const [editedTitle, setEditedTitle] = useState<string>(thread_title);
   const [editedDescription, setEditedDescription] = useState<string>(thread_description);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const router= useRouter();
 
+  const handleOpenThread = () => {
+    router.push(`/Listings?threadId=${_id}`);
+  };
   useEffect(() => {
     // Fetch current user
     const fetchCurrentUser = async () => {
@@ -129,7 +135,12 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
     .slice(0, 3);
 
   return (
-    <Container className="thread-box p-4 mb-2">
+    <Container className={style.threadBox}>
+        <Row>
+            <div className={style.community}>
+                {community_id.communityName}
+            </div>
+        </Row>
       <Row style={{ flexDirection: 'row', marginTop: '0.1rem' }}>
         <Col style={{ flex: '0 0px' }}>
           {user_id.profilePicture && user_id.profilePicture.url ? (
@@ -150,7 +161,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           <strong>{user_id.username}</strong> <span className="text-muted">· Posted: {new Date(createdAt).toLocaleTimeString()}</span>
         </Col>
       </Row>
-      <Row className="mt-2">
+      <Row className="mt-1">
         <Col className='thread-headings'>
           <p className="thread-title">{thread_title}</p>
           <p className="thread-description">{thread_description}</p>
@@ -185,7 +196,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
                 />
               ) : (
                 <img
-                  src="/osama.jpg" // Replace with the actual path to your placeholder image
+                  src="/no-profile-picture-15257.svg" // Replace with the actual path to your placeholder image
                   alt="pfp"
                   className="reply-user-image"
                 />
@@ -198,7 +209,7 @@ const ThreadBox: React.FC<BoxProps> = ({ _id, user_id, community_id, thread_titl
           </div>
         </Col>
         <Col className="open-thread-container">
-          <Button variant="primary" className="replybox-button" onClick={() => onClick({ _id, user_id, community_id, thread_title, thread_description, createdAt, updatedAt, image, document })}>
+          <Button variant="primary" className="replybox-button" onClick={handleOpenThread}>
             Open Thread
           </Button>
         </Col>

@@ -25,6 +25,7 @@
 
 .communitySearch{
     width: 30%;
+    height: fit-content;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 0.5rem;

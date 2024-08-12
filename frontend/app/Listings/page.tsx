@@ -1,5 +1,5 @@
 'use client'
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect, use } from 'react';
 import { Listing, Thread } from '../../types';
 import ListingBox from '@/components/Listings/ListingBox';
 import NavBar from '../../components/NavBar';
@@ -99,7 +99,7 @@ const Page = () => {
         ageGroup: ageGroup || ''
       }).toString();
 
-      const response = await fetch(`http://localhost:5000/api/listings/listingserach?${query}`,  {
+      const response = await fetch(`http://localhost:5000/api/listings/listingsearch?${query}`,  {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -248,6 +248,33 @@ const Page = () => {
     }
   };
   
+   useEffect(() => {
+
+    const fetchListings = async () => {
+    const keyword = searchParams.get('keyword');
+    console.log(keyword)
+    
+    try {
+      const response = await fetch(`http://localhost:5000/api/listings/type?keyword=${keyword}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+       console.log(data)
+       setListings(data)
+      } else {
+        console.error("Error fetching buy listings:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching buy listings:", error);
+    }
+  }
+
+  fetchListings();
+  },[] );
 
   return (
     <div>

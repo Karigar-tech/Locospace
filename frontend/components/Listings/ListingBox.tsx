@@ -16,6 +16,9 @@ const ListingBox: React.FC<ListingBoxProps> = ({ item }) => {
     if (typeof price !== 'number') {
       return 'Invalid price';
     }
+    if(price > 100000 && price < 10000000){
+      return `Rs ${(price/100000).toFixed(1)}  lakh`
+    }
     if (price >= 10000000) {
       return `${(price / 10000000).toFixed(2)} crore`;
     } else {

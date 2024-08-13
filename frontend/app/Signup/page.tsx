@@ -27,10 +27,6 @@ const Signup: React.FC = () => {
 
   const handleSignup = async () => {
     setLoading(true);
-    setAuthUser(localStorage.getItem('token'));
-    if(authUser){
-      router.push('/');
-    }
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`, {
         method: 'POST',

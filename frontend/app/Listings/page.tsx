@@ -1,18 +1,23 @@
 'use client'
 import React, { Suspense, useState, useEffect, use } from 'react';
+import dynamic from "next/dynamic";
 import { Listing, Thread, Community } from '../../types';
+
+
 // import { useRouter } from 'next/router';
-import ListingBox from '@/components/Listings/ListingBox';
-import NavBar from '../../components/NavBar';
+const ListingBox = dynamic(()=>import ('@/components/Listings/ListingBox'),{ssr:false}) ;
+const NavBar = dynamic(()=> import('../../components/NavBar'),{ssr:false}) ;
+const ToggleButton = dynamic(()=>import ('../../components/Listings/Toggle'),{ssr:false});
+const MainBox = dynamic(()=> import('@/components/Threads/MainBox'),{ssr:false});
+const SearchBar = dynamic(()=>import('@/components/SearchBar'),{ssr:false}) ;
+const FilterPopup = dynamic(()=>import('@/components/Listings/filterPopup'),{ssr:false});
+const Notification = dynamic(()=>import('@/components/Seller/MessageComp'),{ssr:false}) ;
+
 import style from "./listings.module.css";
-import ToggleButton from "../../components/Listings/Toggle";
-import MainBox from '@/components/Threads/MainBox';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-import SearchBar from '@/components/SearchBar';
-import FilterPopup from '@/components/Listings/filterPopup'
+import Image from 'next/image'; 
 import { Button } from 'react-bootstrap'
-import Notification from '@/components/Seller/MessageComp';
+
 // Icons
 import { FaBed, FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaChild, FaCheck } from 'react-icons/fa';
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
@@ -122,8 +127,6 @@ const Page = () => {
     if (searchTerm) {
       setSearch(searchTerm);
     }
-
-
     fetchListings(searchTerm, community, environment, facilities, ageGroup);
   }, [searchParams]);
 

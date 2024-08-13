@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { IoAdd } from 'react-icons/io5';
 import ThreadBox from './ThreadBox';

@@ -232,7 +232,13 @@ const SellerForm: React.FC = () => {
     document.getElementById('fileInput')?.click();
   };
 
-  
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); 
    
@@ -275,8 +281,6 @@ const SellerForm: React.FC = () => {
     }));
 
     try {
-      const token = localStorage.getItem("token");
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/`, {
         method: "POST",
         headers: {

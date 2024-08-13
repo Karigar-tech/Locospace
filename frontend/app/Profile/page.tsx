@@ -1,16 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from 'next/navigation';
-import NavBar from "../../components/NavBar";
-import UserProfile from "../../components/Profile/UserProfile";
-import Footer from "../../components/LandingFooter";
-import CardGridComp from "../../components/Profile/ListingCard";
-import styles from "../../styles/profile.module.css";
 import { Listing } from "@/types";
 import { Thread } from "@/types";
-import ThreadBox from "../../components/Profile/ThreadBox";
 import { useAuthContext } from "@/context/authContext";
-import Notification from "../../components/Seller/MessageComp";
+
+const NavBar = dynamic(()=> import('../../components/NavBar'),{ssr:false}) ;
+const UserProfile = dynamic(()=>import('../../components/Profile/UserProfile'),{ssr:false});
+const CardGridComp = dynamic(()=> import('../../components/Profile/ListingCard'),{ssr:false});
+const ThreadBox = dynamic(()=>import('../../components/Profile/ThreadBox'),{ssr:false});
+const Notification = dynamic(()=> import ('../../components/Seller/MessageComp'),{ssr:false}) ;
+
+import styles from "../../styles/profile.module.css";
+
 
 const MyProfile: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<"listings" | "threads" | "saved">("listings");
@@ -34,7 +37,7 @@ const MyProfile: React.FC = () => {
       setSelectedThreadId(thread_id);
     }
   };
-
+  
   const handleListingDelete = async (id: number) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/${id}`, {

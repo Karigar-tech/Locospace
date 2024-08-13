@@ -7,11 +7,13 @@ import { useEffect , useRef } from "react";
 const Messages = () => {
   const { messages, loading } = useGetMessages(); 
   useListenMessage();
-  const lastMessageRef = useRef();
+  const lastMessageRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
     setTimeout(() => {
-      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+      
+        lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+      
     }, 100);
   }, [messages]);
 

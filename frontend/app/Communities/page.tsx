@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import CommunityBox from "../../components/Communities/CommunityBox";
 import styles from "./communitypage.module.css";
@@ -16,13 +16,7 @@ const CommunitiesPage = () => {
   const { authUser, setAuthUser } = useAuthContext();
   const [communities, setCommunities] = useState<Community[]>([]);
   const [search, setSearch] = useState<string>("");
-
-  useEffect(() => {
-    if (!authUser) {
-      router.push("/Login"); // Redirect to login page if not authenticated
-    }
-  }, [authUser, router]);
-
+ 
   const fetchCommunities = async (searchTerm: string) => {
     try {
       const searchQueryString = searchTerm
@@ -56,6 +50,45 @@ const CommunitiesPage = () => {
       console.error("Error fetching communities:", error);
     }
   };
+  // useEffect(() => {
+  //   if (!authUser) {
+  //     router.push("/Login"); // Redirect to login page if not authenticated
+  //   }
+  // }, [authUser, router]);
+
+  // const fetchCommunities = async (searchTerm: string) => {
+  //   try {
+  //     const searchQueryString = searchTerm
+  //       ? `search=${encodeURIComponent(searchTerm)}`
+  //       : "";
+  //     const token = localStorage.getItem("token");
+  //     setAuthUser(token);
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/?${searchQueryString}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+
+  //     const data: Community[] = await response.json();
+  //     console.log("Fetched communities:", data);
+
+  //     if (Array.isArray(data)) {
+  //       setCommunities(data);
+  //     } else {
+  //       console.error("Expected an array but got:", data);
+  //       setCommunities([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching communities:", error);
+  //   }
+  // };
 
   useEffect(() => {
     const search = searchParams.get("search") || "";

@@ -21,7 +21,6 @@ export const useAuthContext = () => {
 };
 
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
-    const [authUser, setAuthUser] = useState<any>(JSON.stringify(localStorage.getItem("token") || 'null'));
-
+    const [authUser, setAuthUser] = useState<any>(JSON.stringify("token" || 'null'));
     return <AuthContext.Provider value={{ authUser, setAuthUser }}>{children}</AuthContext.Provider>;
 };

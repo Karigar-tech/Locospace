@@ -159,15 +159,15 @@
 .customModal {
   padding: 2rem;
   display: flex !important;
-  /* width: fit-content !important; */
+  justify-content: center !important;
+  width: fit-content !important; 
   align-items: center !important;
-
 }
 
 .customModal .modalHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  
 }
 
 .customModal .profileIcon {

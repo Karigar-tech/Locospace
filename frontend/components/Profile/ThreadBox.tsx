@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import {useRouter } from 'next/navigation';
 import { User, Community, Reply, Thread } from '@/types';

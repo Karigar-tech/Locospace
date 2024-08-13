@@ -2,10 +2,9 @@
 import { createContext, useState, useEffect, useContext, ReactNode } from "react";
 import { useAuthContext } from "./authContext";
 import io, { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 
 interface SocketContextType {
-    socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
+    socket: Socket | null;
 }
 
 interface SocketContextProviderProps {
@@ -18,7 +17,7 @@ export const useSocketContext = () => {
 };
 
 export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
-    const [socket, setSocket] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
+    const [socket, setSocket] = useState<Socket | null>(null);
     const { authUser } = useAuthContext();
 
     useEffect(() => {

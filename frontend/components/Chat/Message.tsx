@@ -2,7 +2,7 @@
 import { extractTime } from "../../utils/extractTime";
 import React from "react";
 
-const Message = ({message}) => {
+const Message = ({message}:any) => {
   const formattedtime = extractTime(message.createdAt);
   const fromMe = message.senderId === localStorage.getItem("userID");
   const chatClassName = fromMe ? "d-flex flex-row justify-content-end" : "d-flex flex-row justify-content-start";

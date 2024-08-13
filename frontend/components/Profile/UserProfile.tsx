@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import styles from "../../styles/profile.module.css"; // Import CSS Module
 import {
@@ -35,13 +36,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
         return;
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         const Data = await response.json();
@@ -78,13 +82,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         console.log("Profile updated successfully");
@@ -108,6 +115,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const profilePictureInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    profilePictureInputRef.current?.click();
   };
 
   useEffect(() => {
@@ -165,17 +178,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
           <div className={styles.modalHeader}>
             <BsPeopleFill className={styles.profileIcon} />
             <Modal.Title>Edit Profile</Modal.Title>
-            <IoClose className={styles.close} size={24} onClick={() => setShowModal(false)} />
+            <IoClose
+              className={styles.close}
+              size={24}
+              onClick={() => setShowModal(false)}
+            />
           </div>
           <Modal.Body className={styles.modalBody}>
             <Row>
-              <Col xs={12} md={4} className="text-center">
+              <Col md={4} className="text-center">
                 <div
                   style={{ width: "100%", height: "100%" }}
                   className={styles.profilePicture}
-                  onClick={() =>
-                    document.getElementById("profilePictureInputModal")?.click()
-                  }
+                  onClick={handleClick}
                 >
                   {profilePictureBase64 ? (
                     <div className={styles.profilePictureWrapper}>
@@ -197,10 +212,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ onProfileUpdate }) => {
                     accept="image/*"
                     onChange={handleFileChange}
                     style={{ display: "none" }}
+                    ref={profilePictureInputRef}
                   />
                 </div>
               </Col>
-              <Col xs={12} md={8} >
+              <Col xs={12} md={8}>
                 <Form className={styles.info}>
                   <Form.Group className={styles.inputField}>
                     <Form.Label>Name</Form.Label>

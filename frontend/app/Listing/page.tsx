@@ -1,14 +1,20 @@
 "use client";
 
 import React, { Suspense, useEffect, useState } from "react";
-import ImageGallery from "../../components/ImageGallery";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
 import styles from "./selectedlist.module.css";
 import { Listing, User } from "../../types";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 import Image from "next/image";
-import Notification from "../../components/Seller/MessageComp";
+
+const ImageGallery = dynamic(()=> import('../../components/ImageGallery'),{ssr:false});
+const Notification = dynamic(()=> import ('../../components/Seller/MessageComp'),{ssr:false}) ;
+const VerticalCardCarousel = dynamic(()=>import('../../components/VerticalCarousel'),{ssr:false}) ;
+const MapComponent = dynamic(()=>import('../../components/MapComponentListing'),{ssr:false});
+const NavBar = dynamic(()=> import('../../components/NavBar'),{ssr:false}) ;
+
 //Icons
 import { FaParking, FaChild } from "react-icons/fa";
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
@@ -29,12 +35,9 @@ import {
   FaPaw,
   FaCopy,
 } from "react-icons/fa";
-import { SiGooglemessages } from "react-icons/si";
 
-import VerticalCardCarousel from "../../components/VerticalCarousel";
-import MapComponent from "../../components/MapComponentListing";
+import { SiGooglemessages } from "react-icons/si";
 import { geocodeAddress } from "../../utils/geocode";
-import NavBar from "../../components/NavBar";
 import { useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/context/authContext";
 import useCreateConversation from "@/components/Hooks/useCreateConversation";
@@ -496,5 +499,12 @@ const ListingPage = () => {
     </div>
   );
 };
+const SuspenseWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ListingPage />
+    </Suspense>
+  );
+}
 
-export default ListingPage;
+export default SuspenseWrapper;

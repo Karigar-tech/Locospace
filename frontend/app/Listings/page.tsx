@@ -7,11 +7,12 @@ import NavBar from '../../components/NavBar';
 import style from "./listings.module.css";
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
+import ExploreBox from '@/components/Threads/ExploreBox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import SearchBar from '@/components/SearchBar';
 import FilterPopup from '@/components/Listings/filterPopup'
-import { Button } from 'react-bootstrap'
+import { Button, Card, Row, Col } from 'react-bootstrap'
 import Notification from '@/components/Seller/MessageComp';
 // Icons
 import { FaBed, FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaChild, FaCheck } from 'react-icons/fa';
@@ -386,12 +387,14 @@ const Page = () => {
       ) : (
         <div>
           <div className='col'> 
-            <h4 className="ml-15 mt-36">
+            {/* <h4 className="ml-15 mt-36">
               Threads in {community ? community : 'Community'}
             </h4>
+           */}
           </div>
-        <MainBox threads={threads} commID={commID} /> 
-        </div>
+            <MainBox threads={threads} commID={commID} /> 
+            <ExploreBox/>
+          </div>
       )}
       <FilterPopup
         showFilters={showFilters}

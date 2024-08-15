@@ -14,15 +14,15 @@ const FilterPopup = dynamic(()=>import('@/components/Listings/filterPopup'),{ssr
 const Notification = dynamic(()=>import('@/components/Seller/MessageComp'),{ssr:false}) ;
 
 import style from "./listings.module.css";
-import ToggleButton from "../../components/Listings/Toggle";
-import MainBox from '@/components/Threads/MainBox';
+// import ToggleButton from "../../components/Listings/Toggle";
+// import MainBox from '@/components/Threads/MainBox';
 import ExploreBox from '@/components/Threads/ExploreBox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import SearchBar from '@/components/SearchBar';
-import FilterPopup from '@/components/Listings/filterPopup'
+// import SearchBar from '@/components/SearchBar';
+// import FilterPopup from '@/components/Listings/filterPopup'
 import { Button, Card, Row, Col } from 'react-bootstrap'
-import Notification from '@/components/Seller/MessageComp';
+// import Notification from '@/components/Seller/MessageComp';
 // Icons
 import { FaBed, FaParking, FaRunning, FaTree, FaBuilding, FaHandsHelping, FaShieldAlt, FaMoneyBillWave, FaPaw, FaChild, FaCheck } from 'react-icons/fa';
 import { MdOutlineSecurity, MdElderly, MdOutlineHiking } from "react-icons/md";
@@ -37,7 +37,7 @@ import { useAuthContext } from '@/context/authContext';
 
 const Page = () => {
   const [listings, setListings] = useState<Listing[]>([]);
-  const [community, setCommunity] = useState<string | null>(null);
+  const [community, setCommunity] = useState<string>('');
   const [view, setView] = useState<'listings' | 'threads'>('listings');
   const [search, setSearch] = useState<string | null>(null);
   const [commID, setCommID] = useState<string>('');
@@ -205,6 +205,8 @@ const Page = () => {
           setCommunity(storedCommunity);
           setListings(data.detailedListings);
           setCommID(data.communityID)
+          console.log("mmamam",data)
+         
 
           const userComm = await UserData();
         
@@ -230,6 +232,8 @@ const Page = () => {
         }
       };
       fetchCommunityDetails();
+      
+      
     }
   }, []);
   
@@ -397,8 +401,8 @@ const Page = () => {
             </h4>
            */}
           </div>
-            <MainBox threads={threads} commID={commID} /> 
-            <ExploreBox/>
+            <MainBox threads={threads} commID={commID} community={community} /> 
+            {/* <ExploreBox/> */}
           </div>
       )}
       <FilterPopup

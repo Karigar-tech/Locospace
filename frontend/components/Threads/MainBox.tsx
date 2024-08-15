@@ -10,9 +10,10 @@ import '../../styles/main.css';
 interface MainBoxProps {
   threads: Thread[];
   commID: string;
+  community: string;
 }
 
-const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) => {
+const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID, community }) => {
   const [threads, setThreads] = useState<Thread[]>(initialThreads);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isThreadOpen, setIsThreadOpen] = useState(false);
@@ -73,7 +74,9 @@ const MainBox: React.FC<MainBoxProps> = ({ threads: initialThreads, commID }) =>
       ) : (
         <>
           <div className="header-container">
-            <h3 className="box-title">General</h3>
+            <h3 className="box-title">General{"  "}
+             <br/> <p  style={{color: ' #ADD8E6', fontSize:'1.1rem', fontStyle:'-moz-initial',  }} className='p-2' >  {community}</p>
+            </h3> 
             <button className="thread-add-button" onClick={() => setIsModalOpen(true)}>
               <IoAdd size={35} />
             </button>

@@ -177,7 +177,7 @@ exports.createCommunity = async (req, res) => {
       }
   
       //increase member count in the new comm
-      newCommunity.communityMembers = (newCommunity.communityMembers || 0) + 1;
+      newCommunity.communityMembers = (newCommunity.communityMembers) + 1;
       await newCommunity.save();
   
       //update

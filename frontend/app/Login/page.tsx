@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [homeButtonLoading, setHomeButtonLoading] = useState(false);
   const [createAccountLoading, setCreateAccountLoading] = useState(false);
@@ -23,7 +23,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     const handleLogin = async () => {
       setLoading(true);
-      setError("");
+      setError(null);
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`,
@@ -49,9 +49,13 @@ const Login: React.FC = () => {
         }
       } catch (error) {
         console.error("Login error:", error);
-        setError("An error occurred during login. Please try again.");
+        
+        if (error instanceof Error) {
+          setError(`${error}`);
+        } else {
+          setError("An unknown error occurred during login.");
+        }
       } finally {
-        // Make sure to set loading to false after the delay
         setTimeout(() => {
           setLoading(false);
         }, 500); // Same delay as above

@@ -1,4 +1,4 @@
-.gradientBarContainer{
+/* .gradientBarContainer{
     position: relative;
     width: 100%;
     height: 9rem;
@@ -9,27 +9,18 @@
     width: 100%;
     height: 9rem;
     background: linear-gradient(90deg, #3D8BFD 0%, #290661);
-}
+} */
 
 .searchBarContainer {
-    display: flex;
-    justify-content: center; 
-    align-items: center;    
-    width: 100%;
-    height: 100%;            
-    position: relative;      
-    z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1
   }
   
-  .searchBarContainer button {
-    position: relative;
-    z-index: 2;
-    margin-left: -5.03rem; 
-    height: fit-content;
-    width: fit-content;
-    border-radius: 0.5rem;
-
-  }
 
 .communitySearch{
     width: 30%;

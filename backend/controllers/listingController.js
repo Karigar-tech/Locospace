@@ -11,7 +11,7 @@ exports.getListingsByType = async (req, res) =>{
     return res.status(400).json({ message: 'Invalid keyword. It must be either "buy" or "rent".' });
   }
 
-  const listingType = keyword === 'buy' ? 'Sell' : 'Rent';
+  const listingType = keyword === 'buy' ? 'sell' : 'rent';  
 
   try {
     const listings = await Listing.find({ listing_type: listingType });

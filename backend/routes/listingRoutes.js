@@ -8,11 +8,6 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-
-
-
-router.get('/specific/:id', listingController.getSpecificListing)
-
 router.get('/alllistings', listingController.getListings); 
 
 router.get('/nearby',listingController.getNearbyListings)
@@ -24,6 +19,8 @@ router.get('/listingsearch', listingController.getAllListings);
 router.post('/savedListings', authenticateToken, listingController.addSavedListing);
 
 router.post('/unsavedListings', authenticateToken, listingController.removeSavedListing);
+
+router.get('/specific/:id', listingController.getSpecificListing);
 
 router.delete('/delete/:id', authenticateToken, listingController.deleteListing);
 

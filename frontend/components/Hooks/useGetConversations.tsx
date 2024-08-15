@@ -15,7 +15,7 @@ const useGetConversations = () => {
                     throw new Error("Token not found in localStorage");
                 }// Debug log
 
-                const res = await fetch("http://localhost:5000/api/chat/currentChats", {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/chat/currentChats`, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }

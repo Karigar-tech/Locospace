@@ -1,9 +1,18 @@
 'use client'
 import React, { Suspense, useState, useEffect, use } from 'react';
+import dynamic from "next/dynamic";
 import { Listing, Thread, Community } from '../../types';
+
+
 // import { useRouter } from 'next/router';
-import ListingBox from '@/components/Listings/ListingBox';
-import NavBar from '../../components/NavBar';
+const ListingBox = dynamic(()=>import ('@/components/Listings/ListingBox'),{ssr:false}) ;
+const NavBar = dynamic(()=> import('../../components/NavBar'),{ssr:false}) ;
+const ToggleButton = dynamic(()=>import ('../../components/Listings/Toggle'),{ssr:false});
+const MainBox = dynamic(()=> import('@/components/Threads/MainBox'),{ssr:false});
+const SearchBar = dynamic(()=>import('@/components/SearchBar'),{ssr:false}) ;
+const FilterPopup = dynamic(()=>import('@/components/Listings/filterPopup'),{ssr:false});
+const Notification = dynamic(()=>import('@/components/Seller/MessageComp'),{ssr:false}) ;
+
 import style from "./listings.module.css";
 import ToggleButton from "../../components/Listings/Toggle";
 import MainBox from '@/components/Threads/MainBox';
@@ -81,7 +90,7 @@ const Page = () => {
       const token = localStorage.getItem("token");
       setAuthUser(token);
       const response = await fetch(
-        `http://localhost:5000/api/community/?${searchQueryString}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/?${searchQueryString}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -123,8 +132,6 @@ const Page = () => {
     if (searchTerm) {
       setSearch(searchTerm);
     }
-
-
     fetchListings(searchTerm, community, environment, facilities, ageGroup);
   }, [searchParams]);
 
@@ -139,7 +146,7 @@ const Page = () => {
         ageGroup: ageGroup || ''
       }).toString();
 
-      const response = await fetch(`http://localhost:5000/api/listings/listingsearch?${query}`,  {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/listingsearch?${query}`,  {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -162,7 +169,7 @@ const Page = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/profile/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +196,7 @@ const Page = () => {
     if (storedCommunity && token) {
       const fetchCommunityDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/api/community/${storedCommunity}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/community/${storedCommunity}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
@@ -201,7 +208,7 @@ const Page = () => {
 
           const userComm = await UserData();
         
-          const response2 = await fetch(`http://localhost:5000/api/threads/specificThreads/${data.communityID}`, {
+          const response2 = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/threads/specificThreads/${data.communityID}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
@@ -256,7 +263,7 @@ const Page = () => {
   const handleJoin = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('http://localhost:5000/api/community/join-community', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/community/join-community`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -292,10 +299,8 @@ const Page = () => {
 
     const fetchListings = async () => {
     const keyword = searchParams.get('keyword');
-    console.log(keyword)
-    
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/type?keyword=${keyword}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/type?keyword=${keyword}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

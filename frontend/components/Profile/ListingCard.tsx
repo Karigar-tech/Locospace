@@ -32,7 +32,7 @@ const CardGridComp: React.FC<CardGridCompProps> = ({ data = [], onDeleteListing,
     router.push(`/SellerForm`);
   };
 
-  return (
+  return ( 
     <div className={styles.cardGridWrapper}>
       <Row style={{ gap: "20px" }}>
         {data && data.map((listing) => (

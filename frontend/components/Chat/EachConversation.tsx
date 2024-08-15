@@ -4,7 +4,7 @@ import React from "react";
 const EachConversation = ({ conversation }: { conversation: any }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
-  const profilePicture = conversation?.profilePicture?.url || "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+  const profilePicture = conversation?.profilePicture?.url || "https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png";
 
   return (
     <div

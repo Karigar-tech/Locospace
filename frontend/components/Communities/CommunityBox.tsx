@@ -30,7 +30,8 @@ const CommunityBox: React.FC<CommunityBoxProps> = ({ name, members, listings, pi
           </Col>
         </Row>
         <hr />
-        <Button className={style.exploreButton} onClick={onClick}>
+        <Button className={style.exploreButton}
+        onClick={onClick}>
           Explore
         </Button>
       </Card.Body>

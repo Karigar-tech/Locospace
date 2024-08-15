@@ -11,7 +11,8 @@ const useListenMessage = () => {
     socket?.on("newMessage", (newMessage:any) => {
       setMessages([...messages, newMessage])
     })
-    return()=> socket?.off("newMessage");
+    return()=> {socket?.off("newMessage");
+       socket?.close();}
   }, [socket, setMessages, messages]);
 };
 

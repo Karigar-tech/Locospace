@@ -7,6 +7,7 @@ const nextConfig = {
         imageSizes: [16, 32, 48, 64, 96], // Image sizes
         loader: 'default', // Use default loader (you can specify custom loader here)
     },
+    output: "standalone",
   };
 
 export default nextConfig;

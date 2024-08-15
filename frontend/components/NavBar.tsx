@@ -3,12 +3,16 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import useAuthStore from "../authStore";
-import { useRouter } from "next/navigation";
-import styles from '../styles/main.module.css';
+import { useRouter ,usePathname } from "next/navigation";
 
+import styles from '../styles/main.module.css';
 const NavBar: React.FC = () => {
   const router = useRouter();
+  const url = usePathname();
   const { token, logout } = useAuthStore();
+
+  const isActive = (pathname: string) => url === pathname;
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -36,20 +40,25 @@ const NavBar: React.FC = () => {
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
           <Nav className="ms-auto navv">
-            <Link href="/Communities" >
-              <div>
-              <Button variant="outline-primary" className={styles.navbarbtncustom}>
-                Communities
-                </Button>
-              </div>
-            </Link>
+          <Link href="/Communities" passHref>
+            <Button
+              variant="link"
+              className={`${styles.navbarbtncustom} ${isActive('/Communities') ? styles.activeLink : 'Dark'}`}
+            >
+              Communities
+            </Button>
+          </Link>
             <Link href="/Profile" passHref>
-              <Button variant="outline-secondary" className={styles.navbarbtncustom}>
-                Profile
+              <Button 
+              variant="link" 
+              className={`${styles.navbarbtncustom} ${isActive('/Profile') ? styles.activeLink: ''}`}>
+              Profile
               </Button>
             </Link>
             <Link href="/Chatting" passHref>
-              <Button variant="outline-secondary" className={styles.navbarbtncustom}>
+              <Button variant="link" 
+              className={`${styles.navbarbtncustom} ${isActive('/Chatting') ? styles.activeLink: ''}`}
+              >
                 Chat
               </Button>
             </Link>

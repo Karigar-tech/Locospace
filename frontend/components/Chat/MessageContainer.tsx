@@ -8,7 +8,7 @@ import '../../styles/chat.css'
 const MessageContainer = () => {
   const { selectedConversation } = useConversation();   
   return (
-    <div className='d-flex flex-column w-75 custom-scrollbar' style={{height:"650px"}}>
+    <div className='d-flex flex-column w-75 custom-scrollbar' style={{height:"590px"}}>
       {
         !selectedConversation ? <NoChatSelected/> :(
         <>

@@ -318,7 +318,7 @@
 }
 
 .SLchatBtn {
-  width: 120px;
-  height: 35px;
-  border-radius: 30px;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
 }

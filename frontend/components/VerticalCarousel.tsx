@@ -24,7 +24,7 @@ const VerticalCardCarousel: React.FC<VerticalCardCarouselProps> = ({ listingId }
   useEffect(() => {
     const fetchNearbyListings = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/listings/nearby?id=${listingId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/listings/nearby?id=${listingId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useAuthContext } from '@/context/authContext';
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -22,11 +23,12 @@ const Signup: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [homeButtonLoading, setHomeButtonLoading] = useState(false);
   const [signInLoading, setSignInLoading] = useState(false);
+  const { authUser, setAuthUser } = useAuthContext();
 
   const handleSignup = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

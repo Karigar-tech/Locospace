@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import CommunityBox from "../../components/Communities/CommunityBox";
 import styles from "./communitypage.module.css";
@@ -7,32 +7,25 @@ import { Button } from "react-bootstrap";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Community } from "../../types";
 import { Suspense } from "react";
-import { useAuthContext } from '../../context/authContext';
-
+import { useAuthContext } from "../../context/authContext";
+import { FaSearch } from "react-icons/fa";
 
 const CommunitiesPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const {authUser ,setAuthUser} = useAuthContext();
+  const { authUser, setAuthUser } = useAuthContext();
   const [communities, setCommunities] = useState<Community[]>([]);
   const [search, setSearch] = useState<string>("");
-
-  useEffect(() => {
-    if (!authUser) {
-      router.push('/Login'); // Redirect to login page if not authenticated
-    }
-  }, [authUser, router]);
-
+ 
   const fetchCommunities = async (searchTerm: string) => {
     try {
       const searchQueryString = searchTerm
         ? `search=${encodeURIComponent(searchTerm)}`
         : "";
-      console.log("Search Query String:", searchQueryString);
       const token = localStorage.getItem("token");
       setAuthUser(token);
       const response = await fetch(
-        `http://localhost:5000/api/community/?${searchQueryString}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/?${searchQueryString}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,6 +50,45 @@ const CommunitiesPage = () => {
       console.error("Error fetching communities:", error);
     }
   };
+  // useEffect(() => {
+  //   if (!authUser) {
+  //     router.push("/Login"); // Redirect to login page if not authenticated
+  //   }
+  // }, [authUser, router]);
+
+  // const fetchCommunities = async (searchTerm: string) => {
+  //   try {
+  //     const searchQueryString = searchTerm
+  //       ? `search=${encodeURIComponent(searchTerm)}`
+  //       : "";
+  //     const token = localStorage.getItem("token");
+  //     setAuthUser(token);
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/?${searchQueryString}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+
+  //     const data: Community[] = await response.json();
+  //     console.log("Fetched communities:", data);
+
+  //     if (Array.isArray(data)) {
+  //       setCommunities(data);
+  //     } else {
+  //       console.error("Expected an array but got:", data);
+  //       setCommunities([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching communities:", error);
+  //   }
+  // };
 
   useEffect(() => {
     const search = searchParams.get("search") || "";
@@ -90,7 +122,18 @@ const CommunitiesPage = () => {
             value={search}
             onChange={handleSearchChange}
           />
-          <Button onClick={() => fetchCommunities(search)}>Search</Button>
+          <Button
+            style={{
+              position: "relative",
+              cursor: "pointer",
+              borderRadius: "0.5rem",
+              height: "fit-content",
+              marginLeft: "0.5rem",
+            }}
+            onClick={() => fetchCommunities(search)}
+          >
+            <FaSearch />
+          </Button>
         </div>
       </div>
       <div className={styles.upperContainer} style={{ width: "90%" }}>
@@ -100,19 +143,19 @@ const CommunitiesPage = () => {
           </div>
         </div>
       </div>
-    <div className={styles.commContainer}>
-    <div className={styles.communityList}>
-        {communities.map((community) => (
-          <CommunityBox
-            key={community._id}
-            name={community.communityName}
-            picture={community.communityPicture}
-            members={community.communityMembers}
-            listings={community.detailedListings.length}
-            onClick={() => handleCommunityClick(community.communityName)}
-          />
-        ))}
-      </div>
+      <div className={styles.commContainer}>
+        <div className={styles.communityList}>
+          {communities.map((community) => (
+            <CommunityBox
+              key={community._id}
+              name={community.communityName}
+              picture={community.communityPicture}
+              members={community.communityMembers}
+              listings={community.detailedListings.length}
+              onClick={() => handleCommunityClick(community.communityName)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -121,7 +164,7 @@ const CommunitiesPage = () => {
 const SuspenseWrapper = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CommunitiesPage/>
+      <CommunitiesPage />
     </Suspense>
   );
 };
